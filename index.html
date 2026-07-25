@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Luxury Supply &amp; Amenities</title>
+  <meta name="description" content="Hotel Luxury Supply &amp; Amenities — premium supplies and guest amenities for hotels. New website on the way; inquiries welcome by email.">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --paper: #21382e;
+      --ink: #f1ecdf;
+      --muted: #a8b3a4;
+      --hairline: rgba(241, 236, 223, 0.22);
+    }
+
+    body {
+      font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(1.25rem, 4vw, 3rem);
+    }
+
+    .small {
+      font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .wordmark {
+      font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 0;
+    }
+
+    h1 {
+      font-weight: 400;
+      font-size: clamp(1.9rem, 5.5vw, 3.4rem);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      max-width: 21em;
+      text-wrap: balance;
+    }
+
+    .note {
+      margin-top: 1.75rem;
+      font-size: clamp(1rem, 2.2vw, 1.125rem);
+      line-height: 1.65;
+      color: var(--muted);
+      max-width: 34em;
+    }
+
+    .note a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-color: var(--hairline);
+      text-underline-offset: 3px;
+    }
+
+    .note a:hover {
+      text-decoration-color: var(--ink);
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--hairline);
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--ink);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="wordmark">Hotel Luxury Supply &amp; Amenities</span>
+    <span class="small">New website in progress</span>
+  </header>
+
+  <main>
+    <h1>Premium supplies and guest amenities for hotels that care about the details.</h1>
+    <p class="note">Our new website is on its way. Until then, we're happy to help directly — write to us at <a href="mailto:info@hotelluxurysupply.com">info@hotelluxurysupply.com</a> for catalogues, pricing, and orders.</p>
+  </main>
+
+  <footer class="small">
+    <span>&copy; 2026 Hotel Luxury Supply &amp; Amenities</span>
+    <a href="mailto:info@hotelluxurysupply.com">info@hotelluxurysupply.com</a>
+  </footer>
+</body>
+</html>
