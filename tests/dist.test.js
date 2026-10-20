@@ -28,7 +28,8 @@ const distExists = (url) => fs.existsSync(distFile(url));
 const readDist = (rel) => fs.readFileSync(path.join(DIST, rel), "utf8");
 
 /* ---------- 1. every expected URL exists ---------- */
-const expected = ["/", "/products/", "/bespoke/", "/quote/", "/404.html", "/products.html", "/category.html", "/product.html", "/_redirects"];
+const PAGES = ["/about/", "/process/", "/contact/", "/privacy/", "/terms/"];
+const expected = ["/", "/products/", "/bespoke/", "/quote/", "/404.html", "/products.html", "/category.html", "/product.html", "/_redirects", ...PAGES];
 CATS.forEach((c) => expected.push("/products/" + c.slug + "/"));
 PRODS.forEach((p) => expected.push("/products/" + p.category + "/" + p.slug + "/"));
 expected.forEach((u) => t.ok(distExists(u), "exists: " + u));
@@ -62,7 +63,7 @@ function auditPage(url) {
   const icon = doc.querySelector('link[rel="icon"]');
   t.ok(icon && icon.getAttribute("href") === "/favicon.svg" && fs.existsSync(path.join(DIST, "favicon.svg")), ctx + " favicon");
   const robots = doc.querySelector('meta[name="robots"]');
-  if (url === "/quote/" || url === "/404.html") t.ok(robots && /noindex/.test(robots.content), ctx + " noindex");
+  if (url === "/quote/" || url === "/404.html" || url === "/privacy/" || url === "/terms/") t.ok(robots && /noindex/.test(robots.content), ctx + " noindex");
   else t.ok(!robots, ctx + " indexable");
   t.ok(doc.querySelectorAll("h1").length === 1, ctx + " exactly one h1 (" + doc.querySelectorAll("h1").length + ")");
   t.ok(!/products\.html#|index\.html#|"index\.html"|data-pv=/.test(html), ctx + " no legacy SPA hrefs or preview markup");
@@ -127,6 +128,19 @@ for (const p of PRODS) {
 {
   const doc = auditPage("/quote/");
   t.ok(doc.getElementById("quoteMount") && !doc.getElementById("viewQuote").hasAttribute("data-prerendered"), "quote: client-rendered mount");
+}
+for (const url of PAGES) {
+  const doc = auditPage(url);
+  t.ok(doc.getElementById("viewPage").hasAttribute("data-prerendered") && doc.querySelector("#pageMount h1"), url + " pre-rendered page content");
+  t.ok(doc.querySelector('.pd__crumbs a[href="/"]'), url + " breadcrumb home link");
+}
+{
+  const doc = staticDom("/contact/").window.document;
+  t.ok(doc.getElementById("contactForm") && doc.querySelector('a[href="mailto:info@hotelluxurysupply.com"]') && doc.querySelector('a[href="tel:+13476694417"]'), "contact: form + NAP in source");
+}
+{
+  const doc = staticDom("/").window.document;
+  t.ok(doc.querySelector('.nav a[href="/about/"]') && doc.querySelector('.footer a[href="/contact/"]') && doc.querySelector('.footer a[href="/privacy/"]') && doc.querySelector('.footer a[href="/terms/"]'), "home: nav + footer link the trust pages");
 }
 {
   const doc = auditPage("/404.html");
@@ -247,6 +261,27 @@ function liveDom(url, opts) {
   t.ok(d2.getElementById("bespokeMount").textContent.includes("The Riviera Bucket Hat"), "static bespoke: ?product context");
 }
 
+{
+  // static contact page: hydrated form posts a lead to /api/lead (default static endpoint)
+  let formBefore;
+  const dom = liveDom("/contact/", { before(win) { formBefore = win.document.getElementById("contactForm"); win.fetch = (url, opts) => { win.__posted = { url, body: JSON.parse(opts.body) }; return Promise.resolve({ ok: true, status: 200 }); }; } });
+  const win = dom.window, doc = win.document;
+  t.ok(doc.getElementById("contactForm") === formBefore, "static contact page NOT re-rendered by JS");
+  t.ok(win.HLLeads.endpoint() === "/api/lead", "static mode lead endpoint is /api/lead");
+  type(win, doc.getElementById("cf-name"), "Paul");
+  type(win, doc.getElementById("cf-email"), "paul@grandriviera.com");
+  type(win, doc.getElementById("cf-message"), "Arrival totes.");
+  click(win, doc.getElementById("cfSubmit"));
+  t.ok(!doc.getElementById("contactSuccess").hidden && win.__posted && win.__posted.url === "/api/lead" && win.__posted.body.type === "contact", "static contact submit -> POST /api/lead");
+  t.ok(fs.existsSync(path.join(ROOT, "functions", "api", "lead.js")), "Pages Function functions/api/lead.js exists");
+}
+{
+  const { types } = ldOf("/about/");
+  t.ok(types.includes("AboutPage") && types.includes("BreadcrumbList"), "about: AboutPage schema");
+  const c = ldOf("/contact/");
+  t.ok(c.types.includes("ContactPage"), "contact: ContactPage schema");
+}
+
 /* ---------- 4. legacy redirects ---------- */
 {
   const dom = liveDom("/", { suffix: "#/products/hats" });
@@ -342,7 +377,7 @@ for (const p of PRODS) {
 {
   const sm = readDist("sitemap.xml");
   const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace("https://hotelluxurysupply.com", ""));
-  const indexable = expected.filter((u) => u.endsWith("/") && u !== "/quote/");
+  const indexable = expected.filter((u) => u.endsWith("/") && !["/quote/", "/privacy/", "/terms/"].includes(u));
   t.ok(locs.length === indexable.length && indexable.every((u) => locs.includes(u)), "sitemap lists every indexable URL (" + locs.length + ")");
   t.ok(!locs.includes("/quote/") && !locs.some((l) => l.endsWith(".html")), "sitemap excludes /quote/ and .html shims");
   t.ok(locs.every((u) => distExists(u)), "sitemap URLs all exist");

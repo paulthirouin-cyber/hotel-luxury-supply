@@ -7,10 +7,14 @@ const { catalogDom, previewDom, harness, click, type } = require("./helpers");
 
 const t = harness("FLOWS SUITE");
 
+// capture every lead POST made during the flows
+function leadSpy(win) { const sent = []; win.HL_LEAD_ENDPOINT = "/api/lead"; win.fetch = (url, opts) => { sent.push(JSON.parse(opts.body)); return Promise.resolve({ ok: true, status: 200 }); }; return sent; }
+
 /* ================= Quote Cart E2E ================= */
 {
   const dom = catalogDom("#/products/hats/fairway-golf-cap");
   const win = dom.window, doc = win.document;
+  const leads = leadSpy(win);
   type(win, doc.querySelector('[data-qty-for="fairway-golf-cap"]'), "300");
   type(win, doc.getElementById("notes-fairway-golf-cap"), "Club logo left panel");
   click(win, doc.querySelector('[data-add="fairway-golf-cap"]'));
@@ -52,12 +56,14 @@ const t = harness("FLOWS SUITE");
   t.ok(q.textContent.includes("Your selections have been sent to the concierge."), "quote success");
   t.ok(/HLQ-\d{4}-\d{4}/.test(q.textContent) && q.textContent.includes("crest.svg"), "success ref + files");
   t.ok(!/Checkout|Payment|Buy Now/i.test(q.textContent), "no checkout language");
+  t.ok(leads.length === 1 && leads[0].type === "quote" && /^HLQ-/.test(leads[0].payload.ref) && leads[0].payload.items[0].ref === "H-005" && leads[0].payload.items[0].quantity === 600, "quote submit -> lead POST with ref + items");
 }
 
 /* ================= Bespoke E2E ================= */
 {
   const dom = catalogDom("#/bespoke");
   const win = dom.window, doc = win.document;
+  const leads = leadSpy(win);
   const bm = doc.getElementById("bespokeMount");
   t.ok(bm.textContent.includes("Beyond the catalog.") && bm.querySelectorAll(".bcap").length === 8, "bespoke page renders");
   click(win, doc.getElementById("bfSubmit"));
@@ -71,11 +77,13 @@ const t = harness("FLOWS SUITE");
   type(win, doc.getElementById("bf-notes"), "Private-label arrival tote.");
   click(win, doc.getElementById("bfSubmit"));
   t.ok(/HLB-\d{4}-\d{4}/.test(bm.textContent), "bespoke success + HLB ref");
+  t.ok(leads.length === 1 && leads[0].type === "bespoke" && /^HLB-/.test(leads[0].payload.reference), "bespoke submit -> lead POST");
 }
 {
   // product drawers
   const dom = catalogDom("#/products/hats/fairway-golf-cap");
   const win = dom.window, doc = win.document;
+  const leads = leadSpy(win);
   click(win, doc.querySelector('[data-bespoke="fairway-golf-cap"]'));
   const drawer = doc.getElementById("bdrDrawer");
   t.ok(drawer && !drawer.hidden && doc.getElementById("bdrSub").textContent.includes("The Fairway Golf Cap"), "bespoke drawer opens with product context");
@@ -99,6 +107,7 @@ const t = harness("FLOWS SUITE");
   mf.dispatchEvent(new win.Event("change", { bubbles: true }));
   click(win, doc.getElementById("bdSubmit"));
   t.ok(drawer.textContent.includes("Your mockup request for The Fairway Golf Cap has been sent."), "mockup success");
+  t.ok(leads.length === 2 && leads[0].type === "bespoke" && leads[1].type === "mockup", "drawer submits -> bespoke + mockup lead POSTs");
 }
 
 /* ================= Preview click-through (frozen hash) ================= */

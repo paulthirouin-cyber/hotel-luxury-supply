@@ -89,13 +89,18 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       ✔ 2026-10-20: self-hosted Marcellus + Jost variable (woff2, swap, preloaded), all CSS inlined + minified per page, scripts deferred, width/height on every image, LCP image eager + fetchpriority=high, SVG favicon, WCAG-AA text tones (`--chrome-text`, `--terracotta-text`), heading order fixed. `npm run lighthouse` (scripts/lighthouse.js + gzip static server) budget ≥95: home 99/100/100/100, catalog 100/100/100/100, category 95/100/100/100, product 97/96/100/100, bespoke 100/100/100/100 (mobile).
 
 ## Phase 3 — Trust & entity pages (E-E-A-T)
-- [ ] 3.1 `/about/` — the atelier story, process, expertise (brand voice).
-- [ ] 3.2 `/contact/` — concierge contact page (reuse drawer form inline).
-- [ ] 3.3 `/process/` — Select → Customize → Produce expanded with timelines.
-- [ ] 3.4 Footer/legal: privacy + terms placeholders, NAP block, copyright.
-- [ ] 3.5 Wire all forms (concierge, quote submit, bespoke, mockup) to a real
+- [x] 3.1 `/about/` — the atelier story, process, expertise (brand voice).
+      ✔ 2026-10-20: `/about/` written from docs/BRAND-BRIEF.md (who we are, philosophy, catalog-as-starting-point, approach to luxury, value, how we work) with the essence line as a pull quote; AboutPage schema. Lives in `js/pages.js` with the other trust pages.
+- [x] 3.2 `/contact/` — concierge contact page (reuse drawer form inline).
+      ✔ 2026-10-20: `/contact/` with NAP block (email, phone, domain), what-to-include list, inline concierge form (honeypot, validation, success state) posting through `js/leads.js`; ContactPage schema. Homepage keeps the bell drawer, which now also posts leads.
+- [x] 3.3 `/process/` — Select → Customize → Produce expanded with timelines.
+      ✔ 2026-10-20: `/process/` — Select → Customize → Produce → Deliver with roles per step, a milestone/timing table (4–6 weeks after proof approval), minimums + tiers paragraph and a direct-answer opener.
+- [x] 3.4 Footer/legal: privacy + terms placeholders, NAP block, copyright.
+      ✔ 2026-10-20: footer on every page links Products / Bespoke / Process / About / Contact / Collections, carries the NAP line (© HL Supply · hotelluxurysupply.com, email, phone) and Privacy / Terms (plain-language placeholders at `/privacy/`, `/terms/`, noindex until counsel text lands). Header nav is now Products · Bespoke · Process · About · Concierge.
+- [x] 3.5 Wire all forms (concierge, quote submit, bespoke, mockup) to a real
       endpoint: Cloudflare Pages Function or Formspree → email to Paul.
       ASK PAUL: which email receives leads. Store submissions as before too.
+      ✔ 2026-10-20: all five forms (contact, concierge bell, quote submit, bespoke, mockup) call `HLLeads.send()` → POST `/api/lead` (Cloudflare Pages Function `functions/api/lead.js`, honeypot + validation, emails via Resend) and mirror to a local outbox; the UX never waits on the network. Tests assert the POST payload for each form. **ASK PAUL (not blocking the build):** which inbox receives leads (default info@hotelluxurysupply.com) and create a free resend.com key → set `RESEND_API_KEY`, `LEAD_TO`, `LEAD_FROM` in Pages → Settings → Environment variables. Until then the endpoint answers 202 and nothing is emailed.
 
 ## Phase 4 — Content engine, wave 1 (cornerstones)
 - [ ] 4.1 `/guides/` template + index page, Article schema, build integration.
@@ -150,3 +155,6 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
 - 2026-10-20 — All CSS is inlined per page (≈25 KB gzipped) instead of extracting "critical" CSS: zero render-blocking requests, no FOUC, trivially cacheable by the CDN. Revisit only if page weight becomes a problem.
 - 2026-10-20 — Lighthouse is NOT part of `npm test` (needs Chrome, ~1 min/page). It is `npm run lighthouse`, run at the end of each phase that touches templates. Lighthouse CLI is fetched once via `npx --yes lighthouse@12 --version` and found in the npx cache; not a project dependency (keeps Pages installs lean).
 - 2026-10-20 — Remaining perf headroom is image delivery (JPEG heroes → WebP/AVIF, product cutouts → srcset). That is the Photography-day image pipeline in Phase 7; the current scores already clear the budget.
+- 2026-10-20 — Trust pages are content modules in `js/pages.js` (registry with path/meta/schemaType/render) rendered by the same router and pre-rendered by the same build; adding a page = adding a registry entry. Clients section stays on the homepage but left the nav (placeholder logos are not a destination).
+- 2026-10-20 — Lead delivery uses a Pages Function + Resend (MailChannels free tier is gone). Formspree would have worked without code but puts the lead list in a third party; Resend keeps the inbox as the system of record. Switching is a one-file change.
+- 2026-10-20 — Legal pages ship as honest plain-language placeholders (noindex) so the footer is complete; counsel text replaces them before Phase 6 cutover.

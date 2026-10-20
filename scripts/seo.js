@@ -163,6 +163,13 @@ function bespokeLd(meta, faqs) {
   ]);
 }
 
+function pageLd(meta, type, crumb) {
+  return graph([
+    webPage(meta, type && type !== "WebPage" ? { "@type": type } : {}),
+    breadcrumb([{ name: "Home", path: "/" }, { name: crumb || meta.title, path: meta.path }])
+  ]);
+}
+
 function simpleLd(meta) {
   return graph([webPage(meta)]);
 }
@@ -213,6 +220,9 @@ function llmsTxt(CATS, PRODS) {
     `- [Homepage](${SITE}/)`,
     `- [Product catalog](${SITE}/products/)`,
     `- [Bespoke Atelier](${SITE}/bespoke/): adapt a catalog piece or develop a new product`,
+    `- [About HL Supply](${SITE}/about/)`,
+    `- [How it works](${SITE}/process/): Select, Customize, Produce, Deliver`,
+    `- [Contact the concierge](${SITE}/contact/)`,
     ""
   ];
   for (const c of CATS) {
@@ -226,4 +236,4 @@ function llmsTxt(CATS, PRODS) {
   return lines.join("\n");
 }
 
-module.exports = { SITE, homeLd, landingLd, categoryLd, productLd, bespokeLd, simpleLd, sitemapXml, robotsTxt, llmsTxt };
+module.exports = { SITE, homeLd, landingLd, categoryLd, productLd, bespokeLd, pageLd, simpleLd, sitemapXml, robotsTxt, llmsTxt };

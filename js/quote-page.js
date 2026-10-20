@@ -333,6 +333,13 @@ window.HLQuotePage = (function () {
       submittedAt: new Date().toISOString()
     };
     Q.setSubmission(sub);
+    if (window.HLLeads) {
+      window.HLLeads.send("quote", {
+        ref: sub.ref, email: sub.email, fileNames: sub.fileNames, submittedAt: sub.submittedAt,
+        details: Q.details(), lead: Q.lead ? Q.lead() : null,
+        items: Q.items().map(function (it) { var p = prod(it.slug); return { ref: p ? p.ref : it.slug, name: p ? p.name : it.slug, quantity: it.quantity, notes: it.notes || "" }; })
+      });
+    }
     render();
     window.scrollTo(0, 0);
   }

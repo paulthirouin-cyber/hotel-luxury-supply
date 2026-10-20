@@ -6,6 +6,7 @@ const t = harness("SITE SUITE");
 const { CATS, PRODS } = data();
 const catSlugs = new Set(CATS.map((c) => c.slug));
 const prodBy = Object.fromEntries(PRODS.map((p) => [p.slug, p]));
+const PAGE_SLUGS = ["about", "process", "contact", "privacy", "terms"];
 
 /* ---------- 1. data integrity (catalog as source of truth) ---------- */
 t.ok(PRODS.length === 39, "39 products");
@@ -62,6 +63,7 @@ function auditDoc(doc, ctx) {
       if (qp > -1) route = route.slice(0, qp);
       const seg = route.split("/").filter(Boolean);
       if (seg[0] === "quote") return;
+      if (PAGE_SLUGS.includes(seg[0]) && seg.length === 1) return;
       if (seg[0] === "bespoke") {
         for (const kv of q.split("&")) {
           const [k, v] = kv.split("=");
@@ -153,6 +155,45 @@ console.log("links audited:", linkCount);
   t.ok(!doc.getElementById("viewLanding").hidden, "hashchange -> landing");
 }
 t.ok(catalogDom("#/products/nope").window.document.getElementById("categoryHero").textContent.includes("Category not found"), "category not-found");
+
+/* ---------- 5. info pages (about / process / contact / legal) ---------- */
+for (const slug of PAGE_SLUGS) {
+  const dom = catalogDom("#/" + slug); const doc = dom.window.document;
+  t.ok(!doc.getElementById("viewPage").hidden && doc.getElementById("viewLanding").hidden, slug + ": page view shown");
+  const h1s = doc.querySelectorAll("#pageMount h1");
+  t.ok(h1s.length === 1 && h1s[0].textContent.length > 10, slug + ": one h1");
+  t.ok(doc.title === dom.window.HL_PAGES[slug].title, slug + ": title set");
+  auditDoc(doc, "[page:" + slug + "]");
+}
+{
+  const doc = catalogDom("#/about").window.document;
+  t.ok(doc.getElementById("pageMount").textContent.includes("products worthy of carrying their names"), "about: essence line present");
+}
+{
+  const doc = catalogDom("#/process").window.document;
+  t.ok(doc.querySelectorAll(".pstep").length === 4 && doc.querySelector(".ptable") && /4\u20136 weeks/.test(doc.getElementById("pageMount").textContent), "process: 4 steps + timeline table");
+}
+{
+  const dom = catalogDom("#/contact"); const win = dom.window, doc = win.document;
+  const sent = []; win.fetch = (url, opts) => { sent.push({ url, body: JSON.parse(opts.body) }); return Promise.resolve({ ok: true, status: 200 }); };
+  win.HL_LEAD_ENDPOINT = "/api/lead";
+  t.ok(/info@hotelluxurysupply\.com/.test(doc.getElementById("pageMount").textContent) && /\+1 \(347\) 669-4417/.test(doc.getElementById("pageMount").textContent), "contact: NAP present");
+  click(win, doc.getElementById("cfSubmit"));
+  t.ok(!doc.getElementById("cfError").hidden, "contact: validates");
+  type(win, doc.getElementById("cf-name"), "Paul");
+  type(win, doc.getElementById("cf-email"), "paul@grandriviera.com");
+  type(win, doc.getElementById("cf-message"), "Arrival totes for a spring opening.");
+  click(win, doc.getElementById("cfSubmit"));
+  t.ok(!doc.getElementById("contactSuccess").hidden && doc.getElementById("contactForm").hidden, "contact: success state");
+  t.ok(sent.length === 1 && sent[0].url === "/api/lead" && sent[0].body.type === "contact" && sent[0].body.payload.email === "paul@grandriviera.com", "contact: lead POSTed");
+  t.ok(win.HLLeads.outbox().length === 1 && win.HLLeads.outbox()[0].type === "contact", "contact: lead mirrored to local outbox");
+}
+{
+  // SPA-mode navigation to an info page from a nav link
+  const dom = catalogDom("#/products"); const win = dom.window, doc = win.document;
+  click(win, doc.querySelector('.nav a[href="products.html#/about"]'));
+  t.ok(!doc.getElementById("viewPage").hidden && doc.querySelector("#pageMount h1"), "nav link -> about renders in SPA mode");
+}
 t.ok(catalogDom("#/products/hats/nope").window.document.getElementById("productDetail").textContent.includes("Product not found"), "product not-found");
 
 t.done();

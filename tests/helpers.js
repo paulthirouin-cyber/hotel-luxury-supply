@@ -8,8 +8,8 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
 const exists = (p) => fs.existsSync(path.join(ROOT, p));
 
 const CATALOG_SCRIPTS = [
-  "js/routes.js", "js/main.js", "js/mobile-menu.js", "js/categories.js", "js/products.js",
-  "js/pricing.js", "js/quote-store.js", "js/catalog.js", "js/quote-pdf.js",
+  "js/routes.js", "js/leads.js", "js/main.js", "js/mobile-menu.js", "js/categories.js", "js/products.js",
+  "js/pricing.js", "js/quote-store.js", "js/pages.js", "js/catalog.js", "js/quote-pdf.js",
   "js/quote-page.js", "js/bespoke-page.js", "js/bespoke-drawers.js"
 ];
 

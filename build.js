@@ -35,8 +35,8 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 const CATALOG_SCRIPTS = [
-  "js/routes.js", "js/main.js", "js/mobile-menu.js", "js/categories.js", "js/products.js",
-  "js/pricing.js", "js/quote-store.js", "js/catalog.js", "js/quote-pdf.js",
+  "js/routes.js", "js/leads.js", "js/main.js", "js/mobile-menu.js", "js/categories.js", "js/products.js",
+  "js/pricing.js", "js/quote-store.js", "js/pages.js", "js/catalog.js", "js/quote-pdf.js",
   "js/quote-page.js", "js/bespoke-page.js", "js/bespoke-drawers.js"
 ];
 const HOME_SCRIPTS = ["js/routes.js", "js/categories.js", "js/category-section.js"];
@@ -206,7 +206,7 @@ function renderCatalogPage(route, meta, opts) {
   CATALOG_SCRIPTS.forEach((f) => win.eval(read(f)));
 
   const activeView = opts.view;
-  ["viewLanding", "viewCategory", "viewProduct", "viewBespoke", "viewQuote"].forEach((id) => {
+  ["viewLanding", "viewCategory", "viewProduct", "viewBespoke", "viewQuote", "viewPage"].forEach((id) => {
     const el = doc.getElementById(id);
     if (!el) return;
     if (id !== activeView) { el.remove(); return; }
@@ -335,6 +335,20 @@ function build() {
 
   emit("bespoke/index.html", renderCatalogPage("#/bespoke", BESPOKE_META,
     { view: "viewBespoke", ld: (win) => seo.bespokeLd(BESPOKE_META, win.HLBespokePage.FAQS) }), BESPOKE_META);
+  // info pages (about, process, contact, legal) declared in js/pages.js
+  {
+    const probe = new JSDOM(withStatic(read("products.html")), { runScripts: "outside-only", url: SITE + "/" });
+    stub(probe.window);
+    ["js/routes.js", "js/pages.js"].forEach((f) => probe.window.eval(read(f)));
+    const PAGES = probe.window.HL_PAGES;
+    for (const slug of PAGES.__list()) {
+      const pg = PAGES[slug];
+      const meta = { title: pg.title, description: pg.description, keywords: pg.keywords, path: pg.path, noindex: !!pg.noindex };
+      emit(pg.path.replace(/^\//, "") + "index.html", renderCatalogPage("#/" + slug, meta,
+        { view: "viewPage", ld: () => seo.pageLd(meta, pg.schemaType, pg.crumb) }), meta);
+    }
+  }
+
   // quote cart is user state: ship the empty state, the client renders the real cart
   emit("quote/index.html", renderCatalogPage("#/quote", QUOTE_META, { view: "viewQuote", prerendered: false }), QUOTE_META);
 

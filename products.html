@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/catalog.css" />
   <link rel="stylesheet" href="css/quote.css" />
   <link rel="stylesheet" href="css/bespoke.css" />
+  <link rel="stylesheet" href="css/pages.css" />
 </head>
 <body data-page="catalog">
 
@@ -22,10 +23,10 @@
       <a class="wordmark" href="index.html" aria-label="HL Supply home">HL<span>&nbsp;&middot;&nbsp;</span>Supply</a>
       <nav class="nav" aria-label="Primary">
         <a href="products.html#/products">Products</a>
-        <a href="index.html#collections">Collections</a>
         <a href="products.html#/bespoke">Bespoke</a>
-        <a href="index.html#clients">Clients</a>
-        <a href="index.html#concierge">Concierge</a>
+        <a href="products.html#/process">Process</a>
+        <a href="products.html#/about">About</a>
+        <a href="products.html#/contact">Concierge</a>
       </nav>
       <a class="btn btn--solid header__cta" href="products.html#/quote">Build a Quote<span class="quote-chip" id="quoteCount" hidden>0</span></a>
       <button type="button" class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">Menu</button>
@@ -36,10 +37,10 @@
     <div class="mobile-menu__ribbon" aria-hidden="true"></div>
     <nav class="mobile-menu__nav" aria-label="Mobile">
       <a href="products.html#/products">Products</a>
-      <a href="index.html#collections">Collections</a>
       <a href="products.html#/bespoke">Bespoke</a>
-      <a href="index.html#clients">Clients</a>
-      <a href="index.html#concierge">Concierge</a>
+      <a href="products.html#/process">Process</a>
+      <a href="products.html#/about">About</a>
+      <a href="products.html#/contact">Concierge</a>
     </nav>
     <div class="mobile-menu__foot">
       <a class="btn btn--solid" href="products.html#/quote">Build a Quote</a>
@@ -147,6 +148,13 @@
       </div>
     </div>
 
+    <!-- ============ /about, /process, /contact, /privacy, /terms ============ -->
+    <div id="viewPage" hidden>
+      <div class="wrap" id="pageMount">
+        <!-- Rendered by js/pages.js -->
+      </div>
+    </div>
+
     <!-- ============ /quote : Quote Cart ============ -->
     <div id="viewQuote" hidden>
       <div class="wrap qwrap" id="quoteMount">
@@ -169,10 +177,11 @@
           <h3>Atelier</h3>
           <ul>
             <li><a href="products.html#/products">Products</a></li>
+            <li><a href="products.html#/bespoke">Bespoke Atelier</a></li>
+            <li><a href="products.html#/process">Process</a></li>
+            <li><a href="products.html#/about">About</a></li>
+            <li><a href="products.html#/contact">Contact the Concierge</a></li>
             <li><a href="index.html#collections">Collections</a></li>
-            <li><a href="products.html#/bespoke">Bespoke</a></li>
-            <li><a href="index.html#clients">Clients</a></li>
-            <li><a href="index.html#concierge">Concierge</a></li>
           </ul>
         </div>
         <div>
@@ -185,19 +194,21 @@
         </div>
       </div>
       <div class="footer__bottom">
-        <span>&copy; 2026 HL Supply</span>
-        <span>Hospitality Atelier</span>
+        <span>&copy; 2026 HL Supply &middot; hotelluxurysupply.com</span>
+        <span class="footer__legal"><a href="products.html#/privacy">Privacy</a><a href="products.html#/terms">Terms</a><span>Hospitality Atelier</span></span>
       </div>
     </div>
   </footer>
 
   <script src="js/routes.js"></script>
+  <script src="js/leads.js"></script>
   <script src="js/main.js"></script>
   <script src="js/mobile-menu.js"></script>
   <script src="js/categories.js"></script>
   <script src="js/products.js"></script>
   <script src="js/pricing.js"></script>
   <script src="js/quote-store.js"></script>
+  <script src="js/pages.js"></script>
   <script src="js/catalog.js"></script>
   <script src="js/quote-pdf.js"></script>
   <script src="js/quote-page.js"></script>

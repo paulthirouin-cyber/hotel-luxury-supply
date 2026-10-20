@@ -211,6 +211,14 @@
       return;
     }
 
+    if (window.HLLeads) {
+      window.HLLeads.send("concierge", {
+        name: name.value.trim(), email: email.value.trim(),
+        property: (document.getElementById("cbellProperty") || {}).value || "",
+        projectType: (document.getElementById("cbellType") || {}).value || "",
+        message: (document.getElementById("cbellMessage") || {}).value || ""
+      });
+    }
     drawer.classList.add("is-sent");
     var status = drawer.querySelector(".cbell-success p");
     if (status) status.setAttribute("tabindex", "-1");

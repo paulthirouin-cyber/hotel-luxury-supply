@@ -353,6 +353,7 @@ window.HLBespokeDrawers = (function () {
       }
     );
     B.save(submission);
+    if (window.HLLeads) window.HLLeads.send(state.mode === "mockup" ? "mockup" : "bespoke", submission);
 
     var body = document.getElementById("bdrBody");
     var msg = state.mode === "mockup"

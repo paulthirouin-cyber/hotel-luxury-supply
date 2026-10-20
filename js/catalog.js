@@ -307,8 +307,9 @@
       var hi = href.indexOf("#/");
       if (hi === -1) return;
       var routeStr = href.slice(hi);
+      var first = routeStr.slice(2).split(/[\/?#]/)[0];
       if (routeStr.indexOf("#/products") !== 0 && routeStr.indexOf("#/quote") !== 0 &&
-          routeStr.indexOf("#/bespoke") !== 0) return;
+          routeStr.indexOf("#/bespoke") !== 0 && !(window.HL_PAGES && window.HL_PAGES[first])) return;
       if (!document.getElementById("catalogViews")) return;
       e.preventDefault();
       navigate(routeStr);
@@ -527,7 +528,7 @@
   //   #/products/:category/:product   -> product detail
 
   function showView(name) {
-    ["viewLanding", "viewCategory", "viewProduct", "viewQuote", "viewBespoke"].forEach(function (id) {
+    ["viewLanding", "viewCategory", "viewProduct", "viewQuote", "viewBespoke", "viewPage"].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.hidden = id !== name;
     });
@@ -539,6 +540,10 @@
     if (name !== "viewProduct") {
       var d = document.getElementById("productDetail");
       if (d) d.innerHTML = "";
+    }
+    if (name !== "viewPage") {
+      var pm = document.getElementById("pageMount");
+      if (pm) { pm.innerHTML = ""; pm.removeAttribute("data-page"); }
     }
   }
 
@@ -578,6 +583,14 @@
       showView("viewBespoke");
       if (!STATIC) document.title = "Bespoke Atelier \u2014 HL Supply";
       if (window.HLBespokePage) window.HLBespokePage.render(query);
+      scrollTop();
+      return;
+    }
+
+    if (window.HL_PAGES && window.HL_PAGES[seg[0]] && seg.length === 1) {
+      showView("viewPage");
+      if (!STATIC) document.title = window.HL_PAGES[seg[0]].title;
+      window.HL_PAGES.__render(seg[0], document.getElementById("pageMount"));
       scrollTop();
       return;
     }
