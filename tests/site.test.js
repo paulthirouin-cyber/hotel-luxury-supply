@@ -65,8 +65,8 @@ function auditDoc(doc, ctx) {
       if (seg[0] === "quote") return;
       if (PAGE_SLUGS.includes(seg[0]) && seg.length === 1) return;
       if (seg[0] === "glossary" && seg.length === 1) return;
-      if (seg[0] === "guides") {
-        if (seg[1] && !exists("content/guides/" + seg[1] + ".md")) t.ok(false, ctx + " missing guide file: " + href);
+      if (seg[0] === "guides" || seg[0] === "for") {
+        if (seg[1] && !exists("content/" + seg[0] + "/" + seg[1] + ".md")) t.ok(false, ctx + " missing content file: " + href);
         return;
       }
       if (seg[0] === "bespoke") {

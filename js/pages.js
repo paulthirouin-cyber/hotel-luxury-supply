@@ -361,10 +361,11 @@ window.HL_PAGES = (function () {
     var view = document.getElementById("viewPage");
     if (view && view.hasAttribute("data-prerendered")) { view.removeAttribute("data-prerendered"); return; }
     var isGlossary = seg[0] === "glossary";
+    var label = isGlossary ? "Glossary" : (seg[0] === "for" ? "Programs" : "Guides");
     mount.innerHTML =
-      crumbs(isGlossary ? "Glossary" : "Guides") +
-      hero("HL Supply / " + (isGlossary ? "Glossary" : "Guides"),
-        isGlossary ? "Hospitality customization glossary" : "Buying guides",
+      crumbs(label) +
+      hero("HL Supply / " + label,
+        isGlossary ? "Hospitality customization glossary" : (seg[0] === "for" ? "Custom goods by property and event" : "Buying guides"),
         "This content is generated for the published site. Open the preview deployment to read it, or continue to the catalog.") +
       '<div class="btn-row"><a class="btn btn--solid" href="' + U("#/products") + '">Explore Products</a><a class="btn" href="' + U("#/contact") + '">Speak with the Concierge</a></div>';
     mount.setAttribute("data-page", seg.join("/"));

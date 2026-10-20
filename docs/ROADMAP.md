@@ -115,12 +115,15 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       ✔ 2026-10-20: link mesh — category pages link their guide + glossary (`#categoryGuide`), product pages link the category guide, guides link every product/category/glossary/bespoke and auto-link glossary terms (≥ 3 per guide), glossary links products/categories/guides/pages, llms.txt + sitemap include guides and glossary. Dist suite asserts every product page receives ≥ 3 inbound internal links site-wide and every glossary anchor referenced anywhere exists. Lighthouse: guide 99/100/100/100, glossary 100/100/100/100.
 
 ## Phase 5 — Content engine, wave 2 (verticals + comparisons)
-- [ ] 5.1 5 use-case pages: /for/golf-tournaments/, /for/beach-clubs/,
+- [x] 5.1 5 use-case pages: /for/golf-tournaments/, /for/beach-clubs/,
       /for/spa-wellness/, /for/hotel-openings/, /for/corporate-retreats/.
-- [ ] 5.2 5 comparison guides (embroidery vs deboss vs etch; canvas vs woven;
+      ✔ 2026-10-20: five use-case pages in `content/for/*.md` → `/for/golf-tournaments/`, `/for/beach-clubs/`, `/for/spa-wellness/`, `/for/hotel-openings/`, `/for/corporate-retreats/` (+ `/for/` index). Each ≥ 900 words, direct-answer opener, `products:` list spanning ≥ 3 categories rendered as cards, timeline table, 5 FAQs, Article + FAQPage + BreadcrumbList schema. Homepage collection cards and the new footer Resources column link them.
+- [x] 5.2 5 comparison guides (embroidery vs deboss vs etch; canvas vs woven;
       bottle sizes; slipper materials; tote styles).
-- [ ] 5.3 Update keyword map from `docs/KEYWORD-MAP.md` if Paul has committed
+      ✔ 2026-10-20: five comparison guides at `/guides/…/` (`type: comparison`): embroidery vs deboss vs laser etching; canvas vs woven leather tote; 350 ml vs 500 ml bottles; slipper materials (terry/waffle/knit/eco); tote styles. Comparison table + FAQs + compared products as cards; guides index now sections buying guides, comparisons, and programs.
+- [x] 5.3 Update keyword map from `docs/KEYWORD-MAP.md` if Paul has committed
       research; otherwise proceed with defaults.
+      ✔ 2026-10-20: no `docs/KEYWORD-MAP.md` existed, so the default map was written from the catalog + content engine (every live page with P/S keywords, product-page generation rule, next 7 content slots, rules). Research from the claude.ai project gets committed here and the next cycle executes against it.
 
 ## Phase 6 — Launch checklist (needs Paul, ~45 min total, guided)
 - [ ] 6.1 Domain **hotelluxurysupply.com** (already in use — see catalog back page)
@@ -165,3 +168,6 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
 - 2026-10-20 — Guides and the glossary are build-time content (Markdown + JSON in `content/`), not JS data: they never ship in the client bundle, and future pieces are just new `.md` files with front matter. In SPA/preview mode those routes show a calm pointer to the preview deployment.
 - 2026-10-20 — Category ↔ guide pairing is declared in `js/categories.js` (`guide`, `guideTitle`) so the SPA can link guides without loading content; the build verifies every declared guide exists.
 - 2026-10-20 — Glossary auto-linking is capped at 12 links per guide and skips headings and existing links, to keep the mesh useful rather than spammy.
+- 2026-10-20 — Content collections are folders: `content/guides/` (type guide|comparison) and `content/for/` (type usecase), same Markdown pipeline and template; a page's product grid comes from a `products:` front-matter list when it spans categories. Related cards show same-type pages first, capped at 6.
+- 2026-10-20 — Homepage collection cards (Poolside, Beach Club, Spa Suite, Golf & Club) now link to the matching program pages instead of a dead `#collections` anchor; Poolside and Beach Club both go to /for/beach-clubs/ until a dedicated poolside page exists.
+- 2026-10-20 — Footer gained a fourth Resources column (guides, glossary, five programs) on every page: the cheapest site-wide inbound links the content engine can get.

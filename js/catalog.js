@@ -321,7 +321,7 @@
       var routeStr = href.slice(hi);
       var first = routeStr.slice(2).split(/[\/?#]/)[0];
       if (routeStr.indexOf("#/products") !== 0 && routeStr.indexOf("#/quote") !== 0 &&
-          routeStr.indexOf("#/bespoke") !== 0 && first !== "guides" && first !== "glossary" &&
+          routeStr.indexOf("#/bespoke") !== 0 && first !== "guides" && first !== "glossary" && first !== "for" && first !== "for" &&
           !(window.HL_PAGES && window.HL_PAGES[first])) return;
       if (!document.getElementById("catalogViews")) return;
       e.preventDefault();
@@ -607,7 +607,7 @@
       return;
     }
 
-    if (window.HL_PAGES && (seg[0] === "guides" || seg[0] === "glossary")) {
+    if (window.HL_PAGES && (seg[0] === "guides" || seg[0] === "glossary" || seg[0] === "for")) {
       showView("viewPage");
       window.HL_PAGES.__renderContent(seg, document.getElementById("pageMount"));
       scrollTop();

@@ -171,12 +171,12 @@ function articleLd(meta, guide) {
     description: meta.description,
     url: SITE + meta.path,
     mainEntityOfPage: { "@id": SITE + meta.path + "#webpage" },
-    image: guide.category ? abs(guide.category.image) : undefined,
+    image: guide.category ? abs(guide.category.image) : (meta.image ? abs(meta.image) : undefined),
     datePublished: guide.meta.published,
     dateModified: guide.meta.updated || guide.meta.published,
     author: { "@id": ORG_ID },
     publisher: { "@id": ORG_ID },
-    articleSection: guide.category ? guide.category.name : "Guides",
+    articleSection: guide.category ? guide.category.name : (guide.meta.type === "usecase" ? "Programs" : "Guides"),
     wordCount: guide.words,
     keywords: (meta.keywords || []).join(", "),
     inLanguage: "en",
@@ -185,7 +185,7 @@ function articleLd(meta, guide) {
   return graph([
     webPage(meta, { mainEntity: { "@id": article["@id"] } }),
     article,
-    breadcrumb([{ name: "Home", path: "/" }, { name: "Guides", path: "/guides/" }, { name: guide.meta.title.replace(/: The Complete Buyer.s Guide$/, ""), path: meta.path }]),
+    breadcrumb([{ name: "Home", path: "/" }, guide.root || { name: "Guides", path: "/guides/" }, { name: guide.meta.title.replace(/: The Complete Buyer.s Guide$/, "").replace(/:.*$/, ""), path: meta.path }]),
     faqPage(guide.faqs)
   ]);
 }

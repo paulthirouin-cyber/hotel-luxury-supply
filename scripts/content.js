@@ -10,16 +10,23 @@ const md = require("./markdown");
 const ROOT = path.join(__dirname, "..");
 const esc = md.esc;
 
-function loadGuides() {
-  const dir = path.join(ROOT, "content", "guides");
+// A collection is a content folder served under its own URL prefix:
+//   content/guides/*.md → /guides/<slug>/   (type: guide | comparison)
+//   content/for/*.md    → /for/<slug>/      (type: usecase)
+function loadCollection(folder, prefix) {
+  const dir = path.join(ROOT, "content", folder);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter((f) => f.endsWith(".md")).map((f) => {
     const slug = f.replace(/\.md$/, "");
     const src = fs.readFileSync(path.join(dir, f), "utf8");
     const { meta } = md.parseFrontMatter(src);
-    return { slug, src, meta, path: "/guides/" + slug + "/" };
+    meta.type = meta.type || (folder === "for" ? "usecase" : "guide");
+    return { slug, src, meta, path: prefix + slug + "/", collection: folder };
   }).sort((a, b) => a.slug.localeCompare(b.slug));
 }
+
+function loadGuides() { return loadCollection("guides", "/guides/"); }
+function loadUseCases() { return loadCollection("for", "/for/"); }
 
 function loadGlossary() {
   const file = path.join(ROOT, "content", "glossary.json");
@@ -45,6 +52,14 @@ function makeResolver(data) {
       if (!GUIDES.find((g) => g.slug === slug)) throw new Error("unknown guide link: " + slug);
       return "/guides/" + slug + "/";
     }
+    if (kind === "for") {
+      if (!(data.USECASES || []).find((g) => g.slug === slug)) throw new Error("unknown use-case link: " + slug);
+      return "/for/" + slug + "/";
+    }
+    if (kind === "for") {
+      if (!(data.USECASES || []).find((g) => g.slug === slug)) throw new Error("unknown use-case link: " + slug);
+      return "/for/" + slug + "/";
+    }
     if (kind === "glossary") {
       if (!GLOSSARY.terms.find((t) => t.slug === slug)) throw new Error("unknown glossary link: " + slug);
       return "/glossary/#" + slug;
@@ -64,6 +79,8 @@ function labelFor(ref, data) {
   if (kind === "product") { const p = data.PRODS.find((x) => x.slug === slug); return p ? p.name : slug; }
   if (kind === "category") { const c = data.CATS.find((x) => x.slug === slug); return c ? c.name : slug; }
   if (kind === "guide") { const g = data.GUIDES.find((x) => x.slug === slug); return g ? g.meta.title.replace(/:.*$/, "") : slug; }
+  if (kind === "for") { const g = (data.USECASES || []).find((x) => x.slug === slug); return g ? g.meta.title : slug; }
+  if (kind === "for") { const g = (data.USECASES || []).find((x) => x.slug === slug); return g ? g.meta.title : slug; }
   if (kind === "glossary") { const t = data.GLOSSARY.terms.find((x) => x.slug === slug); return t ? t.term : slug; }
   if (slug === "quote") return "Quote cart";
   if (slug === "bespoke") return "Bespoke Atelier";
@@ -86,9 +103,15 @@ function fmtDate(iso) {
   return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 }
 
+function cardEyebrow(g) {
+  if (g.meta.type === "comparison") return "Comparison";
+  if (g.meta.type === "usecase") return "For " + (g.meta.audience || "properties");
+  return g.categoryName || "Guide";
+}
+
 function guideCard(g) {
   return '<a class="gcard" href="' + esc(g.path) + '">' +
-    '<span class="eyebrow">' + esc(g.categoryName || "Guide") + "</span>" +
+    '<span class="eyebrow">' + esc(cardEyebrow(g)) + "</span>" +
     "<h3>" + esc(g.meta.title.replace(/: The Complete Buyer.s Guide$/, "")) + "</h3>" +
     "<p>" + esc(g.meta.summary || g.meta.description) + "</p>" +
     '<span class="tlink">Read the guide</span></a>';
@@ -104,8 +127,16 @@ function renderGuide(guide, data, helpers) {
   const r = md.render(guide.src, { resolver, onLink: (h) => links.add(h), terms, glossaryHref: "/glossary/", maxAutoLinks: 12 });
   const meta = r.meta;
   const cat = CATS.find((c) => c.slug === meta.category);
-  const prods = PRODS.filter((p) => p.category === meta.category);
-  const others = GUIDES.filter((g) => g.slug !== guide.slug);
+  const listed = meta.products ? String(meta.products).split(",").map((s) => s.trim()).filter(Boolean) : null;
+  if (listed) listed.forEach((s) => { if (!PRODS.find((p) => p.slug === s)) throw new Error(guide.slug + ": unknown product in front matter: " + s); });
+  const prods = listed ? listed.map((s) => PRODS.find((p) => p.slug === s)) : PRODS.filter((p) => p.category === meta.category);
+  const isUse = meta.type === "usecase";
+  const pool = isUse ? (data.USECASES || []) : GUIDES;
+  const sameType = pool.filter((g) => g.slug !== guide.slug && (g.meta.type || "guide") === (meta.type || "guide"));
+  const otherType = pool.filter((g) => g.slug !== guide.slug && (g.meta.type || "guide") !== (meta.type || "guide"));
+  const others = sameType.concat(otherType).slice(0, 6);
+  const rootCrumb = isUse ? { name: "For", href: "/for/" } : { name: "Guides", href: "/guides/" };
+  const eyebrow = isUse ? "For " + (meta.audience || "properties") : (meta.type === "comparison" ? "Comparison" : "Buying guide" + (cat ? " \u00b7 " + cat.name : ""));
 
   // body without the H1 (the template renders it) and with FAQ answers kept
   const body = r.html.replace(/^<h1>[\s\S]*?<\/h1>\n?/, "");
@@ -115,22 +146,25 @@ function renderGuide(guide, data, helpers) {
       r.headings.map((h) => '<li><a href="#' + esc(h.id) + '">' + esc(h.text) + "</a></li>").join("") + "</ol></nav></aside>"
     : "";
 
+  const productsTitle = listed
+    ? (isUse ? "The pieces this program is built from" : "Products compared in this guide")
+    : (cat ? "Every " + cat.name.toLowerCase() + " style in the catalog" : "Products");
   const products = prods.length
     ? '<section class="guide-products" aria-labelledby="guideProductsTitle">' +
-      '<div class="section-head"><span class="eyebrow">In this guide</span><h2 id="guideProductsTitle">' + esc(cat ? "Every " + cat.name.toLowerCase() + " style in the catalog" : "Products") + "</h2></div>" +
+      '<div class="section-head"><span class="eyebrow">' + (isUse ? "The collection" : "In this guide") + '</span><h2 id="guideProductsTitle">' + esc(productsTitle) + "</h2></div>" +
       '<div class="pgrid">' + prods.map((p) => helpers.cardHTML(p)).join("") + "</div>" +
-      '<div class="btn-row"><a class="btn btn--solid" href="/products/' + esc(meta.category) + '/">View the ' + esc(cat ? cat.name : "") + ' collection</a><a class="btn" href="/quote/">Build a Quote</a></div>' +
+      '<div class="btn-row">' + (cat ? '<a class="btn btn--solid" href="/products/' + esc(meta.category) + '/">View the ' + esc(cat.name) + " collection</a>" : '<a class="btn btn--solid" href="/products/">Explore the catalog</a>') + '<a class="btn" href="/quote/">Build a Quote</a></div>' +
       "</section>"
     : "";
 
-  const related = '<section class="guide-related"><div class="section-head"><span class="eyebrow">More guides</span><h2>Other buying guides</h2></div>' +
+  const related = '<section class="guide-related"><div class="section-head"><span class="eyebrow">' + (isUse ? "Other programs" : "More guides") + '</span><h2>' + (isUse ? "Custom goods for other properties and events" : "Other guides") + "</h2></div>" +
     '<div class="gcards">' + others.map(guideCard).join("") + "</div>" +
     '<p class="page-note">Unfamiliar term? The <a href="/glossary/">hospitality customization glossary</a> defines MOQs, tiers, proofs, embroidery, debossing, laser etching, and more.</p></section>';
 
   const html =
-    crumbs([{ name: "Home", href: "/" }, { name: "Guides", href: "/guides/" }, { name: meta.title.replace(/: The Complete Buyer.s Guide$/, "") }]) +
+    crumbs([{ name: "Home", href: "/" }, rootCrumb, { name: meta.title.replace(/: The Complete Buyer.s Guide$/, "").replace(/:.*$/, "") }]) +
     '<header class="page-intro guide-intro">' +
-    '<span class="eyebrow">Buying guide' + (cat ? " · " + esc(cat.name) : "") + "</span>" +
+    '<span class="eyebrow">' + esc(eyebrow) + "</span>" +
     "<h1>" + esc(meta.title) + "</h1>" +
     '<p class="guide-meta"><span>Published <time datetime="' + esc(meta.published) + '">' + esc(fmtDate(meta.published)) + "</time></span>" +
     (meta.updated && meta.updated !== meta.published ? '<span>Updated <time datetime="' + esc(meta.updated) + '">' + esc(fmtDate(meta.updated)) + "</time></span>" : "") +
@@ -140,17 +174,22 @@ function renderGuide(guide, data, helpers) {
     '<div class="guide-layout">' + toc + '<article class="guide-body">' + body + "</article></div>" +
     products + related;
 
-  return { html, meta, faqs: r.faqs, words: r.words, headings: r.headings, links: [...links], category: cat };
+  return { html, meta, faqs: r.faqs, words: r.words, headings: r.headings, links: [...links], category: cat, products: prods };
 }
 
 /* ---------------- guides index ---------------- */
 
 function renderGuidesIndex(data) {
   const { GUIDES } = data;
+  const buying = GUIDES.filter((g) => g.meta.type !== "comparison");
+  const comparisons = GUIDES.filter((g) => g.meta.type === "comparison");
+  const usecases = data.USECASES || [];
   return crumbs([{ name: "Home", href: "/" }, { name: "Guides" }]) +
     '<header class="page-intro"><span class="eyebrow">HL Supply / Guides</span><h1>Buying guides for custom hospitality products</h1>' +
     '<p class="page-intro__lede">What to specify, what it costs to get wrong, and how the atelier produces it: one guide per category, written for the people who commission guest goods for hotels, resorts, clubs, and spas.</p></header>' +
-    '<div class="gcards gcards--index">' + GUIDES.map(guideCard).join("") + "</div>" +
+    '<div class="gcards gcards--index">' + buying.map(guideCard).join("") + "</div>" +
+    (comparisons.length ? '<section class="page-section"><div class="section-head"><span class="eyebrow">Comparisons</span><h2>Side by side</h2></div><div class="gcards">' + comparisons.map(guideCard).join("") + "</div></section>" : "") +
+    (usecases.length ? '<section class="page-section"><div class="section-head"><span class="eyebrow">By property and event</span><h2>Custom goods for your program</h2></div><div class="gcards">' + usecases.map(guideCard).join("") + '</div><p class="page-note"><a href="/for/">All programs</a></p></section>' : "") +
     '<section class="page-section page-section--tint"><h2>Glossary</h2><p>Every term used in these guides, defined in plain language: MOQ, quantity tiers, proof, mockup, embroidery, deboss, laser etching, Pantone matching, lead time, and more.</p><p><a class="tlink" href="/glossary/">Open the glossary</a></p></section>';
 }
 
@@ -186,4 +225,13 @@ function renderGlossary(data) {
     '<div class="btn-row"><a class="btn btn--solid" href="/contact/">Speak with the Concierge</a><a class="btn" href="/guides/">Read the guides</a></div></section>';
 }
 
-module.exports = { loadGuides, loadGlossary, makeResolver, renderGuide, renderGuidesIndex, renderGlossary, readingTime };
+function renderUseCasesIndex(data) {
+  const usecases = data.USECASES || [];
+  return crumbs([{ name: "Home", href: "/" }, { name: "For" }]) +
+    '<header class="page-intro"><span class="eyebrow">HL Supply / Programs</span><h1>Custom guest goods by property and event</h1>' +
+    '<p class="page-intro__lede">Golf tournaments, beach clubs, spas, openings, and retreats each ask something different of a branded collection. These pages show what properties commission for each, built from the catalog, with the quantities and timelines that fit.</p></header>' +
+    '<div class="gcards gcards--index">' + usecases.map(guideCard).join("") + "</div>" +
+    '<section class="page-section page-section--tint"><h2>Buying guides and comparisons</h2><p>Materials, minimums, logo methods, and timelines by category, plus side-by-side comparisons of the decisions buyers ask about most.</p><p><a class="tlink" href="/guides/">Read the guides</a></p></section>';
+}
+
+module.exports = { loadGuides, loadUseCases, loadCollection, loadGlossary, makeResolver, renderGuide, renderGuidesIndex, renderUseCasesIndex, renderGlossary, readingTime };

@@ -31,6 +31,9 @@ const readDist = (rel) => fs.readFileSync(path.join(DIST, rel), "utf8");
 const PAGES = ["/about/", "/process/", "/contact/", "/privacy/", "/terms/"];
 const expected = ["/", "/products/", "/bespoke/", "/quote/", "/404.html", "/products.html", "/category.html", "/product.html", "/_redirects", ...PAGES];
 expected.push("/guides/", "/glossary/", ...CATS.map((c) => "/guides/" + c.guide + "/"));
+const COMPARISONS = ["embroidery-vs-deboss-vs-laser-etching", "canvas-vs-woven-leather-tote", "350ml-vs-500ml-hotel-bottles", "hotel-slipper-materials-compared", "hotel-tote-styles-compared"];
+const USECASES = ["golf-tournaments", "beach-clubs", "spa-wellness", "hotel-openings", "corporate-retreats"];
+expected.push("/for/", ...COMPARISONS.map((s) => "/guides/" + s + "/"), ...USECASES.map((s) => "/for/" + s + "/"));
 CATS.forEach((c) => expected.push("/products/" + c.slug + "/"));
 PRODS.forEach((p) => expected.push("/products/" + p.category + "/" + p.slug + "/"));
 expected.forEach((u) => t.ok(distExists(u), "exists: " + u));
@@ -285,11 +288,11 @@ function liveDom(url, opts) {
 
 /* ---------- Phase 4: guides, glossary, link mesh ---------- */
 const GUIDES = fs.readdirSync(path.join(ROOT, "content", "guides")).filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, ""));
-t.ok(GUIDES.length === 7, "7 guide sources");
+t.ok(GUIDES.length === 12, "7 buying guides + 5 comparisons in content/guides (" + GUIDES.length + ")");
 t.ok(distExists("/guides/") && distExists("/glossary/"), "guides index + glossary exist");
 {
   const doc = auditPage("/guides/");
-  t.ok(doc.querySelectorAll(".gcard").length === 7 && doc.querySelector('a[href="/glossary/"]'), "guides index: 7 cards + glossary link");
+  t.ok(doc.querySelectorAll(".gcard").length === 17 && doc.querySelector('a[href="/glossary/"]') && doc.querySelector('a[href="/for/"]'), "guides index: 7 guides + 5 comparisons + 5 programs, glossary + programs links");
 }
 for (const c of CATS) {
   const url = "/guides/" + c.guide + "/";
@@ -305,7 +308,7 @@ for (const c of CATS) {
   t.ok(doc.querySelector('a[href="/products/' + c.slug + '/"]') && doc.querySelector('a[href="/glossary/"]') && doc.querySelector('a[href="/bespoke/"]'), c.guide + ": links category, glossary, bespoke");
   t.ok(doc.querySelectorAll(".guide-body a.term-link").length >= 3, c.guide + ": glossary terms auto-linked");
   t.ok(doc.querySelectorAll(".guide-products .pcard").length === COUNTS[c.slug], c.guide + ": product cards for the whole category");
-  t.ok(doc.querySelectorAll(".guide-related .gcard").length === 6, c.guide + ": 6 related guides");
+  t.ok(doc.querySelectorAll(".guide-related .gcard").length === 6 && [...doc.querySelectorAll(".guide-related .gcard .eyebrow")].every((e) => e.textContent !== "Comparison"), c.guide + ": 6 related buying guides");
   const { graph, types } = ldOf(url);
   t.ok(types.includes("Article") && types.includes("BreadcrumbList") && types.includes("FAQPage"), c.guide + ": Article + BreadcrumbList + FAQPage schema");
   const art = graph.find((n) => n["@type"] === "Article");
@@ -344,6 +347,46 @@ for (const c of CATS) {
   const sm = readDist("sitemap.xml");
   t.ok(sm.includes("/guides/custom-hotel-hats/") && sm.includes("/glossary/"), "sitemap includes guides + glossary");
   t.ok(/\/guides\/custom-hotel-slippers\//.test(readDist("llms.txt")), "llms.txt lists guides");
+}
+
+/* ---------- Phase 5: comparisons + use-case pages ---------- */
+for (const slug of COMPARISONS) {
+  const url = "/guides/" + slug + "/";
+  const doc = auditPage(url);
+  const words = doc.querySelector(".guide-body").textContent.split(/\s+/).filter(Boolean).length;
+  t.ok(words >= 900, slug + ": body >= 900 words (" + words + ")");
+  t.ok(doc.querySelector(".page-intro .eyebrow").textContent === "Comparison", slug + ": comparison eyebrow");
+  t.ok(doc.querySelector(".guide-body table") && doc.querySelectorAll(".guide-body .faq__q").length >= 4, slug + ": comparison table + FAQs");
+  t.ok(doc.querySelectorAll(".guide-products .pcard").length >= 4, slug + ": compared products as cards");
+  const { types } = ldOf(url);
+  t.ok(types.includes("Article") && types.includes("FAQPage"), slug + ": Article + FAQPage schema");
+}
+{
+  const doc = auditPage("/for/");
+  t.ok(doc.querySelectorAll(".gcard").length === 5 && doc.querySelector('a[href="/guides/"]'), "programs index: 5 cards + guides link");
+}
+for (const slug of USECASES) {
+  const url = "/for/" + slug + "/";
+  const doc = auditPage(url);
+  const words = doc.querySelector(".guide-body").textContent.split(/\s+/).filter(Boolean).length;
+  t.ok(words >= 900, slug + ": body >= 900 words (" + words + ")");
+  t.ok(/^For /.test(doc.querySelector(".page-intro .eyebrow").textContent), slug + ": program eyebrow");
+  t.ok(doc.querySelector(".category-answer") && /\d/.test(doc.querySelector(".category-answer").textContent), slug + ": direct-answer intro");
+  const cards = doc.querySelectorAll(".guide-products .pcard");
+  t.ok(cards.length >= 8, slug + ": >= 8 product cards from across categories (" + cards.length + ")");
+  const cats = new Set([...cards].map((c) => c.querySelector("a").getAttribute("href").split("/")[2]));
+  t.ok(cats.size >= 3, slug + ": products span >= 3 categories");
+  t.ok(doc.querySelectorAll(".guide-body .faq__q").length >= 4 && doc.querySelector('a[href="/bespoke/"]'), slug + ": FAQs + bespoke link");
+  t.ok(doc.querySelectorAll(".guide-related .gcard").length === 4, slug + ": 4 other programs");
+  const { graph, types } = ldOf(url);
+  t.ok(types.includes("Article") && types.includes("FAQPage"), slug + ": Article + FAQPage schema");
+  t.ok(graph.find((n) => n["@type"] === "BreadcrumbList").itemListElement[1].item.endsWith("/for/"), slug + ": breadcrumb through /for/");
+}
+{
+  const home = staticDom("/").window.document;
+  t.ok(home.querySelector('.footer a[href="/guides/"]') && home.querySelector('.footer a[href="/for/golf-tournaments/"]'), "home footer links guides + programs");
+  t.ok(home.querySelector('.col-card a[href="/for/spa-wellness/"]') && home.querySelector('.col-card a[href="/for/golf-tournaments/"]'), "home collection cards link programs");
+  t.ok(fs.existsSync(path.join(ROOT, "docs", "KEYWORD-MAP.md")), "keyword map exists");
 }
 
 /* ---------- 4. legacy redirects ---------- */

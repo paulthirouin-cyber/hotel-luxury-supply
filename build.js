@@ -359,8 +359,9 @@ function build() {
     const PAGES = probe.window.HL_PAGES;
     const helpers = { cardHTML: probe.window.HLCatalog.cardHTML };
     const GUIDES = content.loadGuides();
+    const USECASES = content.loadUseCases();
     const GLOSSARY = content.loadGlossary();
-    const data = { CATS, PRODS, GUIDES, PAGES, GLOSSARY };
+    const data = { CATS, PRODS, GUIDES, USECASES, PAGES, GLOSSARY };
     GUIDES.forEach((g) => { const c = CATS.find((x) => x.slug === g.meta.category); g.categoryName = c ? c.name : ""; });
     // every category must point at an existing guide and vice versa
     CATS.forEach((c) => { if (c.guide && !GUIDES.find((g) => g.slug === c.guide)) throw new Error("category " + c.slug + " points at missing guide " + c.guide); });
@@ -375,6 +376,23 @@ function build() {
       }), meta);
       GUIDE_SUMMARIES.push({ title: r.meta.title, path: g.path, summary: r.meta.summary || r.meta.description, words: r.words });
     }
+    for (const g of USECASES) {
+      const r = content.renderGuide(g, data, helpers);
+      const meta = { title: r.meta.metaTitle || r.meta.title, description: r.meta.description, keywords: r.meta.keywords, path: g.path, image: r.products[0] ? "/" + r.products[0].image.replace(/^\//, "") : undefined, ogType: "article" };
+      emit(g.path.replace(/^\//, "") + "index.html", renderCatalogPage("#/for/" + g.slug, meta, {
+        view: "viewPage",
+        mutate(doc) { doc.getElementById("pageMount").innerHTML = r.html; doc.getElementById("pageMount").setAttribute("data-page", "usecase"); },
+        ld: () => seo.articleLd(meta, { meta: r.meta, faqs: r.faqs, words: r.words, category: null, root: { name: "For", path: "/for/" } })
+      }), meta);
+      GUIDE_SUMMARIES.push({ title: r.meta.title, path: g.path, summary: r.meta.summary || r.meta.description, words: r.words });
+    }
+    const forMeta = { title: "Custom Guest Goods by Property and Event | HL Supply", description: "What golf tournaments, beach clubs, spas, hotel openings, and corporate retreats commission from HL Supply, with the quantities and timelines that fit each program.", path: "/for/", keywords: ["custom hospitality products by use case", "hotel merchandise programs"] };
+    emit("for/index.html", renderCatalogPage("#/for", forMeta, {
+      view: "viewPage",
+      mutate(doc) { doc.getElementById("pageMount").innerHTML = content.renderUseCasesIndex(data); },
+      ld: () => seo.pageLd(forMeta, "CollectionPage", "For")
+    }), forMeta);
+
     const idxMeta = { title: "Buying Guides for Custom Hospitality Products | HL Supply", description: "One buyer\u2019s guide per category: custom hotel totes, hats, bottles, flip-flops, leather goods, slippers, and accessories. Materials, minimums, logo methods, and timelines.", path: "/guides/", keywords: ["custom hotel products guide", "hotel merchandise buying guide"] };
     emit("guides/index.html", renderCatalogPage("#/guides", idxMeta, {
       view: "viewPage",
