@@ -23,6 +23,7 @@ const path = require("path");
 const { JSDOM } = require("jsdom");
 const seo = require("./scripts/seo");
 const perf = require("./scripts/perf");
+const content = require("./scripts/content");
 
 const ROOT = __dirname;
 const SITE = "https://hotelluxurysupply.com";
@@ -349,6 +350,45 @@ function build() {
     }
   }
 
+  // content engine: guides + glossary from content/ (Node only)
+  const GUIDE_SUMMARIES = [];
+  {
+    const probe = new JSDOM(withStatic(read("products.html")), { runScripts: "outside-only", url: SITE + "/" });
+    stub(probe.window);
+    CATALOG_SCRIPTS.forEach((f) => probe.window.eval(read(f)));
+    const PAGES = probe.window.HL_PAGES;
+    const helpers = { cardHTML: probe.window.HLCatalog.cardHTML };
+    const GUIDES = content.loadGuides();
+    const GLOSSARY = content.loadGlossary();
+    const data = { CATS, PRODS, GUIDES, PAGES, GLOSSARY };
+    GUIDES.forEach((g) => { const c = CATS.find((x) => x.slug === g.meta.category); g.categoryName = c ? c.name : ""; });
+    // every category must point at an existing guide and vice versa
+    CATS.forEach((c) => { if (c.guide && !GUIDES.find((g) => g.slug === c.guide)) throw new Error("category " + c.slug + " points at missing guide " + c.guide); });
+
+    for (const g of GUIDES) {
+      const r = content.renderGuide(g, data, helpers);
+      const meta = { title: r.meta.metaTitle || r.meta.title, description: r.meta.description, keywords: r.meta.keywords, path: g.path, image: r.category ? "/" + r.category.image.replace(/^\//, "") : undefined, ogType: "article" };
+      emit(g.path.replace(/^\//, "") + "index.html", renderCatalogPage("#/guides/" + g.slug, meta, {
+        view: "viewPage",
+        mutate(doc) { doc.getElementById("pageMount").innerHTML = r.html; doc.getElementById("pageMount").setAttribute("data-page", "guide"); },
+        ld: () => seo.articleLd(meta, { meta: r.meta, faqs: r.faqs, words: r.words, category: r.category })
+      }), meta);
+      GUIDE_SUMMARIES.push({ title: r.meta.title, path: g.path, summary: r.meta.summary || r.meta.description, words: r.words });
+    }
+    const idxMeta = { title: "Buying Guides for Custom Hospitality Products | HL Supply", description: "One buyer\u2019s guide per category: custom hotel totes, hats, bottles, flip-flops, leather goods, slippers, and accessories. Materials, minimums, logo methods, and timelines.", path: "/guides/", keywords: ["custom hotel products guide", "hotel merchandise buying guide"] };
+    emit("guides/index.html", renderCatalogPage("#/guides", idxMeta, {
+      view: "viewPage",
+      mutate(doc) { doc.getElementById("pageMount").innerHTML = content.renderGuidesIndex(data); },
+      ld: () => seo.pageLd(idxMeta, "CollectionPage", "Guides")
+    }), idxMeta);
+    const glMeta = { title: "Hospitality Customization Glossary | HL Supply", description: "Plain definitions of " + GLOSSARY.terms.length + " terms used when commissioning custom branded guest goods: MOQ, quantity tiers, proof, embroidery, deboss, laser etching, lead time.", path: "/glossary/", keywords: ["hospitality customization glossary", "what is MOQ custom products", "embroidery vs deboss vs laser etching"] };
+    emit("glossary/index.html", renderCatalogPage("#/glossary", glMeta, {
+      view: "viewPage",
+      mutate(doc) { doc.getElementById("pageMount").innerHTML = content.renderGlossary(data); },
+      ld: () => seo.glossaryLd(glMeta, GLOSSARY)
+    }), glMeta);
+  }
+
   // quote cart is user state: ship the empty state, the client renders the real cart
   emit("quote/index.html", renderCatalogPage("#/quote", QUOTE_META, { view: "viewQuote", prerendered: false }), QUOTE_META);
 
@@ -368,7 +408,7 @@ function build() {
   const today = new Date().toISOString().slice(0, 10);
   write("sitemap.xml", seo.sitemapXml(routes, today));
   write("robots.txt", seo.robotsTxt());
-  write("llms.txt", seo.llmsTxt(CATS, PRODS));
+  write("llms.txt", seo.llmsTxt(CATS, PRODS, { guides: GUIDE_SUMMARIES }));
   write("build-manifest.json", JSON.stringify({ builtAt: new Date().toISOString(), site: SITE, routes }, null, 2));
 
   console.log(`built ${pages.length} pages into ${path.relative(ROOT, OUT) || "."}/ (${routes.filter((r) => !r.noindex).length} indexable)`);

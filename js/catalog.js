@@ -176,6 +176,18 @@
     );
   }
 
+  // Guide + glossary pointer (internal-link mesh: category → guide → glossary)
+  function guideLinkHTML(cat) {
+    if (!cat || !cat.guide) return "";
+    return (
+      '<aside class="guide-link">' +
+      '  <span class="eyebrow">Buying guide</span>' +
+      '  <p><a href="' + U("#/guides/" + cat.guide) + '">' + esc(cat.guideTitle || "Read the buying guide") + "</a></p>" +
+      '  <small>Materials, minimums, logo methods, and timelines, plus the <a href="' + U("#/glossary") + '">customization glossary</a>.</small>' +
+      "</aside>"
+    );
+  }
+
   // FAQ block (real buyer questions; the build emits matching FAQPage schema)
   function faqHTML(faqs, heading) {
     if (!faqs || !faqs.length) return "";
@@ -309,7 +321,8 @@
       var routeStr = href.slice(hi);
       var first = routeStr.slice(2).split(/[\/?#]/)[0];
       if (routeStr.indexOf("#/products") !== 0 && routeStr.indexOf("#/quote") !== 0 &&
-          routeStr.indexOf("#/bespoke") !== 0 && !(window.HL_PAGES && window.HL_PAGES[first])) return;
+          routeStr.indexOf("#/bespoke") !== 0 && first !== "guides" && first !== "glossary" &&
+          !(window.HL_PAGES && window.HL_PAGES[first])) return;
       if (!document.getElementById("catalogViews")) return;
       e.preventDefault();
       navigate(routeStr);
@@ -347,8 +360,10 @@
       if (gridM) gridM.innerHTML = "";
       var ansM = document.getElementById("categoryAnswer");
       var faqM = document.getElementById("categoryFaq");
+      var guideM = document.getElementById("categoryGuide");
       if (ansM) ansM.textContent = "";
       if (faqM) faqM.innerHTML = "";
+      if (guideM) guideM.innerHTML = "";
       if (heroM) heroM.innerHTML = notFoundHTML("Category");
       document.title = "Category not found \u2014 HL Supply";
       return;
@@ -377,6 +392,8 @@
     if (answer) answer.textContent = cat.directAnswer || "";
     var faq = document.getElementById("categoryFaq");
     if (faq) faq.innerHTML = faqHTML(cat.faqs, "Questions about custom " + cat.name.toLowerCase());
+    var guideEl = document.getElementById("categoryGuide");
+    if (guideEl) guideEl.innerHTML = guideLinkHTML(cat);
 
     var BESPOKE_CTA = {
       "bags": ["Need a custom size, handle, pocket, or material?", "Start from one of our bag styles or send us your desired canvas, straps, dimensions, logo placement, and quantity.", "Start Bespoke Bag Project"],
@@ -516,6 +533,9 @@
       '      <button type="button" class="btn" data-mockup="' + product.slug + '">Request Mockup</button>' +
       "    </div>" +
       '    <p class="pd__logonote">Logo upload happens at quote submission.</p>' +
+      (cat && cat.guide
+        ? '    <p class="pd__guide">Planning a program? Read <a href="' + U("#/guides/" + cat.guide) + '">' + esc(cat.guideTitle || "the buying guide") + "</a>.</p>"
+        : "") +
       "  </div>" +
       "</div>" +
       relatedHTML(product);
@@ -587,6 +607,13 @@
       return;
     }
 
+    if (window.HL_PAGES && (seg[0] === "guides" || seg[0] === "glossary")) {
+      showView("viewPage");
+      window.HL_PAGES.__renderContent(seg, document.getElementById("pageMount"));
+      scrollTop();
+      return;
+    }
+
     if (window.HL_PAGES && window.HL_PAGES[seg[0]] && seg.length === 1) {
       showView("viewPage");
       if (!STATIC) document.title = window.HL_PAGES[seg[0]].title;
@@ -652,6 +679,8 @@
     renderProduct: renderProduct,
     notFoundHTML: notFoundHTML,
     faqHTML: faqHTML,
+    cardHTML: cardHTML,
+    guideLinkHTML: guideLinkHTML,
     isStatic: STATIC,
     refreshCount: refreshCount,
     toast: toast

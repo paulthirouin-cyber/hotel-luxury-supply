@@ -163,6 +163,49 @@ function bespokeLd(meta, faqs) {
   ]);
 }
 
+function articleLd(meta, guide) {
+  const article = {
+    "@type": "Article",
+    "@id": SITE + meta.path + "#article",
+    headline: guide.meta.title,
+    description: meta.description,
+    url: SITE + meta.path,
+    mainEntityOfPage: { "@id": SITE + meta.path + "#webpage" },
+    image: guide.category ? abs(guide.category.image) : undefined,
+    datePublished: guide.meta.published,
+    dateModified: guide.meta.updated || guide.meta.published,
+    author: { "@id": ORG_ID },
+    publisher: { "@id": ORG_ID },
+    articleSection: guide.category ? guide.category.name : "Guides",
+    wordCount: guide.words,
+    keywords: (meta.keywords || []).join(", "),
+    inLanguage: "en",
+    about: guide.category ? { "@type": "Thing", name: "Custom " + guide.category.name.toLowerCase() + " for hotels" } : undefined
+  };
+  return graph([
+    webPage(meta, { mainEntity: { "@id": article["@id"] } }),
+    article,
+    breadcrumb([{ name: "Home", path: "/" }, { name: "Guides", path: "/guides/" }, { name: guide.meta.title.replace(/: The Complete Buyer.s Guide$/, ""), path: meta.path }]),
+    faqPage(guide.faqs)
+  ]);
+}
+
+function glossaryLd(meta, glossary) {
+  return graph([
+    webPage(meta, {
+      mainEntity: {
+        "@type": "DefinedTermSet",
+        "@id": SITE + meta.path + "#terms",
+        name: glossary.title,
+        hasDefinedTerm: glossary.terms.map((t) => ({
+          "@type": "DefinedTerm", name: t.term, description: t.definition, url: SITE + meta.path + "#" + t.slug, inDefinedTermSet: SITE + meta.path + "#terms"
+        }))
+      }
+    }),
+    breadcrumb([{ name: "Home", path: "/" }, { name: "Guides", path: "/guides/" }, { name: "Glossary", path: meta.path }])
+  ]);
+}
+
 function pageLd(meta, type, crumb) {
   return graph([
     webPage(meta, type && type !== "WebPage" ? { "@type": type } : {}),
@@ -198,7 +241,8 @@ function robotsTxt() {
   ].join("\n");
 }
 
-function llmsTxt(CATS, PRODS) {
+function llmsTxt(CATS, PRODS, extra) {
+  extra = extra || {};
   const byCat = (slug) => PRODS.filter((p) => p.category === slug);
   const lines = [
     "# HL Supply",
@@ -223,6 +267,9 @@ function llmsTxt(CATS, PRODS) {
     `- [About HL Supply](${SITE}/about/)`,
     `- [How it works](${SITE}/process/): Select, Customize, Produce, Deliver`,
     `- [Contact the concierge](${SITE}/contact/)`,
+    `- [Buying guides](${SITE}/guides/)`,
+    `- [Glossary of customization terms](${SITE}/glossary/)`,
+    ...((extra.guides || []).map((g) => `- [${g.title}](${SITE}${g.path}): ${g.summary}`)),
     ""
   ];
   for (const c of CATS) {
@@ -236,4 +283,4 @@ function llmsTxt(CATS, PRODS) {
   return lines.join("\n");
 }
 
-module.exports = { SITE, homeLd, landingLd, categoryLd, productLd, bespokeLd, pageLd, simpleLd, sitemapXml, robotsTxt, llmsTxt };
+module.exports = { SITE, homeLd, landingLd, categoryLd, productLd, bespokeLd, pageLd, articleLd, glossaryLd, simpleLd, sitemapXml, robotsTxt, llmsTxt };

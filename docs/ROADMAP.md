@@ -103,12 +103,16 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       ✔ 2026-10-20: all five forms (contact, concierge bell, quote submit, bespoke, mockup) call `HLLeads.send()` → POST `/api/lead` (Cloudflare Pages Function `functions/api/lead.js`, honeypot + validation, emails via Resend) and mirror to a local outbox; the UX never waits on the network. Tests assert the POST payload for each form. **ASK PAUL (not blocking the build):** which inbox receives leads (default info@hotelluxurysupply.com) and create a free resend.com key → set `RESEND_API_KEY`, `LEAD_TO`, `LEAD_FROM` in Pages → Settings → Environment variables. Until then the endpoint answers 202 and nothing is emailed.
 
 ## Phase 4 — Content engine, wave 1 (cornerstones)
-- [ ] 4.1 `/guides/` template + index page, Article schema, build integration.
-- [ ] 4.2 Write the 7 category buying guides (1,500–2,500 words each, brand
+- [x] 4.1 `/guides/` template + index page, Article schema, build integration.
+      ✔ 2026-10-20: content engine = `scripts/markdown.js` (front matter, headings, lists, tables, quotes, internal link shorthands `product:` `category:` `guide:` `glossary:` `page:`, glossary auto-linking) + `scripts/content.js` (guide template with breadcrumb, meta, reading time, sticky TOC, direct answer, product grid for the whole category, related guides; guides index; glossary). `/guides/` index + Article/FAQPage/BreadcrumbList schema; unknown internal links fail the build.
+- [x] 4.2 Write the 7 category buying guides (1,500–2,500 words each, brand
       voice, FAQ block, direct-answer intro, links to every category product).
-- [ ] 4.3 `/glossary/` with 30+ hospitality-customization terms.
-- [ ] 4.4 Internal-link mesh pass: category ↔ guide ↔ glossary ↔ products.
+      ✔ 2026-10-20: seven buying guides in `content/guides/*.md` (bags, hats, bottles, flip-flops, leather goods, slippers, accessories), each ≥ 1,400 body words (Article wordCount asserted), brand voice, direct-answer intro, comparison table, brief-writing + common-mistakes sections, 6 FAQs, links to every product in the category, the category, the glossary, and the Bespoke Atelier. Facts drawn only from `js/products.js`.
+- [x] 4.3 `/glossary/` with 30+ hospitality-customization terms.
+      ✔ 2026-10-20: `/glossary/` with 47 terms in `content/glossary.json` (MOQ, tiers, proof, mockup, embroidery, deboss, emboss, laser etching, Pantone, vector artwork, digitizing, lead time, materials, cap constructions, programs…), alphabetical index, anchor per term, related links resolved against live data, DefinedTermSet schema.
+- [x] 4.4 Internal-link mesh pass: category ↔ guide ↔ glossary ↔ products.
       Link-audit test extended to cover all new pages.
+      ✔ 2026-10-20: link mesh — category pages link their guide + glossary (`#categoryGuide`), product pages link the category guide, guides link every product/category/glossary/bespoke and auto-link glossary terms (≥ 3 per guide), glossary links products/categories/guides/pages, llms.txt + sitemap include guides and glossary. Dist suite asserts every product page receives ≥ 3 inbound internal links site-wide and every glossary anchor referenced anywhere exists. Lighthouse: guide 99/100/100/100, glossary 100/100/100/100.
 
 ## Phase 5 — Content engine, wave 2 (verticals + comparisons)
 - [ ] 5.1 5 use-case pages: /for/golf-tournaments/, /for/beach-clubs/,
@@ -158,3 +162,6 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
 - 2026-10-20 — Trust pages are content modules in `js/pages.js` (registry with path/meta/schemaType/render) rendered by the same router and pre-rendered by the same build; adding a page = adding a registry entry. Clients section stays on the homepage but left the nav (placeholder logos are not a destination).
 - 2026-10-20 — Lead delivery uses a Pages Function + Resend (MailChannels free tier is gone). Formspree would have worked without code but puts the lead list in a third party; Resend keeps the inbox as the system of record. Switching is a one-file change.
 - 2026-10-20 — Legal pages ship as honest plain-language placeholders (noindex) so the footer is complete; counsel text replaces them before Phase 6 cutover.
+- 2026-10-20 — Guides and the glossary are build-time content (Markdown + JSON in `content/`), not JS data: they never ship in the client bundle, and future pieces are just new `.md` files with front matter. In SPA/preview mode those routes show a calm pointer to the preview deployment.
+- 2026-10-20 — Category ↔ guide pairing is declared in `js/categories.js` (`guide`, `guideTitle`) so the SPA can link guides without loading content; the build verifies every declared guide exists.
+- 2026-10-20 — Glossary auto-linking is capped at 12 links per guide and skips headings and existing links, to keep the mesh useful rather than spammy.

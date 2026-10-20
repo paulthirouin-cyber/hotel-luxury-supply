@@ -7,6 +7,8 @@ var A = function (p) { return window.HLRoutes ? window.HLRoutes.asset(p) : p; };
 window.HL_CATEGORIES = [
   {
     slug: "bags",
+    guide: "custom-hotel-tote-bags",
+    guideTitle: "Custom Hotel Tote Bags: The Complete Buyer’s Guide",
     directAnswer: "Custom hotel tote bags are resort-grade canvas, woven, or leather-trimmed totes produced in your property’s colors and finished with an embroidered logo. HL Supply’s eight bag styles start at 200 units, with four quantity tiers and a 4–6 week production window after proof approval. Each piece is designed as a guest object first and a branded item second.",
     faqs: [
       { q: "What is the minimum order for custom hotel tote bags?", a: "Every HL Supply bag style starts at 200 units, with quantity pricing tiers at 200, 500, 1,000, and 2,500 units. Pricing is confirmed by the atelier at quote review, after artwork and customization are settled." },
@@ -33,6 +35,8 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "hats",
+    guide: "custom-hotel-hats",
+    guideTitle: "Custom Hotel & Resort Hats: The Complete Buyer’s Guide",
     directAnswer: "Custom resort hats are embroidered caps, bucket hats, and trucker styles produced in your property’s colors for clubs, courses, cabanas, and guest retail. HL Supply’s six hat styles start at 100 units, with four quantity tiers and in-house embroidery. Every hat is proofed for placement and thread color before production.",
     faqs: [
       { q: "What is the minimum order for custom resort hats?", a: "Hat styles start at 100 units, with quantity pricing tiers at 100, 250, 500, and 1,000 units. Pricing is confirmed at quote review once the embroidery and color details are set." },
@@ -58,6 +62,8 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "bottles",
+    guide: "custom-hotel-water-bottles",
+    guideTitle: "Custom Hotel Water Bottles: The Complete Buyer’s Guide",
     directAnswer: "Custom hotel water bottles are triple-wall vacuum-insulated stainless steel bottles in 350ml or 500ml, finished in your property’s colors with a laser-etched logo. HL Supply’s four bottle styles start at 200 units with four quantity tiers. They are built for suites, spa bars, fitness programs, and days on the property.",
     faqs: [
       { q: "What is the minimum order for custom hotel water bottles?", a: "Every bottle style starts at 200 units, with quantity pricing tiers at 200, 500, 1,000, and 2,500 units. Final pricing is confirmed by the atelier after artwork and finish review." },
@@ -83,6 +89,8 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "flip-flops",
+    guide: "custom-hotel-flip-flops",
+    guideTitle: "Custom Hotel & Resort Flip-Flops: The Complete Buyer’s Guide",
     directAnswer: "Custom hotel flip-flops are premium high-density foam sandals produced in your property’s colors with logo straps, printed footbeds, or sand-print outsoles that leave your mark on the beach. HL Supply’s four flip-flop styles start at 200 units with four quantity tiers. They serve spa amenity programs, pool decks, and beach club retail.",
     faqs: [
       { q: "What is the minimum order for custom flip-flops?", a: "Each flip-flop style starts at 200 units, with quantity pricing tiers at 200, 500, 1,000, and 2,500 units. Pricing is confirmed at quote review after artwork and sizing are settled." },
@@ -108,6 +116,8 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "leather-goods",
+    guide: "custom-hotel-leather-goods",
+    guideTitle: "Custom Leather Goods for Hotels & Suites: The Complete Buyer’s Guide",
     directAnswer: "Custom hotel leather goods are debossed vegan-leather suite details, including valet trays, luggage tags, tissue box covers, and cable snaps, finished in your property’s colors. HL Supply’s six leather pieces start at 100 units with four quantity tiers. Each piece is proofed for deboss depth and placement before production.",
     faqs: [
       { q: "What is the minimum order for custom leather goods?", a: "Leather pieces start at 100 units, with quantity pricing tiers at 100, 250, 500, and 1,000 units. Pricing is confirmed at quote review once the deboss artwork and color are approved." },
@@ -133,6 +143,8 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "slippers",
+    guide: "custom-hotel-slippers",
+    guideTitle: "Custom Hotel Slippers: The Complete Buyer’s Guide",
     directAnswer: "Custom hotel slippers are embroidered spa and suite slippers in plush terry, waffle-weave, ribbed knit, or biodegradable fibers, produced in your property’s colors. HL Supply’s four slipper styles start at 1,000 pairs with four quantity tiers, sized for amenity programs across an entire property. Every pair is proofed for embroidery placement before production.",
     faqs: [
       { q: "What is the minimum order for custom hotel slippers?", a: "Slipper styles start at 1,000 pairs, with quantity pricing tiers at 1,000, 2,500, 5,000, and 10,000 pairs, reflecting their use as a property-wide amenity. Pricing is confirmed at quote review." },
@@ -158,6 +170,8 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "accessories",
+    guide: "custom-hotel-accessories",
+    guideTitle: "Custom Hotel Guest Accessories: The Complete Buyer’s Guide",
     directAnswer: "Custom hotel accessories are the guest extras that complete a stay: umbrellas, sunglasses, sleep masks, lens cloths, and yoga mats produced in your property’s colors with laser-etched or embroidered logos. HL Supply’s seven accessory pieces start at 100 to 250 units depending on the item, each with four quantity tiers. They are designed for suites, spas, pool decks, and wellness programs.",
     faqs: [
       { q: "What is the minimum order for custom hotel accessories?", a: "Minimums depend on the item: the yoga mat starts at 100 units, the umbrella at 200, and sunglasses, lens cloths, and sleep masks at 250. Each has four quantity pricing tiers, confirmed at quote review." },

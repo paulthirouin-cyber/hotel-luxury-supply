@@ -30,6 +30,7 @@ const readDist = (rel) => fs.readFileSync(path.join(DIST, rel), "utf8");
 /* ---------- 1. every expected URL exists ---------- */
 const PAGES = ["/about/", "/process/", "/contact/", "/privacy/", "/terms/"];
 const expected = ["/", "/products/", "/bespoke/", "/quote/", "/404.html", "/products.html", "/category.html", "/product.html", "/_redirects", ...PAGES];
+expected.push("/guides/", "/glossary/", ...CATS.map((c) => "/guides/" + c.guide + "/"));
 CATS.forEach((c) => expected.push("/products/" + c.slug + "/"));
 PRODS.forEach((p) => expected.push("/products/" + p.category + "/" + p.slug + "/"));
 expected.forEach((u) => t.ok(distExists(u), "exists: " + u));
@@ -280,6 +281,69 @@ function liveDom(url, opts) {
   t.ok(types.includes("AboutPage") && types.includes("BreadcrumbList"), "about: AboutPage schema");
   const c = ldOf("/contact/");
   t.ok(c.types.includes("ContactPage"), "contact: ContactPage schema");
+}
+
+/* ---------- Phase 4: guides, glossary, link mesh ---------- */
+const GUIDES = fs.readdirSync(path.join(ROOT, "content", "guides")).filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, ""));
+t.ok(GUIDES.length === 7, "7 guide sources");
+t.ok(distExists("/guides/") && distExists("/glossary/"), "guides index + glossary exist");
+{
+  const doc = auditPage("/guides/");
+  t.ok(doc.querySelectorAll(".gcard").length === 7 && doc.querySelector('a[href="/glossary/"]'), "guides index: 7 cards + glossary link");
+}
+for (const c of CATS) {
+  const url = "/guides/" + c.guide + "/";
+  t.ok(GUIDES.includes(c.guide), c.slug + ": category guide source exists");
+  const doc = auditPage(url);
+  const body = doc.querySelector(".guide-body");
+  const words = body.textContent.split(/\s+/).filter(Boolean).length;
+  t.ok(words >= 1400, c.guide + ": body >= 1,400 words (" + words + ")");
+  t.ok(doc.querySelectorAll(".guide-toc li").length >= 6, c.guide + ": table of contents");
+  t.ok(doc.querySelector(".category-answer") && /\d/.test(doc.querySelector(".category-answer").textContent), c.guide + ": direct-answer intro");
+  const prodLinks = new Set([...doc.querySelectorAll("a[href^='/products/" + c.slug + "/']")].map((a) => a.getAttribute("href")).filter((h) => h.split("/").filter(Boolean).length === 3));
+  PRODS.filter((p) => p.category === c.slug).forEach((p) => t.ok(prodLinks.has("/products/" + p.category + "/" + p.slug + "/"), c.guide + " links product " + p.slug));
+  t.ok(doc.querySelector('a[href="/products/' + c.slug + '/"]') && doc.querySelector('a[href="/glossary/"]') && doc.querySelector('a[href="/bespoke/"]'), c.guide + ": links category, glossary, bespoke");
+  t.ok(doc.querySelectorAll(".guide-body a.term-link").length >= 3, c.guide + ": glossary terms auto-linked");
+  t.ok(doc.querySelectorAll(".guide-products .pcard").length === COUNTS[c.slug], c.guide + ": product cards for the whole category");
+  t.ok(doc.querySelectorAll(".guide-related .gcard").length === 6, c.guide + ": 6 related guides");
+  const { graph, types } = ldOf(url);
+  t.ok(types.includes("Article") && types.includes("BreadcrumbList") && types.includes("FAQPage"), c.guide + ": Article + BreadcrumbList + FAQPage schema");
+  const art = graph.find((n) => n["@type"] === "Article");
+  t.ok(art.datePublished && art.wordCount >= 1400 && art.author["@id"].includes("#organization"), c.guide + ": article dates/wordcount/author");
+  const faq = graph.find((n) => n["@type"] === "FAQPage");
+  t.ok(faq.mainEntity.length >= 4 && faq.mainEntity.length === doc.querySelectorAll(".guide-body .faq__q").length, c.guide + ": FAQ schema matches visible questions");
+}
+{
+  const doc = auditPage("/glossary/");
+  const terms = doc.querySelectorAll(".glossary-term");
+  t.ok(terms.length >= 30, "glossary: >= 30 terms (" + terms.length + ")");
+  t.ok([...terms].every((t2) => t2.id && t2.querySelector("dt") && t2.querySelector("dd p").textContent.length > 80), "glossary: every term has an anchor id and a definition");
+  const { graph } = ldOf("/glossary/");
+  const set = graph.find((n) => n.mainEntity && n.mainEntity["@type"] === "DefinedTermSet");
+  t.ok(set && set.mainEntity.hasDefinedTerm.length === terms.length, "glossary: DefinedTermSet matches rendered terms");
+  // every glossary anchor referenced anywhere in dist exists
+  const ids = new Set([...terms].map((t2) => t2.id));
+  let anchorRefs = 0;
+  for (const u of [...PAGES, "/guides/", ...GUIDES.map((g) => "/guides/" + g + "/"), ...CATS.map((c) => "/products/" + c.slug + "/")]) {
+    staticDom(u).window.document.querySelectorAll('a[href^="/glossary/#"]').forEach((a) => { anchorRefs++; t.ok(ids.has(a.getAttribute("href").split("#")[1]), u + " glossary anchor exists: " + a.getAttribute("href")); });
+  }
+  t.ok(anchorRefs > 20, "glossary anchors referenced across the site (" + anchorRefs + ")");
+}
+{
+  // link mesh: category → guide, product → guide, every product receives >= 3 inbound links site-wide
+  for (const c of CATS) {
+    const doc = staticDom("/products/" + c.slug + "/").window.document;
+    t.ok(doc.querySelector('#categoryGuide a[href="/guides/' + c.guide + '/"]') && doc.querySelector('#categoryGuide a[href="/glossary/"]'), c.slug + ": category links guide + glossary");
+  }
+  const inbound = {};
+  const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).forEach((e) => { const p = path.join(dir, e.name); if (e.isDirectory()) walk(p); else if (e.name === "index.html") { const html = fs.readFileSync(p, "utf8"); const from = path.relative(DIST, path.dirname(p)).replace(/\\/g, "/"); for (const m of html.matchAll(/href="(\/products\/[a-z-]+\/[a-z0-9-]+\/)"/g)) { const to = m[1]; if ("/" + from + "/" === to) continue; (inbound[to] = inbound[to] || new Set()).add(from); } } });
+  walk(DIST);
+  PRODS.forEach((p) => { const u = "/products/" + p.category + "/" + p.slug + "/"; const n = inbound[u] ? inbound[u].size : 0; t.ok(n >= 3, p.slug + ": >= 3 inbound internal links (" + n + ")"); });
+  const pd = staticDom("/products/hats/riviera-bucket-hat/").window.document;
+  t.ok(pd.querySelector('.pd__guide a[href="/guides/custom-hotel-hats/"]'), "product page links its category guide");
+  const sm = readDist("sitemap.xml");
+  t.ok(sm.includes("/guides/custom-hotel-hats/") && sm.includes("/glossary/"), "sitemap includes guides + glossary");
+  t.ok(/\/guides\/custom-hotel-slippers\//.test(readDist("llms.txt")), "llms.txt lists guides");
 }
 
 /* ---------- 4. legacy redirects ---------- */

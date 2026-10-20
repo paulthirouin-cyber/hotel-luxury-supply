@@ -353,7 +353,25 @@ window.HL_PAGES = (function () {
     return true;
   }
 
+  // Guides and the glossary are generated at build time from content/*.
+  // In SPA/preview mode (source files) they are not available, so show a
+  // calm pointer instead of a broken page. Static pages are pre-rendered.
+  function renderContent(seg, mount) {
+    if (!mount) return;
+    var view = document.getElementById("viewPage");
+    if (view && view.hasAttribute("data-prerendered")) { view.removeAttribute("data-prerendered"); return; }
+    var isGlossary = seg[0] === "glossary";
+    mount.innerHTML =
+      crumbs(isGlossary ? "Glossary" : "Guides") +
+      hero("HL Supply / " + (isGlossary ? "Glossary" : "Guides"),
+        isGlossary ? "Hospitality customization glossary" : "Buying guides",
+        "This content is generated for the published site. Open the preview deployment to read it, or continue to the catalog.") +
+      '<div class="btn-row"><a class="btn btn--solid" href="' + U("#/products") + '">Explore Products</a><a class="btn" href="' + U("#/contact") + '">Speak with the Concierge</a></div>';
+    mount.setAttribute("data-page", seg.join("/"));
+  }
+
   PAGES.__render = render;
+  PAGES.__renderContent = renderContent;
   PAGES.__list = function () {
     return Object.keys(PAGES).filter(function (k) { return k.indexOf("__") !== 0; });
   };

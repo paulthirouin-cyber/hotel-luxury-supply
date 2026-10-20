@@ -64,6 +64,11 @@ function auditDoc(doc, ctx) {
       const seg = route.split("/").filter(Boolean);
       if (seg[0] === "quote") return;
       if (PAGE_SLUGS.includes(seg[0]) && seg.length === 1) return;
+      if (seg[0] === "glossary" && seg.length === 1) return;
+      if (seg[0] === "guides") {
+        if (seg[1] && !exists("content/guides/" + seg[1] + ".md")) t.ok(false, ctx + " missing guide file: " + href);
+        return;
+      }
       if (seg[0] === "bespoke") {
         for (const kv of q.split("&")) {
           const [k, v] = kv.split("=");
@@ -104,6 +109,7 @@ auditDoc(homeDom().window.document, "[home]");
 for (const c of CATS) {
   const doc = catalogDom("#/products/" + c.slug).window.document;
   t.ok(!doc.getElementById("viewCategory").hidden, "category view visible: " + c.slug);
+  t.ok(c.guide && exists("content/guides/" + c.guide + ".md") && doc.querySelector('#categoryGuide a[href="products.html#/guides/' + c.guide + '"]'), c.slug + ": links its buying guide");
   t.ok(doc.querySelector("#categoryHero h1") && doc.querySelector("#categoryHero h1").textContent === c.name, c.slug + " hero title");
   t.ok(doc.querySelector("#categoryHero img.ph__img"), c.slug + " hero uses real lifestyle image");
   t.ok(doc.getElementById("categoryHero").textContent.includes(c.tagline), c.slug + " shows catalog tagline");
