@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>HL Supply</title>
+<script>
+  var cat = new URLSearchParams(location.search).get("cat") || "";
+  location.replace("products.html#/products" + (cat ? "/" + cat : ""));
+</script></head>
+<body><p>Redirecting to the <a href="products.html#/products">Atelier Catalog</a>&hellip;</p></body></html>

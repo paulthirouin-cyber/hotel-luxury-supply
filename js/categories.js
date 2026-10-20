@@ -1,0 +1,111 @@
+// HL Supply — Phase 3
+// Category data for the "Explore the atelier" section.
+// Rendered by js/category-section.js — do not duplicate this content in index.html.
+
+window.HL_CATEGORIES = [
+  {
+    slug: "bags",
+    tagline: "100% Pure Cotton Canvas",
+    image: "assets/catalog/cat-bags.jpg",
+    catalogSubtitle: "Resort totes, beach bags, and carryalls made for arrival, poolside, retail, and guest gifting.",
+    catalogIntro: "From arrival gifts to boutique retail, each bag is built on resort-grade canvas and finished with your property\u2019s mark.",
+    name: "Bags",
+    line: "Resort totes, beach bags, and carryalls made for arrival, poolside, and retail.",
+    imageLabel: "Canvas tote at a luxury pool lounger with cabana stripes.",
+    href: "products.html#/products/bags",
+    tint: "tint-poolside",
+    accent: "pool",
+    micro: "micro-stripe",
+    size: "feature"
+  },
+  {
+    slug: "hats",
+    tagline: "Bespoke Embroidered Detail",
+    image: "assets/catalog/cat-hats.jpg",
+    catalogSubtitle: "Embroidered caps and sun-ready silhouettes for clubs, courses, cabanas, and guest retail.",
+    catalogIntro: "Structured caps and relaxed sun shapes, embroidered in-house for clubs, courses, and pool decks.",
+    name: "Hats",
+    line: "Embroidered caps and sun-ready silhouettes for clubs, courses, and cabanas.",
+    imageLabel: "Embroidered cap on tennis bench or golf cart in soft sun.",
+    href: "products.html#/products/hats",
+    tint: "tint-sand",
+    accent: "terracotta",
+    micro: "micro-brim",
+    size: "small"
+  },
+  {
+    slug: "bottles",
+    tagline: "Triple-Wall Vacuum Insulation",
+    image: "assets/catalog/cat-bottles.jpg",
+    catalogSubtitle: "Custom bottles for suites, spas, fitness programs, and outdoor guest moments.",
+    catalogIntro: "Polished, durable bottles etched with your logo \u2014 made for suites, spa bars, and days on the property.",
+    name: "Bottles",
+    line: "Custom bottles for suites, spas, fitness, and outdoor guest moments.",
+    imageLabel: "Custom bottle on spa counter or poolside stone ledge.",
+    href: "products.html#/products/bottles",
+    tint: "tint-pool",
+    accent: "chrome",
+    micro: "micro-sheen",
+    size: "small"
+  },
+  {
+    slug: "flip-flops",
+    tagline: "Premium High-Density Comfort",
+    image: "assets/catalog/cat-flip-flops.jpg",
+    catalogSubtitle: "Poolside and beach-ready essentials customized for the property.",
+    catalogIntro: "Guest-ready flip-flops in property colors, from spa amenities to beach club retail.",
+    name: "Flip-flops",
+    line: "Poolside and beach-ready essentials customized for the property.",
+    imageLabel: "Flip-flops on sand near striped towel and beach club chair.",
+    href: "products.html#/products/flip-flops",
+    tint: "tint-terra",
+    accent: "pool",
+    micro: "micro-sand",
+    size: "small"
+  },
+  {
+    slug: "leather-goods",
+    tagline: "Genuine Handcrafted Leather",
+    image: "assets/catalog/cat-leather-goods.jpg",
+    catalogSubtitle: "Debossed trays, tags, and in-room details for a more finished suite.",
+    catalogIntro: "Quiet leather details \u2014 debossed trays and tags that finish a suite and travel well.",
+    name: "Leather Goods",
+    line: "Debossed trays, tags, and in-room details for a more finished suite.",
+    imageLabel: "Leather valet tray or luggage tag in luxury hotel suite.",
+    href: "products.html#/products/leather-goods",
+    tint: "tint-navy",
+    accent: "terracotta",
+    micro: "micro-deboss",
+    size: "small"
+  },
+  {
+    slug: "slippers",
+    tagline: "Plush Terry Cotton Fleece",
+    image: "assets/catalog/cat-slippers.jpg",
+    catalogSubtitle: "Soft custom slippers for spa, suite, and wellness experiences.",
+    catalogIntro: "Embroidered slippers for spa, suite, and wellness programs \u2014 the detail guests remember after checkout.",
+    name: "Slippers",
+    line: "Soft custom slippers for spa, suite, and wellness experiences.",
+    imageLabel: "Slippers beside bed or in spa bathroom with robe and towels.",
+    href: "products.html#/products/slippers",
+    tint: "tint-linen",
+    accent: "chrome",
+    micro: "micro-weave",
+    size: "wide"
+  },
+  {
+    slug: "accessories",
+    tagline: "Bespoke Branded Essentials",
+    image: "assets/catalog/cat-accessories.jpg",
+    catalogSubtitle: "Umbrellas, sunglasses, sleep masks, yoga mats, and guest extras.",
+    catalogIntro: "The guest extras that complete a stay \u2014 umbrellas, sunglasses, sleep masks, and wellness pieces.",
+    name: "Accessories",
+    line: "Umbrellas, sunglasses, sleep masks, yoga mats, and guest extras.",
+    imageLabel: "Sunglasses, umbrella, sleeping mask, or yoga mat in resort wellness setting.",
+    href: "products.html#/products/accessories",
+    tint: "tint-green",
+    accent: "pool",
+    micro: "micro-glint",
+    size: "wide"
+  }
+];

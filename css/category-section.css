@@ -1,0 +1,364 @@
+/* ============================================================
+   HL SUPPLY — Phase 3: CategorySection
+   Scoped under .atelier- / .at- prefixes. Replaces the old
+   .cat-grid styles without touching the rest of Phase 1.
+   ============================================================ */
+
+/* ---------- editorial grid ---------- */
+
+.atelier-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: auto;
+  gap: clamp(20px, 2.4vw, 34px);
+}
+
+/* Desktop rhythm:
+   Row 1–2 : Bags (feature, 6 cols, 2 rows) + Hats/Bottles/Flip-flops/Leather (3 cols each)
+   Row 3   : Slippers + Accessories (6 cols each, panoramic)                     */
+
+.at-card--feature { grid-column: span 6; grid-row: span 2; }
+.at-card--small   { grid-column: span 3; }
+.at-card--wide    { grid-column: span 6; }
+
+.at-card--feature .at-card__media { aspect-ratio: 4 / 4.15; }
+.at-card--small   .at-card__media { aspect-ratio: 4 / 3.05; }
+.at-card--wide    .at-card__media { aspect-ratio: 16 / 8.2; }
+
+@media (max-width: 1020px) {
+  .at-card--feature { grid-column: span 12; grid-row: auto; }
+  .at-card--small,
+  .at-card--wide { grid-column: span 6; }
+
+  .at-card--feature .at-card__media { aspect-ratio: 16 / 9; }
+  .at-card--small .at-card__media,
+  .at-card--wide .at-card__media { aspect-ratio: 4 / 3; }
+}
+
+@media (max-width: 640px) {
+  .at-card--feature,
+  .at-card--small,
+  .at-card--wide { grid-column: span 12; }
+
+  .at-card--feature .at-card__media,
+  .at-card--small .at-card__media,
+  .at-card--wide .at-card__media { aspect-ratio: 4 / 3; }
+}
+
+/* ---------- card ---------- */
+
+.at-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--cream, #fcf9f2);
+  border: 1px solid rgba(216, 203, 174, 0.85); /* soft stone */
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px -22px rgba(27, 42, 65, 0.28);
+  cursor: pointer;
+  transform: translateY(0);
+  transition:
+    transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.at-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(154, 163, 168, 0.75);
+  box-shadow: 0 20px 40px -24px rgba(27, 42, 65, 0.38);
+}
+
+.at-card:focus-visible {
+  outline: 2px solid var(--pool-deep, #52869a);
+  outline-offset: 3px;
+}
+
+/* ---------- media ---------- */
+
+.at-card__media { flex: 0 0 auto; }
+
+.at-card__media .ph__art {
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.at-card:hover .at-card__media .ph__art { transform: scale(1.03); }
+
+/* warm contrast wash on hover */
+.at-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(43, 33, 27, 0) 55%, rgba(43, 33, 27, 0.16) 100%);
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+}
+
+.at-card:hover .at-card__media::after { opacity: 1; }
+
+/* ---------- text panel ---------- */
+
+.at-card__panel {
+  position: relative;
+  flex: 1;
+  padding: 22px 24px 24px;
+  background: var(--cream, #fcf9f2);
+  border-top: 1px solid rgba(216, 203, 174, 0.7);
+  transform: translateY(0);
+  transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.at-card:hover .at-card__panel { transform: translateY(-4px); }
+
+/* accent line — extends left to right on hover */
+.at-card__accent {
+  display: block;
+  width: 34px;
+  height: 1px;
+  margin-bottom: 16px;
+  transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.at-card:hover .at-card__accent { width: 100%; }
+
+.accent-pool       .at-card__accent { background: var(--pool, #7fb3c1); }
+.accent-terracotta .at-card__accent { background: var(--terracotta, #c47e5d); }
+.accent-chrome     .at-card__accent { background: var(--chrome, #9aa3a8); }
+
+.at-card__panel h3 {
+  font-family: var(--serif, "Marcellus", serif);
+  font-weight: 400;
+  font-size: 23px;
+  color: var(--navy, #1b2a41);
+  margin-bottom: 8px;
+}
+
+.at-card--feature .at-card__panel h3 { font-size: 27px; }
+
+.at-card__panel p {
+  font-family: var(--sans, "Jost", sans-serif);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink, #33383d);
+  margin-bottom: 16px;
+  max-width: 46ch;
+}
+
+/* CTA with sliding arrow */
+.at-card__cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--sans, "Jost", sans-serif);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green, #3f5c4f);
+  transition: color 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.at-card:hover .at-card__cta { color: var(--navy, #1b2a41); }
+
+.at-card__arrow {
+  width: 26px;
+  height: 10px;
+  transform: translateX(0);
+  transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.at-card:hover .at-card__arrow { transform: translateX(5px); }
+
+/* ============================================================
+   category-specific micro-details (subtle, non-cartoon)
+   ============================================================ */
+
+.at-card__micro {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Bags — cabana stripe corner slides in from the left */
+.micro-stripe .at-card__micro::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 88px;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(252, 249, 242, 0.85) 0 11px,
+    rgba(27, 42, 65, 0.55) 11px 22px
+  );
+  transform: translateX(-100%);
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.micro-stripe:hover .at-card__micro::before { transform: translateX(0); }
+
+/* Hats — a faint curved brim line appears */
+.micro-brim .at-card__micro::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 34%;
+  height: 34%;
+  border-bottom: 1px solid rgba(27, 42, 65, 0.35);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.micro-brim:hover .at-card__micro::before { opacity: 1; }
+
+/* Bottles — soft reflection line sweeps across */
+.micro-sheen .at-card__micro::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 26%;
+  background: linear-gradient(
+    100deg,
+    rgba(252, 249, 242, 0) 0%,
+    rgba(252, 249, 242, 0.28) 50%,
+    rgba(252, 249, 242, 0) 100%
+  );
+  transform: translateX(-140%) rotate(6deg);
+  transition: transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.micro-sheen:hover .at-card__micro::before { transform: translateX(440%) rotate(6deg); }
+
+/* Flip-flops — a tiny sand line appears near the base */
+.micro-sand .at-card__micro::before {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 40%;
+  bottom: 16%;
+  height: 0;
+  border-bottom: 1px dotted rgba(252, 249, 242, 0.75);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.micro-sand:hover .at-card__micro::before { opacity: 1; }
+
+/* Leather Goods — debossed inner border deepens */
+.micro-deboss .at-card__micro::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(252, 249, 242, 0.14);
+  transition: border-color 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+              box-shadow 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.micro-deboss:hover .at-card__micro::before {
+  border-color: rgba(252, 249, 242, 0.34);
+  box-shadow: inset 0 1px 3px rgba(22, 35, 58, 0.45);
+}
+
+/* Slippers — soft fabric weave becomes slightly more visible */
+.micro-weave .at-card__micro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(27, 42, 65, 0.035) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(90deg, rgba(27, 42, 65, 0.035) 0 1px, transparent 1px 6px);
+  opacity: 0.35;
+  transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.micro-weave:hover .at-card__micro::before { opacity: 1; }
+
+/* Accessories — a small sun-glint line appears top-right */
+.micro-glint .at-card__micro::before {
+  content: "";
+  position: absolute;
+  top: 14%;
+  right: 12%;
+  width: 54px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(252, 249, 242, 0) 0%, rgba(252, 249, 242, 0.85) 55%, rgba(252, 249, 242, 0) 100%);
+  transform: rotate(-24deg) scaleX(0.3);
+  transform-origin: right center;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.micro-glint:hover .at-card__micro::before {
+  opacity: 1;
+  transform: rotate(-24deg) scaleX(1);
+}
+
+/* ============================================================
+   entrance reveal — title fades up, cards stagger
+   ============================================================ */
+
+.categories.will-reveal .section-head {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.categories.will-reveal .at-card {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) calc(var(--stagger, 0) * 70ms + 120ms),
+    transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) calc(var(--stagger, 0) * 70ms + 120ms);
+}
+
+.categories.will-reveal.is-inview .section-head,
+.categories.will-reveal.is-inview .at-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* restore hover lift after the entrance transition completes */
+.categories.will-reveal.is-inview .at-card {
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) calc(var(--stagger, 0) * 70ms + 120ms),
+    transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.categories.will-reveal.is-inview .at-card:hover { transform: translateY(-4px); }
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .at-card,
+  .at-card__panel,
+  .at-card__accent,
+  .at-card__arrow,
+  .at-card__media .ph__art,
+  .at-card__media::after,
+  .at-card__micro::before,
+  .categories.will-reveal .section-head,
+  .categories.will-reveal .at-card {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .at-card:hover { transform: none; }
+  .at-card:hover .at-card__media .ph__art { transform: none; }
+  .at-card:hover .at-card__panel { transform: none; }
+  .micro-sheen:hover .at-card__micro::before { transform: translateX(-140%) rotate(6deg); }
+}

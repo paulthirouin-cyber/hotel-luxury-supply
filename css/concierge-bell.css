@@ -1,0 +1,409 @@
+/* ============================================================
+   HL SUPPLY — Phase 2: ConciergeBell component
+   Scoped under .cbell- prefix. Does not alter Phase 1 styles.
+   ============================================================ */
+
+/* ---------- floating bell button ---------- */
+
+.cbell-btn {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px 14px 18px;
+  background: var(--ivory, #f6f1e6);
+  border: 1px solid rgba(154, 163, 168, 0.55); /* muted chrome */
+  border-radius: 999px;
+  color: var(--navy, #1b2a41);
+  font-family: var(--sans, "Jost", sans-serif);
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 14px 34px -18px rgba(27, 42, 65, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 0.61, 0.36, 1),
+    visibility 0.45s,
+    transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.cbell-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.cbell-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--chrome, #9aa3a8);
+  box-shadow: 0 18px 38px -18px rgba(27, 42, 65, 0.5);
+}
+
+.cbell-btn:focus-visible {
+  outline: 2px solid var(--pool-deep, #52869a);
+  outline-offset: 3px;
+}
+
+/* bell icon */
+.cbell-icon {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+
+.cbell-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: var(--green, #3f5c4f);
+  transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform-origin: 50% 12%;
+}
+
+.cbell-btn:hover .cbell-icon svg { transform: rotate(4deg); }
+
+/* two ring lines that appear briefly on hover */
+.cbell-rings {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cbell-rings::before,
+.cbell-rings::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  width: 6px;
+  height: 10px;
+  border: 1px solid var(--chrome, #9aa3a8);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.cbell-rings::before {
+  left: -8px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.cbell-rings::after {
+  right: -8px;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.cbell-btn:hover .cbell-rings::before { animation: cbellRing 0.9s ease-out 1; }
+.cbell-btn:hover .cbell-rings::after  { animation: cbellRing 0.9s ease-out 0.12s 1; }
+
+@keyframes cbellRing {
+  0%   { opacity: 0; transform: scale(0.7); }
+  35%  { opacity: 0.9; }
+  100% { opacity: 0; transform: scale(1.25); }
+}
+
+.cbell-label { white-space: nowrap; }
+
+/* compact mode below 1100px: icon only, label on hover */
+@media (max-width: 1100px) and (min-width: 641px) {
+  .cbell-btn { padding: 15px; gap: 0; }
+  .cbell-label {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.3s, margin 0.4s;
+  }
+  .cbell-btn:hover .cbell-label,
+  .cbell-btn:focus-visible .cbell-label {
+    max-width: 200px;
+    opacity: 1;
+    margin-left: 12px;
+  }
+}
+
+/* mobile: icon only, thumb-friendly */
+@media (max-width: 640px) {
+  .cbell-btn {
+    right: 18px;
+    bottom: 18px;
+    padding: 13px;
+    gap: 0;
+  }
+  .cbell-label { display: none; }
+}
+
+/* ---------- overlay ---------- */
+
+.cbell-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: rgba(43, 33, 27, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+.cbell-overlay.is-open { opacity: 1; visibility: visible; }
+
+/* ---------- drawer ---------- */
+
+.cbell-drawer {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 100vw);
+  background: var(--cream, #fcf9f2);
+  border-left: 1px solid rgba(216, 203, 174, 0.9); /* soft stone */
+  box-shadow: -18px 0 50px -30px rgba(27, 42, 65, 0.35);
+  transform: translateX(105%);
+  transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.cbell-drawer.is-open { transform: translateX(0); }
+
+@media (max-width: 640px) {
+  .cbell-drawer {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 86vh;
+    border-left: none;
+    border-top: 1px solid rgba(216, 203, 174, 0.9);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -18px 50px -30px rgba(27, 42, 65, 0.35);
+    transform: translateY(105%);
+  }
+  .cbell-drawer.is-open { transform: translateY(0); }
+}
+
+/* drawer inner — hotel stationery card */
+.cbell-drawer__inner {
+  padding: clamp(28px, 5vw, 44px) clamp(24px, 5vw, 40px) 40px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cbell-drawer__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.cbell-drawer__eyebrow {
+  font-family: var(--sans, "Jost", sans-serif);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--terracotta, #c47e5d);
+  display: block;
+  margin-bottom: 14px;
+}
+
+.cbell-drawer h2 {
+  font-family: var(--serif, "Marcellus", serif);
+  font-weight: 400;
+  font-size: clamp(26px, 3vw, 32px);
+  color: var(--navy, #1b2a41);
+  line-height: 1.15;
+}
+
+.cbell-close {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(154, 163, 168, 0.5);
+  border-radius: 50%;
+  color: var(--navy, #1b2a41);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.cbell-close:hover {
+  background: var(--navy, #1b2a41);
+  border-color: var(--navy, #1b2a41);
+  color: var(--cream, #fcf9f2);
+}
+
+.cbell-close:focus-visible {
+  outline: 2px solid var(--pool-deep, #52869a);
+  outline-offset: 3px;
+}
+
+.cbell-drawer__intro {
+  font-family: var(--sans, "Jost", sans-serif);
+  font-weight: 300;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--navy-soft, #2c3e57);
+  margin: 14px 0 26px;
+  max-width: 42ch;
+}
+
+.cbell-divider {
+  height: 1px;
+  background: rgba(216, 203, 174, 0.9);
+  margin-bottom: 28px;
+}
+
+/* ---------- form ---------- */
+
+.cbell-form { display: grid; gap: 20px; }
+
+.cbell-field { display: grid; gap: 8px; }
+
+.cbell-field label {
+  font-family: var(--sans, "Jost", sans-serif);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--green, #3f5c4f);
+}
+
+.cbell-field input,
+.cbell-field select,
+.cbell-field textarea {
+  font-family: var(--sans, "Jost", sans-serif);
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--navy, #1b2a41);
+  background: #fffdf8; /* white linen */
+  border: 1px solid rgba(216, 203, 174, 0.95);
+  border-radius: 2px;
+  padding: 13px 14px;
+  width: 100%;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.cbell-field textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.cbell-field select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%233f5c4f' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+.cbell-field input::placeholder,
+.cbell-field textarea::placeholder {
+  color: rgba(154, 163, 168, 0.9);
+}
+
+.cbell-field input:focus,
+.cbell-field select:focus,
+.cbell-field textarea:focus {
+  outline: none;
+  border-color: var(--green, #3f5c4f);
+  box-shadow: 0 0 0 1px var(--green, #3f5c4f);
+}
+
+.cbell-submit {
+  margin-top: 6px;
+  font-family: var(--sans, "Jost", sans-serif);
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 16px 34px 15px;
+  background: var(--navy, #1b2a41);
+  color: var(--cream, #fcf9f2);
+  border: 1px solid var(--navy, #1b2a41);
+  cursor: pointer;
+  transition: background 0.35s, border-color 0.35s;
+  justify-self: start;
+}
+
+.cbell-submit:hover {
+  background: var(--green, #3f5c4f);
+  border-color: var(--green, #3f5c4f);
+}
+
+.cbell-submit:focus-visible {
+  outline: 2px solid var(--pool-deep, #52869a);
+  outline-offset: 3px;
+}
+
+/* ---------- success state ---------- */
+
+.cbell-success {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+  padding-bottom: 60px;
+}
+
+.cbell-drawer.is-sent .cbell-form,
+.cbell-drawer.is-sent .cbell-divider,
+.cbell-drawer.is-sent .cbell-drawer__intro { display: none; }
+
+.cbell-drawer.is-sent .cbell-success { display: flex; }
+
+.cbell-success__rule {
+  width: 64px;
+  height: 1px;
+  background: var(--terracotta, #c47e5d);
+}
+
+.cbell-success p {
+  font-family: var(--serif, "Marcellus", serif);
+  font-size: clamp(22px, 2.4vw, 27px);
+  line-height: 1.35;
+  color: var(--navy, #1b2a41);
+  max-width: 20ch;
+}
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cbell-btn,
+  .cbell-drawer,
+  .cbell-overlay,
+  .cbell-icon svg,
+  .cbell-label {
+    transition-duration: 0.01ms !important;
+  }
+  .cbell-btn:hover .cbell-rings::before,
+  .cbell-btn:hover .cbell-rings::after {
+    animation: none;
+  }
+  .cbell-btn:hover .cbell-icon svg { transform: none; }
+}

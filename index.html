@@ -1,131 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotel Luxury Supply &amp; Amenities</title>
-  <meta name="description" content="Hotel Luxury Supply &amp; Amenities — premium supplies and guest amenities for hotels. New website on the way; inquiries welcome by email.">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --paper: #21382e;
-      --ink: #f1ecdf;
-      --muted: #a8b3a4;
-      --hairline: rgba(241, 236, 223, 0.22);
-    }
-
-    body {
-      font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
-      background: var(--paper);
-      color: var(--ink);
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      padding: clamp(1.25rem, 4vw, 3rem);
-    }
-
-    .small {
-      font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-      color: var(--muted);
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      padding-bottom: 1.25rem;
-      border-bottom: 1px solid var(--hairline);
-    }
-
-    .wordmark {
-      font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--ink);
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 4rem 0;
-    }
-
-    h1 {
-      font-weight: 400;
-      font-size: clamp(1.9rem, 5.5vw, 3.4rem);
-      line-height: 1.18;
-      letter-spacing: -0.01em;
-      max-width: 21em;
-      text-wrap: balance;
-    }
-
-    .note {
-      margin-top: 1.75rem;
-      font-size: clamp(1rem, 2.2vw, 1.125rem);
-      line-height: 1.65;
-      color: var(--muted);
-      max-width: 34em;
-    }
-
-    .note a {
-      color: var(--ink);
-      text-decoration: underline;
-      text-decoration-color: var(--hairline);
-      text-underline-offset: 3px;
-    }
-
-    .note a:hover {
-      text-decoration-color: var(--ink);
-    }
-
-    footer {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem 2rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--hairline);
-    }
-
-    footer a {
-      color: var(--muted);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      color: var(--ink);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HL Supply — Bespoke Branded Goods for Luxury Hospitality</title>
+  <meta name="description" content="HL Supply is a bespoke product atelier creating custom branded guest goods for luxury hotels, resorts, private clubs, spas, and destination events." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/guest-journey.css" />
+  <link rel="stylesheet" href="css/category-section.css" />
+  <link rel="stylesheet" href="css/concierge-bell.css" />
+  <link rel="stylesheet" href="css/polish.css" />
 </head>
 <body>
-  <header>
-    <span class="wordmark">Hotel Luxury Supply &amp; Amenities</span>
-    <span class="small">New website in progress</span>
+
+  <div class="ribbon" aria-hidden="true"></div>
+
+  <!-- ================= HEADER ================= -->
+  <header class="header" id="header">
+    <div class="wrap header__inner">
+      <a class="wordmark" href="#top" aria-label="HL Supply home">HL<span>&nbsp;·&nbsp;</span>Supply</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="products.html#/products">Products</a>
+        <a href="#collections">Collections</a>
+        <a href="products.html#/bespoke">Bespoke</a>
+        <a href="#clients">Clients</a>
+        <a href="#concierge" data-open-concierge>Concierge</a>
+      </nav>
+      <a class="btn btn--solid header__cta" href="products.html#/quote">Build a Quote<span class="quote-chip" id="quoteCount" hidden>0</span></a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">Menu</button>
+    </div>
   </header>
 
-  <main>
-    <h1>Premium supplies and guest amenities for hotels that care about the details.</h1>
-    <p class="note">Our new website is on its way. Until then, we're happy to help directly — write to us at <a href="mailto:info@hotelluxurysupply.com">info@hotelluxurysupply.com</a> for catalogues, pricing, and orders.</p>
-  </main>
+  <!-- Mobile menu panel (Phase 5) -->
+  <div class="mobile-menu" id="mobileMenu" hidden>
+    <div class="mobile-menu__ribbon" aria-hidden="true"></div>
+    <nav class="mobile-menu__nav" aria-label="Mobile">
+      <a href="products.html#/products">Products</a>
+      <a href="#collections">Collections</a>
+      <a href="products.html#/bespoke">Bespoke</a>
+      <a href="#clients">Clients</a>
+      <a href="#concierge" data-open-concierge>Concierge</a>
+    </nav>
+    <div class="mobile-menu__foot">
+      <a class="btn btn--solid" href="products.html#/quote">Build a Quote</a>
+      <p>Bespoke branded goods for luxury hospitality.</p>
+    </div>
+  </div>
 
-  <footer class="small">
-    <span>&copy; 2026 Hotel Luxury Supply &amp; Amenities</span>
-    <a href="mailto:info@hotelluxurysupply.com">info@hotelluxurysupply.com</a>
+  <!-- ================= HERO ================= -->
+  <section class="hero ph" id="top">
+    <div class="hero__art ph__art" aria-hidden="true"></div>
+    <img class="hero__img" src="assets/catalog/cat-bags.jpg"
+         alt="Embroidered canvas resort tote on a poolside lounger at a luxury beach resort"
+         fetchpriority="high" decoding="async" />
+    <div class="wrap hero__inner">
+      <div class="hero__content">
+        <span class="hero__label">HL Supply / Hospitality Atelier</span>
+        <h1>Bespoke branded goods for luxury hospitality.</h1>
+        <p class="hero__sub">Custom guest products for hotels, resorts, private clubs, and destination events — designed to feel native to the property and memorable enough to travel home.</p>
+        <div class="btn-row">
+          <a class="btn btn--solid" href="products.html#/products">Explore Products</a>
+          <a class="btn" href="products.html#/quote">Build a Quote</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE GUEST JOURNEY (Phase 4) ================= -->
+  <section class="journey" id="journey">
+    <div class="wrap journey__intro">
+      <span class="eyebrow">The Guest Journey</span>
+      <h2>Designed for the moments guests remember.</h2>
+      <p>From arrival to checkout, HL Supply creates branded goods that feel native to the property &mdash; useful, beautiful, and made to travel home.</p>
+    </div>
+    <div id="guestJourney">
+      <!-- Scenes are rendered by js/guest-journey.js from js/homepage-scenes.js -->
+    </div>
+  </section>
+
+  <!-- ================= CATEGORIES ================= -->
+  <section class="section categories" id="categories">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Products</span>
+        <h2>Explore the atelier</h2>
+        <p>Signature categories for the guest experience, from pool deck to suite.</p>
+      </div>
+
+      <div class="atelier-grid" id="atelierGrid">
+        <!-- Category cards are rendered by js/category-section.js from js/categories.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LIFESTYLE STATEMENT ================= -->
+  <section class="section statement" id="bespoke">
+    <div class="wrap statement__grid">
+      <div>
+        <span class="eyebrow" style="display:block; margin-bottom:18px;">The Bespoke Standard</span>
+        <h2>Not logo products. Guest objects.</h2>
+        <div class="statement__rule"></div>
+        <p class="statement__copy">HL Supply helps hospitality teams turn everyday items into property moments — the tote a guest brings to the pool, the cap they wear on the course, the bottle waiting in the suite, and the slippers they remember after checkout.</p>
+      </div>
+      <div class="ph ph--cover">
+        <img class="ph__img" src="assets/catalog/cat-leather-goods.jpg"
+             alt="Handcrafted debossed leather valet tray in a luxury hotel suite" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COLLECTIONS ================= -->
+  <section class="section collections" id="collections">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Collections</span>
+        <h2>Built around the way guests move through a property.</h2>
+      </div>
+
+      <div class="col-grid">
+
+        <article class="col-card">
+          <a href="#collections" aria-label="Explore the Poolside Collection">
+            <div class="ph">
+              <div class="ph__art tint-pool"><span class="ph__line"></span></div>
+              <span class="ph__cap">Image — loungers, towels, and totes along the pool deck</span>
+            </div>
+          </a>
+          <div class="col-card__body">
+            <h3>Poolside Collection</h3>
+            <p>Totes, towels-in-hand essentials, and sun accessories for long afternoons on the deck.</p>
+            <a class="tlink" href="#collections">Explore Collection</a>
+          </div>
+        </article>
+
+        <article class="col-card">
+          <a href="#collections" aria-label="Explore the Beach Club Collection">
+            <div class="ph">
+              <div class="ph__art tint-sand"><span class="ph__sun"></span><span class="ph__line"></span></div>
+              <span class="ph__cap">Image — beach bags and caps at the club entrance</span>
+            </div>
+          </a>
+          <div class="col-card__body">
+            <h3>Beach Club Collection</h3>
+            <p>Beach bags, flip-flops, and shade-ready goods made for sand, salt, and sunlight.</p>
+            <a class="tlink" href="#collections">Explore Collection</a>
+          </div>
+        </article>
+
+        <article class="col-card">
+          <a href="#collections" aria-label="Explore the Spa Suite Collection">
+            <div class="ph">
+              <div class="ph__art tint-linen"></div>
+              <span class="ph__cap">Image — slippers and wellness details in the spa suite</span>
+            </div>
+          </a>
+          <div class="col-card__body">
+            <h3>Spa Suite Collection</h3>
+            <p>Slippers, bottles, and soft in-room details for rest, ritual, and recovery.</p>
+            <a class="tlink" href="#collections">Explore Collection</a>
+          </div>
+        </article>
+
+        <article class="col-card">
+          <a href="#collections" aria-label="Explore the Golf and Club Collection">
+            <div class="ph">
+              <div class="ph__art tint-green"><span class="ph__line"></span></div>
+              <span class="ph__cap">Image — caps and leather goods at the first tee</span>
+            </div>
+          </a>
+          <div class="col-card__body">
+            <h3>Golf &amp; Club Collection</h3>
+            <p>Caps, leather goods, and course-day accessories for members and tournaments.</p>
+            <a class="tlink" href="#collections">Explore Collection</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CLIENT LOGOS ================= -->
+  <section class="section clients" id="clients">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Clients</span>
+        <h2>Selected by luxury hospitality teams.</h2>
+        <p>Trusted by leading 5-star hotels, resorts, and private properties.</p>
+      </div>
+      <div class="logo-grid" aria-label="Client property logos">
+        <div class="logo-box">Property Logo</div>
+        <div class="logo-box">Property Logo</div>
+        <div class="logo-box">Property Logo</div>
+        <div class="logo-box">Property Logo</div>
+        <div class="logo-box">Property Logo</div>
+        <div class="logo-box">Property Logo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROCESS ================= -->
+  <section class="section process">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">The Process</span>
+        <h2>From idea to property-ready goods.</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step__num">I</div>
+          <h3>Select</h3>
+          <p>Choose a category, product direction, or collection.</p>
+        </div>
+        <div class="step">
+          <div class="step__num">II</div>
+          <h3>Customize</h3>
+          <p>Add logo, color, material, packaging, or bespoke details.</p>
+        </div>
+        <div class="step">
+          <div class="step__num">III</div>
+          <h3>Produce</h3>
+          <p>HL Supply reviews the project, prepares the proof, and moves into production.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONCIERGE CTA ================= -->
+  <section class="concierge" id="concierge">
+    <div class="wrap concierge__inner">
+      <span class="eyebrow">Concierge</span>
+      <h2>Ready to create the guest goods your property is remembered for?</h2>
+      <p>Explore the categories or send us your project direction. We’ll help turn your property, event, or guest moment into the right product collection.</p>
+      <div class="btn-row">
+        <a class="btn btn--light-solid" href="products.html#/products">Explore Products</a>
+        <a class="btn btn--light" href="products.html#/quote">Build a Quote</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <a class="wordmark" href="#top">HL<span>&nbsp;·&nbsp;</span>Supply</a>
+          <p class="footer__tag">Bespoke branded goods for luxury hospitality.</p>
+          <div class="footer__seal" aria-hidden="true"></div>
+        </div>
+        <div>
+          <h4>Atelier</h4>
+          <ul>
+            <li><a href="products.html#/products">Products</a></li>
+            <li><a href="#collections">Collections</a></li>
+            <li><a href="products.html#/bespoke">Bespoke</a></li>
+            <li><a href="#clients">Clients</a></li>
+            <li><a href="#concierge" data-open-concierge>Concierge</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p class="footer__contact">
+            <a href="mailto:info@hotelluxurysupply.com">info@hotelluxurysupply.com</a><br />
+            <a href="tel:+13476694417">+1 (347) 669-4417</a><br />
+            hotelluxurysupply.com
+          </p>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 HL Supply</span>
+        <span>Hospitality Atelier</span>
+      </div>
+    </div>
   </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/mobile-menu.js"></script>
+  <script src="js/homepage-scenes.js"></script>
+  <script src="js/guest-journey.js"></script>
+  <script src="js/categories.js"></script>
+  <script src="js/category-section.js"></script>
+  <script src="js/concierge-bell.js"></script>
 </body>
 </html>

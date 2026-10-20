@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>HL Supply</title>
+<script src="js/products.js"></script>
+<script>
+  var item = new URLSearchParams(location.search).get("item") || "";
+  var p = (window.HL_PRODUCTS || []).filter(function (x) { return x.slug === item; })[0];
+  location.replace("products.html#/products" + (p ? "/" + p.category + "/" + p.slug : ""));
+</script></head>
+<body><p>Redirecting to the <a href="products.html#/products">Atelier Catalog</a>&hellip;</p></body></html>
