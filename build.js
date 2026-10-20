@@ -24,6 +24,7 @@ const { JSDOM } = require("jsdom");
 const seo = require("./scripts/seo");
 const perf = require("./scripts/perf");
 const content = require("./scripts/content");
+const SITE_CONFIG = JSON.parse(fs.readFileSync(path.join(__dirname, "config", "site.json"), "utf8"));
 
 const ROOT = __dirname;
 const SITE = "https://hotelluxurysupply.com";
@@ -84,6 +85,24 @@ const NOT_FOUND_META = {
   noindex: true
 };
 
+function analyticsHTML() {
+  const a = SITE_CONFIG.analytics || {};
+  if (!a.enabled) return "";
+  if (a.provider === "ga4" && a.measurementId) {
+    return `<script async src="https://www.googletagmanager.com/gtag/js?id=${esc(a.measurementId)}"></script>` +
+      `<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${esc(a.measurementId)}');</script>`;
+  }
+  return `<script defer data-domain="${esc(a.domain || new URL(SITE).host)}" src="https://plausible.io/js/script.js"></script>`;
+}
+
+function verificationHTML() {
+  const v = SITE_CONFIG.verification || {};
+  return [
+    v.google ? `<meta name="google-site-verification" content="${esc(v.google)}" />` : "",
+    v.bing ? `<meta name="msvalidate.01" content="${esc(v.bing)}" />` : ""
+  ].filter(Boolean).join("\n");
+}
+
 function headHTML(meta) {
   const url = SITE + meta.path;
   const img = SITE + (meta.image || "/assets/catalog/cat-bags.jpg");
@@ -104,7 +123,9 @@ function headHTML(meta) {
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${esc(meta.title)}" />`,
     `<meta name="twitter:description" content="${esc(meta.description)}" />`,
-    `<meta name="twitter:image" content="${esc(img)}" />`
+    `<meta name="twitter:image" content="${esc(img)}" />`,
+    verificationHTML(),
+    meta.noindex ? "" : analyticsHTML()
   ].filter(Boolean).map((l) => "  " + l).join("\n");
 }
 
@@ -423,6 +444,29 @@ function build() {
   write("category.html", CATEGORY_SHIM);
   write("product.html", productShim(PRODS));
   write("_redirects", "/index.html / 301\n");
+  write("_headers", [
+    "/*",
+    "  X-Content-Type-Options: nosniff",
+    "  X-Frame-Options: SAMEORIGIN",
+    "  Referrer-Policy: strict-origin-when-cross-origin",
+    "  Permissions-Policy: camera=(), microphone=(), geolocation=()",
+    "",
+    "/assets/*",
+    "  Cache-Control: public, max-age=31536000, immutable",
+    "/css/*",
+    "  Cache-Control: public, max-age=31536000, immutable",
+    "/js/*",
+    "  Cache-Control: public, max-age=31536000, immutable",
+    "/favicon.svg",
+    "  Cache-Control: public, max-age=604800",
+    ""
+  ].join("\n"));
+  // IndexNow ownership file (config/indexnow.key → /<key>.txt)
+  const keyFile = path.join(ROOT, "config", "indexnow.key");
+  if (fs.existsSync(keyFile)) {
+    const key = fs.readFileSync(keyFile, "utf8").trim();
+    if (/^[a-f0-9]{32}$/.test(key)) write(key + ".txt", key + "\n");
+  }
   const today = new Date().toISOString().slice(0, 10);
   write("sitemap.xml", seo.sitemapXml(routes, today));
   write("robots.txt", seo.robotsTxt());

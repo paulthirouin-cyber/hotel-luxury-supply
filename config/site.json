@@ -1,0 +1,14 @@
+{
+  "site": "https://hotelluxurysupply.com",
+  "analytics": {
+    "provider": "plausible",
+    "domain": "hotelluxurysupply.com",
+    "enabled": false,
+    "note": "Set enabled:true once the Plausible site is created (see docs/LAUNCH-CHECKLIST.md). For GA4 set provider:'ga4' and measurementId:'G-XXXXXXX'."
+  },
+  "verification": {
+    "google": "",
+    "bing": "",
+    "note": "Optional HTML-tag verification. DNS TXT verification (recommended) needs nothing here."
+  }
+}

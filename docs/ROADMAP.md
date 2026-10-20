@@ -53,6 +53,7 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       he can view them. (Phase 1 switches Pages to build command
       `node build.js`, output `dist/`.)
       ✔ 2026-10-20: remote verified (github.com/paulthirouin-cyber/hotel-luxury-supply). Cloudflare Pages click-steps printed for Paul with build `node build.js`, output `dist` (Phase 1 already landed, so the no-build interim is skipped). PAUL ACTION PENDING: connect Pages.
+      ◻ 2026-10-20 PAUL: connect Cloudflare Pages — exact clicks in `docs/LAUNCH-CHECKLIST.md` §1 (build `node build.js`, output `dist`, preview branches = all). Blocks the preview URL.
 
 ## Phase 1 — Static pre-rendering (THE SEO unlock)
 - [x] 1.1 `build.js`: generate real URLs into `dist/` from the data files:
@@ -101,6 +102,7 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       endpoint: Cloudflare Pages Function or Formspree → email to Paul.
       ASK PAUL: which email receives leads. Store submissions as before too.
       ✔ 2026-10-20: all five forms (contact, concierge bell, quote submit, bespoke, mockup) call `HLLeads.send()` → POST `/api/lead` (Cloudflare Pages Function `functions/api/lead.js`, honeypot + validation, emails via Resend) and mirror to a local outbox; the UX never waits on the network. Tests assert the POST payload for each form. **ASK PAUL (not blocking the build):** which inbox receives leads (default info@hotelluxurysupply.com) and create a free resend.com key → set `RESEND_API_KEY`, `LEAD_TO`, `LEAD_FROM` in Pages → Settings → Environment variables. Until then the endpoint answers 202 and nothing is emailed.
+      ◻ 2026-10-20 PAUL: create Resend key + set `RESEND_API_KEY`, `LEAD_TO`, `LEAD_FROM` in Pages env vars — `docs/LAUNCH-CHECKLIST.md` §2. Until then /api/lead answers 202 and nothing is emailed.
 
 ## Phase 4 — Content engine, wave 1 (cornerstones)
 - [x] 4.1 `/guides/` template + index page, Article schema, build integration.
@@ -131,11 +133,15 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       (`main`) deployment only; `dev` previews stay on pages.dev. Print exact
       DNS steps for its registrar. Confirm with Paul before cutover — this is
       the one moment the public site changes.
+      ◻ 2026-10-20 prepared: DNS cutover steps (Cloudflare nameservers or registrar CNAME/ALIAS) written in `docs/LAUNCH-CHECKLIST.md` §3. PAUL: run them only when saying "go live".
 - [ ] 6.2 Google Search Console + Bing Webmaster verified (DNS TXT — print
       exact records); sitemap submitted; IndexNow key generated + installed.
+      ◻ 2026-10-20 prepared: IndexNow key generated (`config/indexnow.key`), published by the build at `/<key>.txt`, `npm run indexnow` submits every sitemap URL (run after each publish). GSC/Bing DNS-TXT steps in `docs/LAUNCH-CHECKLIST.md` §4. PAUL: verify both properties + submit the sitemap once the domain is live.
 - [ ] 6.3 Analytics installed (Plausible default; ASK PAUL only if he wants GA4).
-- [ ] 6.4 Final pre-launch audit: all suites + Lighthouse + schema validation +
+      ◻ 2026-10-20 prepared: analytics snippet is build-time and gated by `config/site.json` (`analytics.enabled`, provider plausible|ga4; never on noindex pages). PAUL: create the Plausible site (or say "use GA4 with G-…") then "enable Plausible".
+- [x] 6.4 Final pre-launch audit: all suites + Lighthouse + schema validation +
       crawl of dist/ for orphans. Tag `v1.0.0`.
+      ✔ 2026-10-20: pre-launch audit — all three suites green (76 pages, orphan crawl: every page reachable ≤ 3 clicks from home), JSON-LD validated per page type by the dist suite, `_headers` (security + immutable asset caching), image pipeline (`npm run images`: WebP heroes + 480px card variants with srcset/sizes, sharp as devDependency) brought forward from Phase 7 to clear the budget on image-heavy category pages. Lighthouse on 10 representative pages ≥ 95 (see Decision log). Tagged `v1.0.0-rc.1` on dev; `v1.0.0` is applied at publish.
 
 ## Phase 7 — Recurring (after launch; run on request)
 - [ ] "run the monthly SEO review" → the §8 measurement loop in the master
@@ -171,3 +177,6 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
 - 2026-10-20 — Content collections are folders: `content/guides/` (type guide|comparison) and `content/for/` (type usecase), same Markdown pipeline and template; a page's product grid comes from a `products:` front-matter list when it spans categories. Related cards show same-type pages first, capped at 6.
 - 2026-10-20 — Homepage collection cards (Poolside, Beach Club, Spa Suite, Golf & Club) now link to the matching program pages instead of a dead `#collections` anchor; Poolside and Beach Club both go to /for/beach-clubs/ until a dedicated poolside page exists.
 - 2026-10-20 — Footer gained a fourth Resources column (guides, glossary, five programs) on every page: the cheapest site-wide inbound links the content engine can get.
+- 2026-10-20 — `v1.0.0` is tagged on `main` at the moment Paul says "publish to live"; the pre-launch state on `dev` is `v1.0.0-rc.1` so the audit is pinned without touching the live lane.
+- 2026-10-20 — Analytics is Plausible by default, injected at build only when `config/site.json` → `analytics.enabled` is true and never on noindex pages; GA4 is a config switch. Verification meta tags are likewise config-driven, but DNS-TXT verification is the recommended path.
+- 2026-10-20 — Image variants are committed to the repo (generated locally with sharp) so Cloudflare's build stays `node build.js` with no native image tooling. Re-run `npm run images` whenever photography lands.

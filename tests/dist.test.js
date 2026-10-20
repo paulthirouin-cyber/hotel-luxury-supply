@@ -89,6 +89,10 @@ function auditPage(url) {
     const src = img.getAttribute("src");
     t.ok(src && src.startsWith("/assets/") && fs.existsSync(path.join(DIST, src)), ctx + " image absolute + exists: " + src);
     t.ok((img.getAttribute("alt") || "").length > 5, ctx + " image alt");
+    const ss = img.getAttribute("srcset");
+    if (ss) ss.split(",").forEach((c) => { const u = c.trim().split(/\s+/)[0]; t.ok(fs.existsSync(path.join(DIST, u)) && img.getAttribute("sizes"), ctx + " srcset candidate exists + sizes: " + u); });
+    const variant = src.replace(/\.webp$/, "-480.webp");
+    if (/\/assets\/catalog\//.test(src) && (fs.existsSync(path.join(DIST, variant)) || /-1600\.webp$/.test(src))) t.ok(ss, ctx + " catalog image has responsive srcset: " + src);
   });
   doc.querySelectorAll('link[rel="stylesheet"][href^="/"], script[src]').forEach((el) => {
     const src = el.getAttribute("href") || el.getAttribute("src");
@@ -389,6 +393,46 @@ for (const slug of USECASES) {
   t.ok(fs.existsSync(path.join(ROOT, "docs", "KEYWORD-MAP.md")), "keyword map exists");
 }
 
+/* ---------- Phase 6: pre-launch audit ---------- */
+{
+  // orphan crawl: every HTML page in dist must be reachable from "/" by following internal links
+  const pages = [];
+  const walkAll = (dir) => fs.readdirSync(dir, { withFileTypes: true }).forEach((e) => { const p = path.join(dir, e.name); if (e.isDirectory()) walkAll(p); else if (e.name.endsWith(".html")) pages.push("/" + path.relative(DIST, p).replace(/\\/g, "/").replace(/index\.html$/, "")); });
+  walkAll(DIST);
+  const seen = new Set(["/"]); const queue = ["/"];
+  while (queue.length) {
+    const u = queue.shift();
+    const doc = staticDom(u).window.document;
+    doc.querySelectorAll("a[href^='/']").forEach((a) => {
+      const h = a.getAttribute("href").split("#")[0].split("?")[0];
+      if (!h || seen.has(h)) return;
+      if (!distExists(h)) return;
+      seen.add(h); queue.push(h);
+    });
+  }
+  const shims = new Set(["/products.html", "/category.html", "/product.html", "/404.html"]);
+  const orphans = pages.filter((p) => !seen.has(p) && !shims.has(p));
+  t.ok(orphans.length === 0, "no orphan pages (unreachable from home): " + orphans.join(", "));
+  t.ok(seen.size >= 70, "crawl from home reaches " + seen.size + " pages");
+  // every page is <= 3 clicks from home
+  const depth = new Map([["/", 0]]); const q2 = ["/"];
+  while (q2.length) { const u = q2.shift(); const d = depth.get(u); staticDom(u).window.document.querySelectorAll("a[href^='/']").forEach((a) => { const h = a.getAttribute("href").split("#")[0].split("?")[0]; if (h && distExists(h) && !depth.has(h)) { depth.set(h, d + 1); q2.push(h); } }); }
+  const deep = [...depth].filter(([u, d]) => d > 3).map(([u]) => u);
+  t.ok(deep.length === 0, "every page within 3 clicks of home: " + deep.join(", "));
+}
+{
+  const h = readDist("_headers");
+  t.ok(/X-Content-Type-Options: nosniff/.test(h) && /\/assets\/\*\s+Cache-Control: public, max-age=31536000, immutable/.test(h), "_headers: security + immutable asset caching");
+  const key = fs.readFileSync(path.join(ROOT, "config", "indexnow.key"), "utf8").trim();
+  t.ok(/^[a-f0-9]{32}$/.test(key) && readDist(key + ".txt").trim() === key, "IndexNow key published at /<key>.txt");
+  const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, "config", "site.json"), "utf8"));
+  const home = readDist("index.html");
+  if (cfg.analytics && cfg.analytics.enabled) t.ok(/plausible\.io|googletagmanager/.test(home), "analytics snippet present when enabled");
+  else t.ok(!/plausible\.io|googletagmanager/.test(home), "no analytics snippet while disabled");
+  t.ok(!/plausible\.io|googletagmanager/.test(readDist("quote/index.html")), "no analytics on noindex pages");
+  t.ok(fs.existsSync(path.join(ROOT, "docs", "LAUNCH-CHECKLIST.md")) && fs.existsSync(path.join(ROOT, "scripts", "indexnow.js")), "launch checklist + indexnow script exist");
+}
+
 /* ---------- 4. legacy redirects ---------- */
 {
   const dom = liveDom("/", { suffix: "#/products/hats" });
@@ -510,6 +554,7 @@ for (const url of ["/", "/products/", "/products/hats/", "/products/hats/riviera
   t.ok(style && style.textContent.length > 20000 && !/\/\*/.test(style.textContent), ctx + " inlined minified CSS");
   t.ok(!/url\(["']?\.\.\//.test(style.textContent) && /url\(["']?\/assets\/fonts\//.test(style.textContent), ctx + " inline CSS uses root-absolute font URLs");
   t.ok(!/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(doc.documentElement.outerHTML), ctx + " no Google Fonts requests");
+  t.ok(![...doc.querySelectorAll("img")].some((i) => /\.(jpg|jpeg|png)$/.test(i.getAttribute("src") || "")), ctx + " no JPEG/PNG served (WebP variants)");
   const preloads = [...doc.querySelectorAll('link[rel="preload"][as="font"]')];
   t.ok(preloads.length === 2 && preloads.every((l) => l.hasAttribute("crossorigin") && fs.existsSync(path.join(DIST, l.getAttribute("href")))), ctx + " two font preloads that exist");
   t.ok(/font-display:swap/.test(style.textContent), ctx + " font-display swap");

@@ -8,12 +8,17 @@
     "build:preview": "node scripts/build-preview.js",
     "test": "node build.js && node scripts/build-preview.js && node tests/site.test.js && node tests/flows.test.js && node tests/dist.test.js",
     "serve": "node scripts/serve.js",
-    "lighthouse": "node scripts/lighthouse.js"
+    "lighthouse": "node scripts/lighthouse.js",
+    "indexnow": "node scripts/indexnow.js",
+    "images": "node scripts/images.js"
   },
   "dependencies": {
     "jsdom": "^24.0.0"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
   }
 }

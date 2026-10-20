@@ -23,48 +23,50 @@ answers ("the standard on the internet for these products"). The strategy is in
 reverse-engineered for compounding organic growth, MrBeast-style: every page has
 a job, every job is measured, and measurements feed the next content cycle.
 
-## Current state (v8 — feature-complete prototype, pre-SEO)
+## Current state (v1.0.0-rc — static site + content engine, pre-launch)
 
-Static site, zero frameworks, zero build step, vanilla JS + CSS. All verified by
-seven automated jsdom test suites (rebuild them if missing — see Testing).
+Zero frameworks. Source files are a hash-routed SPA (`index.html`,
+`products.html`, `js/`, `css/`); **`node build.js` pre-renders every route
+into `dist/`** (76 pages, 72 indexable) by running the same renderers in
+jsdom under `<html data-static>`. Cloudflare Pages builds `dist/` from
+`main` (production) and `dev` (preview). `npm test` = build + preview +
+three jsdom suites (site, flows, dist); `npm run lighthouse` enforces ≥ 95.
 
-- `index.html` — homepage: header, hero, Guest Journey (scroll-driven, 5 scenes),
-  Explore the Atelier (7 category cards), lifestyle statement, collections,
-  client logos, process, concierge CTA, footer, floating concierge bell + drawer,
-  mobile menu. **Homepage is lifestyle-only: no pricing, MOQs, SKUs, or quote UI. Ever.**
-- `products.html` — hash-routed catalog SPA:
-  - `#/products` landing (7 categories)
-  - `#/products/:category` (7 pages) — product cards WITHOUT pricing
-    (image, type, name, description, MOQ, customization, View Details only)
-    + per-category bespoke CTA
-  - `#/products/:category/:slug` (39 product pages) — gallery, specs, ref,
-    4-tier Quantity Pricing, quantity selector w/ active-tier highlight +
-    MOQ warning, Add to Quote, Make It Bespoke drawer, Request Mockup drawer
-    (logo required), related products
-  - `#/quote` — Quote Cart: line items, summary, Project Details (gates the
-    Instant Quote PDF, ref `HLQ-YYYY-NNNN`), logo upload (gates Submit to
-    Concierge), printable quote document, success state
-  - `#/bespoke` (+ `?category=` / `?product=` prefill) — Bespoke Atelier page,
-    form, ref `HLB-YYYY-NNNN`
-- `category.html` / `product.html` — legacy redirect stubs to hash routes.
-- Data: `js/products.js` (39 products, factory-generated: ref, slug, type,
-  tiers×4 with `price: null` → "$--", customization, specifications, imageLabel,
-  gallery), `js/categories.js` (7 categories + homepage + catalog copy).
-- Logic: `js/pricing.js` (tier resolution — lower qualifying tier),
-  `js/catalog.js` (router + renderers + self-contained nav interception),
-  `js/quote-store.js`, `js/quote-page.js`, `js/quote-pdf.js`,
-  `js/bespoke-page.js`, `js/bespoke-drawers.js`.
-- Images: real catalog photography is integrated. `assets/catalog/` holds the
-  39 alpha-trimmed product cutouts (`<slug>.webp`, rendered contained on a
-  softened tint via `.ph--photo`) and 7 lifestyle category heroes
-  (`cat-<slug>.jpg`, rendered full-bleed via `.ph--cover`), all extracted from
-  the official catalog PDF. The homepage hero and lifestyle statement use
-  lifestyle shots; Guest Journey scenes and collections still use designed
-  tint placeholders until dedicated photography exists. Product data/copy
+- URLs: `/`, `/products/`, `/products/:cat/` ×7, `/products/:cat/:slug/` ×39,
+  `/bespoke/`, `/quote/` (noindex), `/about/`, `/process/`, `/contact/`,
+  `/privacy/` + `/terms/` (noindex placeholders), `/guides/` + 12 guides
+  (7 buying guides, 5 comparisons), `/for/` + 5 program pages, `/glossary/`,
+  `/404.html`, legacy `.html` shims, `sitemap.xml`, `robots.txt`, `llms.txt`,
+  `_headers`, `_redirects`, IndexNow key file.
+- `js/routes.js` (load first): `HLRoutes.href("#/products/hats")` emits hash
+  routes in SPA/preview mode and clean URLs in static mode. Never hard-code
+  `products.html#/…` in renderers.
+- Pre-rendered views carry `data-prerendered`; client JS hydrates only
+  (catalog.js, bespoke-page.js, pages.js). `/quote/` renders client-side.
+- Trust pages live in `js/pages.js` (registry: path, meta, schemaType,
+  render). Content pages live in `content/guides/*.md`, `content/for/*.md`,
+  `content/glossary.json` and are rendered by `scripts/content.js` +
+  `scripts/markdown.js` (front matter; link shorthands `product:` `category:`
+  `guide:` `for:` `glossary:` `page:`; unknown targets fail the build).
+- SEO: `scripts/seo.js` (JSON-LD graphs, sitemap, robots, llms.txt);
+  `scripts/perf.js` (inline minified CSS, self-hosted fonts in `assets/fonts/`,
+  deferred JS, image dimensions, eager LCP image). Meta fields: `metaTitle`,
+  `metaDescription`, `keywords`, `directAnswer`, `faqs`, `guide` on categories;
+  generated defaults on products.
+- Leads: every form calls `HLLeads.send(type, payload)` → POST `/api/lead`
+  (`functions/api/lead.js`, Resend; env vars pending Paul) + local outbox.
+- Config: `config/site.json` (analytics gate, verification tags),
+  `config/indexnow.key`. Paul's click-steps: `docs/LAUNCH-CHECKLIST.md`.
+  Keyword map: `docs/KEYWORD-MAP.md`. Decisions: `docs/ROADMAP.md` log.
+- Images: `assets/catalog/` holds 39 alpha-trimmed cutouts (`<slug>.webp`)
+  and 7 lifestyle heroes (`cat-<slug>.jpg`) from the catalog PDF; Guest
+  Journey and collection cards still use tint placeholders. Product copy
   source of truth: HL Supply Product Catalog 2025-2026 + `docs/BRAND-BRIEF.md`
-  (the company brief — use its voice and its essence line for About/content:
-  "We don't simply put hotel names on products. We help hotels create products
-  worthy of carrying their names.").
+  (essence line: "We don't simply put hotel names on products. We help
+  hotels create products worthy of carrying their names.").
+- **Homepage is lifestyle-only: no pricing, MOQs, SKUs, or quote UI. Ever.**
+- Pricing stays `$--` / "Estimate pending" until Paul supplies numbers in
+  `js/products.js`; schema deliberately has no `offers` until then.
 
 ## Brand system (non-negotiable)
 
@@ -95,12 +97,15 @@ seven automated jsdom test suites (rebuild them if missing — see Testing).
 
 ## Testing
 
-`npm test` runs the jsdom suites in `tests/` (`site.test.js` +
-`flows.test.js`): data integrity against the catalog, every view rendered,
-1,500+ link audit, image existence + alt text, pricing/tier interactions,
-quote and bespoke E2E, and a sandbox click-through of the built preview
-(`npm run build:preview` first). **No phase is complete until all suites
-pass.** Add a regression test for every bug fixed.
+`npm test` builds `dist/` and the single-file preview, then runs the jsdom
+suites in `tests/`: `site.test.js` (data integrity, every SPA view, 1,500+
+link audit, pricing/tier interactions, info pages), `flows.test.js` (quote,
+bespoke, drawer and preview click-throughs, lead POST payloads) and
+`dist.test.js` (every URL exists, per-page SEO head, JSON-LD, sitemap/robots/
+llms, performance invariants, hydration without re-render, content pages,
+inbound-link mesh, orphan crawl). `npm run lighthouse` audits dist/ with a
+≥ 95 budget (needs Chrome; not part of `npm test`). **No phase is complete
+until all suites pass.** Add a regression test for every bug fixed.
 
 ## Company facts (from the catalog & brief — use everywhere relevant)
 
@@ -127,9 +132,10 @@ Two lanes, enforced always:
 "Continue the roadmap" therefore always means: work on `dev`, push `dev`,
 report the preview URL. Publishing is a separate, explicit instruction.
 
-## Deployment model (target)
+## Deployment model
 
-GitHub repo → Cloudflare Pages (or Netlify) auto-deploy on push to `main`.
-After Phase 0 (static pre-rendering), the deployed site is plain HTML files —
-no server, no build service required beyond running `node build.js`.
-Claude Code runs the build, tests, commit, and push; "deploy" = `git push`.
+GitHub repo → Cloudflare Pages (build command `node build.js`, output `dist`,
+production branch `main`, preview branches all). The deployed site is plain
+HTML plus one Pages Function (`functions/api/lead.js`). Claude Code runs the
+build, tests, commit, and push; "deploy" = `git push`. After a publish to
+`main`: tag the release and run `npm run indexnow`.

@@ -122,8 +122,41 @@ function eagerHero(doc) {
   hero.setAttribute("decoding", "async");
 }
 
+// Responsive sources: use generated variants (scripts/images.js) when present.
+//   /assets/catalog/cat-x.jpg  → src cat-x-1600.webp, srcset 960w/1600w (hero, full-bleed)
+//   /assets/catalog/x.webp     → srcset x-480.webp 480w, x.webp <orig>w (cards, contained)
+function responsiveImages(doc, distDir) {
+  doc.querySelectorAll("img[src^='/assets/catalog/']").forEach((img) => {
+    const src = img.getAttribute("src");
+    const m = src.match(/^\/assets\/catalog\/(cat-[a-z-]+)\.(jpg|jpeg|png)$/);
+    if (m) {
+      const big = "/assets/catalog/" + m[1] + "-1600.webp", mid = "/assets/catalog/" + m[1] + "-960.webp";
+      if (fs.existsSync(path.join(distDir, big))) {
+        img.setAttribute("src", big);
+        const dm = fs.existsSync(path.join(distDir, mid)) ? readDims(path.join(distDir, mid)) : null, db = readDims(path.join(distDir, big));
+        img.setAttribute("srcset", (dm && db && dm.width < db.width) ? mid + " " + dm.width + "w, " + big + " " + db.width + "w" : big + " " + (db ? db.width : 1600) + "w");
+        img.setAttribute("sizes", img.classList.contains("hero__img") ? "100vw" : "(max-width: 900px) 100vw, 50vw");
+        const d = readDims(path.join(distDir, big));
+        if (d) { img.setAttribute("width", String(d.width)); img.setAttribute("height", String(d.height)); }
+      }
+      return;
+    }
+    const p = src.match(/^\/assets\/catalog\/([a-z0-9-]+)\.webp$/);
+    if (p && !/-\d+$/.test(p[1])) {
+      const small = "/assets/catalog/" + p[1] + "-480.webp";
+      if (!fs.existsSync(path.join(distDir, small))) return;
+      const d = readDims(path.join(distDir, src));
+      const w = d ? d.width : 800;
+      img.setAttribute("srcset", small + " 480w, " + src + " " + w + "w");
+      const main = img.closest(".pd__ph");
+      img.setAttribute("sizes", main ? "(max-width: 900px) 100vw, 50vw" : "(max-width: 600px) 90vw, 400px");
+    }
+  });
+}
+
 function apply(doc, distDir) {
   eagerHero(doc);
+  responsiveImages(doc, distDir);
   inlineStyles(doc, distDir);
   preloadFonts(doc);
   deferScripts(doc);
