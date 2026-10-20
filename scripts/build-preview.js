@@ -12,7 +12,7 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
 
-const CSS = ["css/styles.css", "css/guest-journey.css", "css/category-section.css",
+const CSS = ["css/fonts.css", "css/styles.css", "css/guest-journey.css", "css/category-section.css",
   "css/concierge-bell.css", "css/polish.css"];
 const HOME_JS = ["js/routes.js", "js/main.js", "js/mobile-menu.js", "js/homepage-scenes.js",
   "js/guest-journey.js", "js/categories.js", "js/category-section.js", "js/concierge-bell.js"];
@@ -26,6 +26,11 @@ let html = read("index.html");
 for (const f of CSS) {
   const tag = `<link rel="stylesheet" href="${f}" />`;
   if (!html.includes(tag)) throw new Error("missing tag: " + tag);
+  if (f === "css/fonts.css") {
+    // single-file preview cannot carry font files: fall back to Google Fonts
+    html = html.replace(tag, '<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />');
+    continue;
+  }
   html = html.replace(tag, "<style>\n" + read(f) + "\n</style>");
 }
 for (const f of HOME_JS) {

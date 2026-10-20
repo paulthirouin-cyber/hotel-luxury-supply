@@ -21,6 +21,8 @@
 const fs = require("fs");
 const path = require("path");
 const { JSDOM } = require("jsdom");
+const seo = require("./scripts/seo");
+const perf = require("./scripts/perf");
 
 const ROOT = __dirname;
 const SITE = "https://hotelluxurysupply.com";
@@ -91,6 +93,7 @@ function headHTML(meta) {
     meta.keywords && meta.keywords.length ? `<meta name="keywords" content="${esc(meta.keywords.join(", "))}" />` : "",
     `<link rel="canonical" href="${esc(url)}" />`,
     `<meta name="theme-color" content="#1b2a41" />`,
+    `<link rel="icon" type="image/svg+xml" href="/favicon.svg" />`,
     `<meta property="og:site_name" content="HL Supply" />`,
     `<meta property="og:type" content="${meta.ogType || "website"}" />`,
     `<meta property="og:title" content="${esc(meta.title)}" />`,
@@ -161,12 +164,20 @@ function withStatic(html) {
 
 function replaceHead(doc, meta) {
   const head = doc.head;
-  ["title", 'meta[name="description"]', 'link[rel="canonical"]', 'meta[name="robots"]'].forEach((sel) => {
+  ["title", 'meta[name="description"]', 'link[rel="canonical"]', 'meta[name="robots"]', 'link[rel="icon"]'].forEach((sel) => {
     head.querySelectorAll(sel).forEach((n) => n.remove());
   });
   const marker = head.querySelector('meta[name="viewport"]');
   if (marker) marker.insertAdjacentHTML("afterend", "\n" + headHTML(meta));
   else head.insertAdjacentHTML("afterbegin", headHTML(meta) + "\n");
+}
+
+function injectLd(doc, ld) {
+  if (!ld) return;
+  const s = doc.createElement("script");
+  s.setAttribute("type", "application/ld+json");
+  s.textContent = JSON.stringify(ld);
+  doc.head.appendChild(s);
 }
 
 function serialize(dom) {
@@ -214,6 +225,8 @@ function renderCatalogPage(route, meta, opts) {
   rewriteLinks(doc, false);
   absolutizeAssets(doc);
   replaceHead(doc, meta);
+  injectLd(doc, opts.ld ? opts.ld(win) : seo.simpleLd(meta));
+  perf.apply(doc, OUT);
   return serialize(dom);
 }
 
@@ -229,6 +242,8 @@ function renderHome() {
   rewriteLinks(doc, true);
   absolutizeAssets(doc);
   replaceHead(doc, HOME_META);
+  injectLd(doc, seo.homeLd(HOME_META));
+  perf.apply(doc, OUT);
   return serialize(dom);
 }
 
@@ -285,6 +300,7 @@ function build() {
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
   STATIC_DIRS.forEach((d) => copyDir(path.join(ROOT, d), path.join(OUT, d)));
+  fs.copyFileSync(path.join(ROOT, "favicon.svg"), path.join(OUT, "favicon.svg"));
 
   const pages = [];
   const routes = []; // { path, title, noindex } — reused by sitemap/llms generation later
@@ -295,14 +311,16 @@ function build() {
   }
 
   emit("index.html", renderHome(), HOME_META);
-  emit("products/index.html", renderCatalogPage("#/products", { ...LANDING_META, keywords: ["custom hospitality products", "hotel guest goods catalog"] }, { view: "viewLanding" }), LANDING_META);
+  emit("products/index.html", renderCatalogPage("#/products", { ...LANDING_META, keywords: ["custom hospitality products", "hotel guest goods catalog"] },
+    { view: "viewLanding", ld: () => seo.landingLd(LANDING_META, CATS) }), LANDING_META);
 
   for (const c of CATS) {
     const meta = {
       title: c.metaTitle, description: c.metaDescription, keywords: c.keywords,
       path: "/products/" + c.slug + "/", image: "/" + c.image.replace(/^\//, "")
     };
-    emit("products/" + c.slug + "/index.html", renderCatalogPage("#/products/" + c.slug, meta, { view: "viewCategory" }), meta);
+    emit("products/" + c.slug + "/index.html", renderCatalogPage("#/products/" + c.slug, meta,
+      { view: "viewCategory", ld: () => seo.categoryLd(meta, c, PRODS.filter((p) => p.category === c.slug)) }), meta);
   }
 
   for (const p of PRODS) {
@@ -311,10 +329,12 @@ function build() {
       path: "/products/" + p.category + "/" + p.slug + "/", image: "/" + p.image.replace(/^\//, ""), ogType: "product"
     };
     emit("products/" + p.category + "/" + p.slug + "/index.html",
-      renderCatalogPage("#/products/" + p.category + "/" + p.slug, meta, { view: "viewProduct" }), meta);
+      renderCatalogPage("#/products/" + p.category + "/" + p.slug, meta,
+        { view: "viewProduct", ld: () => seo.productLd(meta, p, CATS.find((c) => c.slug === p.category)) }), meta);
   }
 
-  emit("bespoke/index.html", renderCatalogPage("#/bespoke", BESPOKE_META, { view: "viewBespoke" }), BESPOKE_META);
+  emit("bespoke/index.html", renderCatalogPage("#/bespoke", BESPOKE_META,
+    { view: "viewBespoke", ld: (win) => seo.bespokeLd(BESPOKE_META, win.HLBespokePage.FAQS) }), BESPOKE_META);
   // quote cart is user state: ship the empty state, the client renders the real cart
   emit("quote/index.html", renderCatalogPage("#/quote", QUOTE_META, { view: "viewQuote", prerendered: false }), QUOTE_META);
 
@@ -331,6 +351,10 @@ function build() {
   write("category.html", CATEGORY_SHIM);
   write("product.html", productShim(PRODS));
   write("_redirects", "/index.html / 301\n");
+  const today = new Date().toISOString().slice(0, 10);
+  write("sitemap.xml", seo.sitemapXml(routes, today));
+  write("robots.txt", seo.robotsTxt());
+  write("llms.txt", seo.llmsTxt(CATS, PRODS));
   write("build-manifest.json", JSON.stringify({ builtAt: new Date().toISOString(), site: SITE, routes }, null, 2));
 
   console.log(`built ${pages.length} pages into ${path.relative(ROOT, OUT) || "."}/ (${routes.filter((r) => !r.noindex).length} indexable)`);

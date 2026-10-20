@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Atelier Catalog — HL Supply</title>
   <meta name="description" content="Signature hospitality goods ready to customize for your property, event, or guest experience." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/fonts.css" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/polish.css" />
   <link rel="stylesheet" href="css/catalog.css" />
@@ -95,7 +94,12 @@
 
       <section class="catalog-section" aria-label="Products in this category">
         <div class="wrap">
-          <p class="section-head" style="max-width:640px;" id="categoryIntro"></p>
+          <p class="category-answer" id="categoryAnswer"></p>
+          <div class="section-head">
+            <span class="eyebrow">The Collection</span>
+            <h2 id="categoryHeading"></h2>
+            <p id="categoryIntro"></p>
+          </div>
           <div class="pgrid" id="categoryGrid">
             <!-- Rendered by js/catalog.js from js/products.js -->
           </div>
@@ -106,6 +110,12 @@
         <div class="wrap custom-note" style="border:none; padding:0;">
           <p>Every piece is customized in-house &mdash; embroidery, deboss, laser etching, custom colors, and packaging.</p>
           <small>Logo upload happens at quote submission. Pricing is confirmed by the atelier at quote review.</small>
+        </div>
+      </section>
+
+      <section class="catalog-section catalog-section--faq">
+        <div class="wrap" id="categoryFaq">
+          <!-- Rendered by js/catalog.js from category faqs -->
         </div>
       </section>
 
@@ -156,7 +166,7 @@
           <div class="footer__seal" aria-hidden="true"></div>
         </div>
         <div>
-          <h4>Atelier</h4>
+          <h3>Atelier</h3>
           <ul>
             <li><a href="products.html#/products">Products</a></li>
             <li><a href="index.html#collections">Collections</a></li>
@@ -166,7 +176,7 @@
           </ul>
         </div>
         <div>
-          <h4>Contact</h4>
+          <h3>Contact</h3>
           <p class="footer__contact">
             <a href="mailto:info@hotelluxurysupply.com">info@hotelluxurysupply.com</a><br />
             <a href="tel:+13476694417">+1 (347) 669-4417</a><br />

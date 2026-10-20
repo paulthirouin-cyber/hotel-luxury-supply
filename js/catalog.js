@@ -114,7 +114,7 @@
           '<button type="button" class="pt-tier' + (active ? " is-active" : "") + '"' +
           ' data-tier-qty="' + t.qty + '" data-tier-for="' + product.slug + '"' +
           ' aria-pressed="' + (active ? "true" : "false") + '"' +
-          ' aria-label="Set quantity to ' + P.formatQty(t.qty) + " " + product.unitLabel + '">' +
+          ' title="Set quantity to ' + P.formatQty(t.qty) + " " + product.unitLabel + '">' +
           '  <span class="pt-tier__qty">' + P.formatQty(t.qty) + "</span>" +
           '  <span class="pt-tier__price">' + P.formatUnit(t.price) + " / unit</span>" +
           (active ? '<span class="pt-tier__mark">Active tier</span>' : "") +
@@ -176,9 +176,24 @@
     );
   }
 
+  // FAQ block (real buyer questions; the build emits matching FAQPage schema)
+  function faqHTML(faqs, heading) {
+    if (!faqs || !faqs.length) return "";
+    return (
+      '<section class="faq" aria-labelledby="faqTitle">' +
+      '  <div class="section-head"><span class="eyebrow">Questions</span><h2 id="faqTitle">' + esc(heading || "Frequently asked questions") + "</h2></div>" +
+      '  <div class="faq__list">' +
+      faqs.map(function (f) {
+        return '<article class="faq__item"><h3 class="faq__q">' + esc(f.q) + '</h3><p class="faq__a">' + esc(f.a) + "</p></article>";
+      }).join("") +
+      "  </div>" +
+      "</section>"
+    );
+  }
+
   function categoryCardHTML(cat) {
     return (
-      '<a class="ccard" href="' + U("#/products/" + cat.slug) + '" aria-label="View the ' + esc(cat.name) + ' category">' +
+      '<a class="ccard" href="' + U("#/products/" + cat.slug) + '">' +
       phHTML(cat.tint, cat.imageLabel, "ccard__media", cat.image, true) +
       '  <div class="ccard__body">' +
       "    <h3>" + esc(cat.name) + "</h3>" +
@@ -326,7 +341,13 @@
       var gridM = document.getElementById("categoryGrid");
       var introM = document.getElementById("categoryIntro");
       if (introM) introM.textContent = "";
+      var headM = document.getElementById("categoryHeading");
+      if (headM) headM.textContent = "";
       if (gridM) gridM.innerHTML = "";
+      var ansM = document.getElementById("categoryAnswer");
+      var faqM = document.getElementById("categoryFaq");
+      if (ansM) ansM.textContent = "";
+      if (faqM) faqM.innerHTML = "";
       if (heroM) heroM.innerHTML = notFoundHTML("Category");
       document.title = "Category not found \u2014 HL Supply";
       return;
@@ -349,6 +370,12 @@
 
     var intro = document.getElementById("categoryIntro");
     if (intro) intro.textContent = cat.catalogIntro || "";
+    var heading = document.getElementById("categoryHeading");
+    if (heading) heading.textContent = cat.collectionTitle || ("Custom " + cat.name.toLowerCase() + " for hotels, resorts, and clubs");
+    var answer = document.getElementById("categoryAnswer");
+    if (answer) answer.textContent = cat.directAnswer || "";
+    var faq = document.getElementById("categoryFaq");
+    if (faq) faq.innerHTML = faqHTML(cat.faqs, "Questions about custom " + cat.name.toLowerCase());
 
     var BESPOKE_CTA = {
       "bags": ["Need a custom size, handle, pocket, or material?", "Start from one of our bag styles or send us your desired canvas, straps, dimensions, logo placement, and quantity.", "Start Bespoke Bag Project"],
@@ -390,9 +417,9 @@
     var cards = picks
       .map(function (p) {
         return (
-          '<a class="rel-card" href="' + U("#/products/" + p.category + "/" + p.slug) + '" aria-label="View details for ' + esc(p.name) + '">' +
+          '<a class="rel-card" href="' + U("#/products/" + p.category + "/" + p.slug) + '">' +
           phHTML(p.tint, p.imageLabel, "rel-card__media", p.image) +
-          '  <div class="rel-card__body"><h4>' + esc(p.name) + '</h4><span class="tlink">View Details</span></div>' +
+          '  <div class="rel-card__body"><h3>' + esc(p.name) + '</h3><span class="tlink">View Details</span></div>' +
           "</a>"
         );
       })
@@ -611,6 +638,7 @@
     renderCategory: renderCategory,
     renderProduct: renderProduct,
     notFoundHTML: notFoundHTML,
+    faqHTML: faqHTML,
     isStatic: STATIC,
     refreshCount: refreshCount,
     toast: toast

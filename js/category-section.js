@@ -29,7 +29,7 @@
         '<a class="at-card at-card--' + cat.size + " accent-" + cat.accent + " " + cat.micro + '"' +
         ' href="' + esc(window.HLRoutes ? window.HLRoutes.href("#/products/" + cat.slug) : "products.html#/products/" + cat.slug) + '"' +
         ' style="--stagger:' + i + '"' +
-        ' aria-label="View the ' + esc(cat.name) + ' category">' +
+        ">" +
         '  <div class="at-card__media ph' + (cat.image ? " ph--cover" : "") + '">' +
         '    <div class="ph__art ' + cat.tint + '">' +
         '      <span class="ph__line"></span>' +

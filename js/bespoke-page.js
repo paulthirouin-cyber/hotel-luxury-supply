@@ -144,6 +144,20 @@ window.HLBespokePage = (function () {
     );
   }
 
+  var FAQS = [
+    { q: "What does \u201cbespoke\u201d mean at HL Supply?", a: "Bespoke means the catalog is a starting point, not a limit. We adapt an existing piece (dimensions, materials, colors, trims, hardware, packaging, logo method) or develop an entirely new product from a sketch, reference image, or guest moment." },
+    { q: "What is the minimum order for a bespoke product?", a: "Minimums follow the closest catalog category: hats and leather goods from 100 units, bags, bottles, and flip-flops from 200, slippers from 1,000 pairs. Fully custom developments are quoted individually once the design is defined." },
+    { q: "How long does a bespoke project take?", a: "Catalog adaptations typically follow the standard 4\u20136 week production window after proof approval. New product developments add design and sampling time, which the atelier confirms in the project proposal." },
+    { q: "Can you match our property\u2019s Pantone colors and materials?", a: "Yes. Pantone matching, alternate fabrics and leathers, custom hardware, and coordinated packaging are all part of the bespoke process, evaluated against production feasibility and quantity." },
+    { q: "Do we need finished artwork to start?", a: "No. Start with a logo, a brand guide, a sketch, or a reference image. The atelier prepares mockups and a proof; logo files are uploaded at quote or mockup submission." },
+    { q: "How do we begin?", a: "Submit the bespoke form below, or open any catalog product and choose Make It Bespoke. The concierge replies with questions, directions, and a project reference (HLB-) to track the inquiry." }
+  ];
+
+  function faqHTML() {
+    if (window.HLCatalog && window.HLCatalog.faqHTML) return window.HLCatalog.faqHTML(FAQS, "Questions about bespoke projects");
+    return "";
+  }
+
   function heroHTML() {
     return (
       '<section class="bhero">' +
@@ -426,7 +440,7 @@ window.HLBespokePage = (function () {
     var root = mount();
     if (!root) return;
     root.innerHTML =
-      heroHTML() + pathsHTML() + capabilitiesHTML() + formHTML() + scenariosHTML() + conciergeHTML();
+      heroHTML() + pathsHTML() + capabilitiesHTML() + formHTML() + scenariosHTML() + faqHTML() + conciergeHTML();
     fileList("bfLogoList", logoFiles);
     fileList("bfInspoList", inspoFiles);
   }
@@ -456,7 +470,7 @@ window.HLBespokePage = (function () {
     }
   }
 
-  return { render: render };
+  return { render: render, FAQS: FAQS };
 })();
 
 // If the bespoke view is already active (deep link), render immediately —

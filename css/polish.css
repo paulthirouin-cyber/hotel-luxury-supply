@@ -112,7 +112,7 @@ h2 { letter-spacing: 0.012em; }
   transition: color 0.3s, padding-left 0.3s;
 }
 
-.mobile-menu__nav a:hover { color: var(--terracotta, #c47e5d); padding-left: 6px; }
+.mobile-menu__nav a:hover { color: var(--terracotta-text, #a4532f); padding-left: 6px; }
 
 .mobile-menu__foot {
   margin-top: auto;
@@ -220,7 +220,7 @@ h2 { letter-spacing: 0.012em; }
   background: transparent;
   aspect-ratio: auto;
   padding: 34px 12px;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   letter-spacing: 0.3em;
   transition: color 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }

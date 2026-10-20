@@ -93,7 +93,7 @@
   font-family: var(--serif, "Marcellus", serif);
   font-size: 15px;
   letter-spacing: 0.3em;
-  color: var(--terracotta, #c47e5d);
+  color: var(--terracotta-text, #a4532f);
   margin-bottom: 14px;
 }
 
@@ -236,11 +236,11 @@
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   cursor: pointer;
 }
 
-.bcontext__clear:hover { color: var(--terracotta, #c47e5d); }
+.bcontext__clear:hover { color: var(--terracotta-text, #a4532f); }
 
 .qdrop--slim { padding: 18px 16px; }
 .qdrop--slim .qdrop__main { font-size: 15px; }
@@ -334,7 +334,7 @@
   font-size: 10.5px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--terracotta, #c47e5d);
+  color: var(--terracotta-text, #a4532f);
   display: block;
   margin-bottom: 12px;
 }
@@ -396,7 +396,7 @@
   font-size: 9.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .bdr__context dd { margin: 0; font-family: var(--sans, "Jost", sans-serif); font-size: 12.5px; color: var(--navy, #1b2a41); }

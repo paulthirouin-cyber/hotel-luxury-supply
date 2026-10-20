@@ -22,7 +22,7 @@
 .qhead__note {
   margin-top: 14px;
   font-size: 13.5px;
-  color: var(--terracotta, #c47e5d);
+  color: var(--terracotta-text, #a4532f);
   border-top: 1px solid rgba(216, 203, 174, 0.8);
   border-bottom: 1px solid rgba(216, 203, 174, 0.8);
   padding: 10px 0;
@@ -99,12 +99,12 @@
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   cursor: pointer;
   transition: color 0.3s, border-color 0.3s;
 }
 
-.qline__remove:hover { color: var(--terracotta, #c47e5d); border-color: var(--terracotta, #c47e5d); }
+.qline__remove:hover { color: var(--terracotta-text, #a4532f); border-color: var(--terracotta-text, #a4532f); }
 
 .qline__meta { display: grid; gap: 6px; margin-bottom: 12px; }
 
@@ -117,7 +117,7 @@
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .qline__meta dd { margin: 0; font-size: 13.5px; color: var(--navy-soft, #2c3e57); }
@@ -165,12 +165,12 @@
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .qline__total strong { font-weight: 400; font-size: 14px; color: var(--navy, #1b2a41); text-align: right; }
 
-.qline__moq { color: var(--terracotta, #c47e5d) !important; font-size: 13px !important; text-transform: none !important; letter-spacing: 0.03em !important; }
+.qline__moq { color: var(--terracotta-text, #a4532f) !important; font-size: 13px !important; text-transform: none !important; letter-spacing: 0.03em !important; }
 
 .qline__notes { display: grid; gap: 6px; }
 
@@ -220,7 +220,7 @@
 
 .qcard__intro { font-size: 14px; line-height: 1.65; color: var(--navy-soft, #2c3e57); margin-bottom: 18px; }
 
-.qnote { font-family: var(--sans, "Jost", sans-serif); font-size: 12.5px; color: var(--chrome, #9aa3a8); margin-top: 12px; }
+.qnote { font-family: var(--sans, "Jost", sans-serif); font-size: 12.5px; color: var(--chrome-text, #5f6a72); margin-top: 12px; }
 
 .qnote--foot { margin-top: 28px; }
 
@@ -234,7 +234,7 @@
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .qsum dd { margin: 0; font-size: 14px; color: var(--navy-soft, #2c3e57); text-align: right; }
@@ -263,7 +263,7 @@
   color: var(--navy, #1b2a41);
 }
 
-.qd-optional { color: var(--chrome, #9aa3a8); letter-spacing: 0.12em; text-transform: none; }
+.qd-optional { color: var(--chrome-text, #5f6a72); letter-spacing: 0.12em; text-transform: none; }
 
 .qd-field input,
 .qd-field select,
@@ -301,17 +301,17 @@
 
 .qd-field.is-invalid input,
 .qd-field.is-invalid select {
-  border-color: var(--terracotta, #c47e5d);
+  border-color: var(--terracotta-text, #a4532f);
   box-shadow: 0 0 0 1px var(--terracotta, #c47e5d);
 }
 
-.qd-field.is-invalid label::after { content: " \2014 required"; color: var(--terracotta, #c47e5d); letter-spacing: 0.08em; text-transform: none; }
+.qd-field.is-invalid label::after { content: " \2014 required"; color: var(--terracotta-text, #a4532f); letter-spacing: 0.08em; text-transform: none; }
 
 /* error message */
 .qerror {
   font-family: var(--sans, "Jost", sans-serif);
   font-size: 13.5px;
-  color: var(--terracotta, #c47e5d);
+  color: var(--terracotta-text, #a4532f);
   border: 1px solid rgba(196, 126, 93, 0.5);
   background: rgba(196, 126, 93, 0.07);
   padding: 12px 14px;
@@ -356,7 +356,7 @@
   font-family: var(--sans, "Jost", sans-serif);
   font-size: 12px;
   letter-spacing: 0.06em;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .qdrop input[type="file"] {
@@ -408,7 +408,7 @@
   font-size: 10.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .qsuccess__meta dd { margin: 0; font-size: 14.5px; color: var(--navy, #1b2a41); }
@@ -423,12 +423,12 @@
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   cursor: pointer;
   padding: 2px 0;
 }
 
-.qreset:hover { color: var(--terracotta, #c47e5d); border-color: var(--terracotta, #c47e5d); }
+.qreset:hover { color: var(--terracotta-text, #a4532f); border-color: var(--terracotta-text, #a4532f); }
 
 /* ---------- toast with actions ---------- */
 
@@ -542,7 +542,7 @@ body.quote-doc-open { overflow: hidden; }
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .qdoc__meta dd { margin: 0; font-family: var(--sans, "Jost", sans-serif); font-size: 13.5px; color: var(--navy, #1b2a41); }
@@ -570,13 +570,13 @@ body.quote-doc-open { overflow: hidden; }
 
 .qdoc__table td strong { font-weight: 400; color: var(--navy, #1b2a41); }
 
-.qdoc__linenote { display: block; font-size: 11.5px; color: var(--chrome, #9aa3a8); margin-top: 3px; }
+.qdoc__linenote { display: block; font-size: 11.5px; color: var(--chrome-text, #5f6a72); margin-top: 3px; }
 
 .qdoc__summary { display: grid; gap: 8px; max-width: 340px; margin-left: auto; margin-bottom: 28px; }
 
 .qdoc__summary div { display: flex; justify-content: space-between; gap: 16px; }
 
-.qdoc__summary dt { font-family: var(--sans, "Jost", sans-serif); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--chrome, #9aa3a8); }
+.qdoc__summary dt { font-family: var(--sans, "Jost", sans-serif); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--chrome-text, #5f6a72); }
 
 .qdoc__summary dd { margin: 0; font-family: var(--sans, "Jost", sans-serif); font-size: 13px; color: var(--navy, #1b2a41); }
 
@@ -599,7 +599,7 @@ body.quote-doc-open { overflow: hidden; }
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   text-align: center;
   border-top: 1px solid rgba(27, 42, 65, 0.35);
   padding-top: 16px;

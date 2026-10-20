@@ -7,6 +7,15 @@ var A = function (p) { return window.HLRoutes ? window.HLRoutes.asset(p) : p; };
 window.HL_CATEGORIES = [
   {
     slug: "bags",
+    directAnswer: "Custom hotel tote bags are resort-grade canvas, woven, or leather-trimmed totes produced in your property’s colors and finished with an embroidered logo. HL Supply’s eight bag styles start at 200 units, with four quantity tiers and a 4–6 week production window after proof approval. Each piece is designed as a guest object first and a branded item second.",
+    faqs: [
+      { q: "What is the minimum order for custom hotel tote bags?", a: "Every HL Supply bag style starts at 200 units, with quantity pricing tiers at 200, 500, 1,000, and 2,500 units. Pricing is confirmed by the atelier at quote review, after artwork and customization are settled." },
+      { q: "Which materials are available for resort totes?", a: "The collection spans 100% cotton canvas, heavy-duty structured canvas, canvas with contrast stripes or trim, canvas with genuine leather straps, and hand-woven vegan leather. Bespoke projects can change the body fabric, lining, handles, and hardware." },
+      { q: "How is a hotel logo applied to a tote bag?", a: "Embroidery is the standard finish across the bag collection: a precise, durable, premium-feeling mark that suits resort retail and guest gifting. Placement, thread colors, and size are confirmed on the proof before production." },
+      { q: "Can the tote be made in our property’s exact colors?", a: "Yes. Every bag is produced in any custom color or color pairing, matched to your brand palette. Striped and trimmed styles accept bespoke color combinations for the body, stripes, straps, and trim." },
+      { q: "How long does production take?", a: "Allow 4–6 weeks after proof approval for production, plus transit to your property. Share your delivery date in the quote so the concierge can plan around an opening, season launch, or event." },
+      { q: "Can we change the size, pockets, or straps?", a: "Yes. Start from any catalog style and request custom dimensions, interior pockets, strap length, closures, or packaging through the Bespoke Atelier. The catalog is a starting point, not a limit." }
+    ],
     metaTitle: "Custom Hotel Tote Bags & Resort Totes | HL Supply",
     metaDescription: "Custom tote bags for hotels, resorts, and beach clubs: cotton canvas, woven leather, and striped totes embroidered with your logo. Bespoke colors, low MOQs, quote-based.",
     keywords: ["custom hotel tote bags","branded resort totes","custom beach bags for resorts"],
@@ -24,6 +33,14 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "hats",
+    directAnswer: "Custom resort hats are embroidered caps, bucket hats, and trucker styles produced in your property’s colors for clubs, courses, cabanas, and guest retail. HL Supply’s six hat styles start at 100 units, with four quantity tiers and in-house embroidery. Every hat is proofed for placement and thread color before production.",
+    faqs: [
+      { q: "What is the minimum order for custom resort hats?", a: "Hat styles start at 100 units, with quantity pricing tiers at 100, 250, 500, and 1,000 units. Pricing is confirmed at quote review once the embroidery and color details are set." },
+      { q: "Which hat styles can be customized for a hotel or club?", a: "Six silhouettes: a structured classic cap, a bucket hat, a golf cap, a trucker hat with mesh backing, a relaxed dad hat, and a performance sports cap. Each is produced in any custom color with an embroidered logo." },
+      { q: "How is the logo applied?", a: "All hats are embroidered in-house. Front, side, and back placements are available, and thread colors are matched to your artwork and confirmed on the proof." },
+      { q: "Can we match our brand colors exactly?", a: "Yes. Every style is made in any custom color, including two-tone combinations for crowns, brims, and mesh panels on the trucker and sports caps." },
+      { q: "How long does production take?", a: "Plan on 4–6 weeks after proof approval, plus delivery to the property. Tournament and season dates can be noted in the quote so timing is built into the production plan." }
+    ],
     metaTitle: "Custom Hotel & Resort Hats with Logo | HL Supply",
     metaDescription: "Custom embroidered caps, bucket hats, and trucker hats for hotels, golf clubs, and beach clubs. Any color, in-house embroidery, quote-based pricing.",
     keywords: ["custom resort hats","embroidered hotel caps","golf club hats with logo"],
@@ -41,6 +58,14 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "bottles",
+    directAnswer: "Custom hotel water bottles are triple-wall vacuum-insulated stainless steel bottles in 350ml or 500ml, finished in your property’s colors with a laser-etched logo. HL Supply’s four bottle styles start at 200 units with four quantity tiers. They are built for suites, spa bars, fitness programs, and days on the property.",
+    faqs: [
+      { q: "What is the minimum order for custom hotel water bottles?", a: "Every bottle style starts at 200 units, with quantity pricing tiers at 200, 500, 1,000, and 2,500 units. Final pricing is confirmed by the atelier after artwork and finish review." },
+      { q: "What sizes and materials are the bottles?", a: "Each style is offered in 350ml or 500ml, made from vacuum-insulated stainless steel with triple-wall construction for hot and cold drinks." },
+      { q: "How is the hotel logo applied to a bottle?", a: "Logos are laser-etched into the finish for a permanent, dishwasher-safe mark with no printed layer to wear away. Etch placement and scale are confirmed on the proof." },
+      { q: "Can bottles be made in our property’s colors?", a: "Yes. Bottles are produced in any custom color, from matte neutrals to a signature accent shade, so the piece reads as part of the suite or spa rather than a generic giveaway." },
+      { q: "How long does production take?", a: "Allow 4–6 weeks after proof approval, plus transit. Custom gift packaging is available and quoted alongside the bottles." }
+    ],
     metaTitle: "Custom Hotel Water Bottles with Logo | HL Supply",
     metaDescription: "Custom insulated water bottles for hotels, spas, and resorts, laser-etched with your logo. Triple-wall vacuum insulation, custom colors, quote-based.",
     keywords: ["custom hotel water bottles","branded insulated bottles for resorts","laser etched logo bottles"],
@@ -58,6 +83,14 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "flip-flops",
+    directAnswer: "Custom hotel flip-flops are premium high-density foam sandals produced in your property’s colors with logo straps, printed footbeds, or sand-print outsoles that leave your mark on the beach. HL Supply’s four flip-flop styles start at 200 units with four quantity tiers. They serve spa amenity programs, pool decks, and beach club retail.",
+    faqs: [
+      { q: "What is the minimum order for custom flip-flops?", a: "Each flip-flop style starts at 200 units, with quantity pricing tiers at 200, 500, 1,000, and 2,500 units. Pricing is confirmed at quote review after artwork and sizing are settled." },
+      { q: "Which logo options are available?", a: "Printed footbed logos, dual logo placement on strap and footbed, all-over custom prints on the canvas style, and a custom molded sand-print outsole that stamps your logo into the sand with every step." },
+      { q: "What are the flip-flops made of?", a: "Premium high-density foam with soft-touch straps; the Essential is 100% recyclable and the Impression uses high-rebound foam with a custom-molded outsole. Printed-canvas footbeds are available on the Canvas style." },
+      { q: "Can we order a mix of sizes?", a: "Yes. Size runs are set in the quote so a spa amenity or retail program can carry a full range. Share your expected size mix in the product notes." },
+      { q: "How long does production take?", a: "Allow 4–6 weeks after proof approval, plus delivery. Custom molded outsoles add tooling time, which the concierge confirms in the quote." }
+    ],
     metaTitle: "Custom Hotel & Resort Flip-Flops with Logo | HL Supply",
     metaDescription: "Custom flip-flops for hotels, spas, and beach clubs in your property colors, with logo straps and sand-print soles. Guest amenity and retail ready, quote-based.",
     keywords: ["custom hotel flip flops","branded resort flip flops","spa flip flops with logo"],
@@ -75,6 +108,14 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "leather-goods",
+    directAnswer: "Custom hotel leather goods are debossed vegan-leather suite details, including valet trays, luggage tags, tissue box covers, and cable snaps, finished in your property’s colors. HL Supply’s six leather pieces start at 100 units with four quantity tiers. Each piece is proofed for deboss depth and placement before production.",
+    faqs: [
+      { q: "What is the minimum order for custom leather goods?", a: "Leather pieces start at 100 units, with quantity pricing tiers at 100, 250, 500, and 1,000 units. Pricing is confirmed at quote review once the deboss artwork and color are approved." },
+      { q: "How is the logo applied to leather?", a: "Logos are debossed, pressed into the surface for a quiet, tactile mark that suits a suite. Blind deboss is standard; foil or tonal finishes can be explored through the Bespoke Atelier." },
+      { q: "Is the leather genuine or vegan?", a: "The catalog leather collection uses premium vegan leather with hand-finished edges, structured cores, and soft-touch or plush linings depending on the piece. Alternative materials can be quoted for bespoke projects." },
+      { q: "Can we match a leather color to our interiors?", a: "Yes. Every piece is produced in any custom color, so a tray or tag can match the suite’s palette rather than defaulting to black or tan." },
+      { q: "How long does production take?", a: "Allow 4–6 weeks after proof approval, plus delivery to the property. Gift packaging is available and quoted with the pieces." }
+    ],
     metaTitle: "Custom Leather Goods for Hotels & Suites | HL Supply",
     metaDescription: "Debossed leather valet trays, luggage tags, tissue box covers, and suite details for luxury hotels. Genuine leather, custom colors, quote-based pricing.",
     keywords: ["custom hotel leather goods","debossed leather valet tray","hotel luggage tags with logo"],
@@ -92,6 +133,14 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "slippers",
+    directAnswer: "Custom hotel slippers are embroidered spa and suite slippers in plush terry, waffle-weave, ribbed knit, or biodegradable fibers, produced in your property’s colors. HL Supply’s four slipper styles start at 1,000 pairs with four quantity tiers, sized for amenity programs across an entire property. Every pair is proofed for embroidery placement before production.",
+    faqs: [
+      { q: "What is the minimum order for custom hotel slippers?", a: "Slipper styles start at 1,000 pairs, with quantity pricing tiers at 1,000, 2,500, 5,000, and 10,000 pairs, reflecting their use as a property-wide amenity. Pricing is confirmed at quote review." },
+      { q: "Which slipper materials are available?", a: "Plush terry cotton fleece, breathable waffle-weave cotton, ribbed knit with a cushioned footbed, and a sustainable, biodegradable-fiber eco style. Each can be made in any custom color." },
+      { q: "How is the hotel logo applied?", a: "Embroidery on the vamp is standard, with thread colors matched to your artwork. Tonal embroidery is a popular choice for a quieter, more luxurious finish." },
+      { q: "Are the slippers suitable for spa and wellness programs?", a: "Yes. The collection is designed for spa, suite, and wellness use: anti-slip soles, machine-washable terry, lightweight waffle weave, and a cushioned ribbed knit, each embroidered to match the program." },
+      { q: "How long does production take?", a: "Allow 4–6 weeks after proof approval, plus delivery. Large amenity programs can be scheduled in staged deliveries; note your preference in the quote." }
+    ],
     metaTitle: "Custom Hotel Slippers with Logo | HL Supply",
     metaDescription: "Custom embroidered hotel slippers for spas, suites, and wellness programs: terry, waffle, ribbed, and eco-friendly styles in your colors. Quote-based.",
     keywords: ["custom hotel slippers","embroidered spa slippers","luxury hotel slippers with logo"],
@@ -109,6 +158,14 @@ window.HL_CATEGORIES = [
   },
   {
     slug: "accessories",
+    directAnswer: "Custom hotel accessories are the guest extras that complete a stay: umbrellas, sunglasses, sleep masks, lens cloths, and yoga mats produced in your property’s colors with laser-etched or embroidered logos. HL Supply’s seven accessory pieces start at 100 to 250 units depending on the item, each with four quantity tiers. They are designed for suites, spas, pool decks, and wellness programs.",
+    faqs: [
+      { q: "What is the minimum order for custom hotel accessories?", a: "Minimums depend on the item: the yoga mat starts at 100 units, the umbrella at 200, and sunglasses, lens cloths, and sleep masks at 250. Each has four quantity pricing tiers, confirmed at quote review." },
+      { q: "How are logos applied across the accessories?", a: "Sunglasses, umbrellas, lens cloths, and yoga mats carry a laser-etched logo; the sleep mask is embroidered. Placement and scale are confirmed on the proof." },
+      { q: "What are the sunglasses made of?", a: "Three styles: an aviator with a lightweight frame and polarized UV lenses, a classic acetate frame with integrated nose pads, and a modern matte acetate frame with scratch-resistant lenses." },
+      { q: "Can accessories be coordinated as a guest collection?", a: "Yes. Many properties pair a sleep mask and lens cloth for suites, sunglasses and umbrellas for the pool deck, and yoga mats for wellness programs. The concierge can quote a coordinated set in one project." },
+      { q: "How long does production take?", a: "Allow 4–6 weeks after proof approval, plus delivery to the property. Custom packaging is available and quoted with the pieces." }
+    ],
     metaTitle: "Custom Hotel Guest Accessories with Logo | HL Supply",
     metaDescription: "Custom umbrellas, sunglasses, sleep masks, yoga mats, and lens cloths for luxury hotels and resorts, finished with your logo. Quote-based, bespoke colors.",
     keywords: ["custom hotel accessories","branded resort accessories","hotel guest amenities with logo"],

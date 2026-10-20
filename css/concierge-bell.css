@@ -44,7 +44,7 @@
 
 .cbell-btn:hover {
   transform: translateY(-2px);
-  border-color: var(--chrome, #9aa3a8);
+  border-color: var(--chrome-text, #5f6a72);
   box-shadow: 0 18px 38px -18px rgba(27, 42, 65, 0.5);
 }
 
@@ -217,7 +217,7 @@
   font-weight: 400;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--terracotta, #c47e5d);
+  color: var(--terracotta-text, #a4532f);
   display: block;
   margin-bottom: 14px;
 }

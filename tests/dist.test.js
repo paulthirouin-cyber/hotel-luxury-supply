@@ -59,6 +59,8 @@ function auditPage(url) {
   const canon = doc.querySelector('link[rel="canonical"]');
   t.ok(canon && canon.getAttribute("href") === "https://hotelluxurysupply.com" + (url === "/404.html" ? "/404.html" : url), ctx + " canonical matches URL");
   t.ok(doc.querySelector('meta[property="og:title"]') && doc.querySelector('meta[property="og:image"]'), ctx + " open graph tags");
+  const icon = doc.querySelector('link[rel="icon"]');
+  t.ok(icon && icon.getAttribute("href") === "/favicon.svg" && fs.existsSync(path.join(DIST, "favicon.svg")), ctx + " favicon");
   const robots = doc.querySelector('meta[name="robots"]');
   if (url === "/quote/" || url === "/404.html") t.ok(robots && /noindex/.test(robots.content), ctx + " noindex");
   else t.ok(!robots, ctx + " indexable");
@@ -144,7 +146,7 @@ function liveDom(url, opts) {
   win.__nav = [];
   win.HL_NAVIGATE = (u, replace) => { win.__nav.push({ url: u, replace }); };
   if (opts.before) opts.before(win);
-  [...win.document.querySelectorAll("script")].forEach((s) => {
+  [...win.document.querySelectorAll("script:not([type])")].forEach((s) => {
     const src = s.getAttribute("src");
     win.eval(src ? fs.readFileSync(path.join(DIST, src), "utf8") : s.textContent);
   });
@@ -265,6 +267,115 @@ function liveDom(url, opts) {
 {
   const doc = liveDom("/products/bags/").window.document;
   t.ok(doc.querySelector("#categoryGrid .pcard a.tlink").getAttribute("href") === "/products/bags/signature-tote/", "runtime links stay clean after hydration");
+}
+
+
+/* ================= Phase 2: structured data, site files, performance ================= */
+
+function ldOf(url) {
+  const doc = staticDom(url).window.document;
+  const blocks = [...doc.querySelectorAll('script[type="application/ld+json"]')];
+  t.ok(blocks.length === 1, "[" + url + "] exactly one JSON-LD block");
+  let graph = [];
+  try { const j = JSON.parse(blocks[0].textContent); t.ok(j["@context"] === "https://schema.org" && Array.isArray(j["@graph"]), "[" + url + "] JSON-LD graph"); graph = j["@graph"]; }
+  catch (e) { t.ok(false, "[" + url + "] JSON-LD parses: " + e.message); }
+  t.ok(!/"offers"|"price"|"priceCurrency"/.test(blocks[0].textContent), "[" + url + "] no fake prices in schema");
+  const types = graph.map((n) => n["@type"]);
+  t.ok(types.includes("Organization") && types.includes("WebSite"), "[" + url + "] Organization + WebSite present");
+  const org = graph.find((n) => n["@type"] === "Organization");
+  t.ok(org && org.telephone === "+1-347-669-4417" && org.email === "info@hotelluxurysupply.com", "[" + url + "] organization NAP");
+  const crumbs = graph.find((n) => n["@type"] === "BreadcrumbList");
+  if (crumbs) crumbs.itemListElement.forEach((li) => {
+    const p = li.item.replace("https://hotelluxurysupply.com", "");
+    t.ok(distExists(p), "[" + url + "] breadcrumb resolves: " + p);
+  });
+  return { graph, types, doc };
+}
+
+{
+  const { types } = ldOf("/");
+  t.ok(types.includes("WebPage"), "home: WebPage node");
+}
+{
+  const { graph, types } = ldOf("/products/");
+  t.ok(types.includes("CollectionPage") && types.includes("BreadcrumbList"), "landing: CollectionPage + BreadcrumbList");
+  const list = graph.find((n) => n["@type"] === "CollectionPage").mainEntity;
+  t.ok(list["@type"] === "ItemList" && list.numberOfItems === 7, "landing: ItemList of 7 categories");
+}
+for (const c of CATS) {
+  const url = "/products/" + c.slug + "/";
+  const { graph, types, doc } = ldOf(url);
+  t.ok(types.includes("CollectionPage") && types.includes("BreadcrumbList") && types.includes("FAQPage"), c.slug + ": CollectionPage + BreadcrumbList + FAQPage");
+  const list = graph.find((n) => n["@type"] === "CollectionPage").mainEntity;
+  t.ok(list.numberOfItems === COUNTS[c.slug] && list.itemListElement.every((li) => distExists(li.url.replace("https://hotelluxurysupply.com", ""))), c.slug + ": ItemList products resolve");
+  const faq = graph.find((n) => n["@type"] === "FAQPage");
+  const rendered = doc.querySelectorAll("#categoryFaq .faq__item");
+  t.ok(rendered.length >= 4 && rendered.length <= 6, c.slug + ": 4–6 FAQ items rendered (" + rendered.length + ")");
+  t.ok(faq.mainEntity.length === rendered.length, c.slug + ": FAQPage matches rendered FAQ count");
+  t.ok(faq.mainEntity.every((q, i) => rendered[i].querySelector(".faq__q").textContent === q.name && rendered[i].querySelector(".faq__a").textContent === q.acceptedAnswer.text), c.slug + ": FAQ schema text equals visible text");
+  const answer = doc.getElementById("categoryAnswer");
+  t.ok(answer && answer.textContent.length > 120 && /\d/.test(answer.textContent), c.slug + ": direct-answer paragraph with a number");
+  t.ok(answer.compareDocumentPosition(doc.querySelector("#categoryGrid")) & 4, c.slug + ": direct answer precedes the product grid");
+}
+for (const p of PRODS) {
+  const url = "/products/" + p.category + "/" + p.slug + "/";
+  const { graph, types } = ldOf(url);
+  t.ok(types.includes("Product") && types.includes("BreadcrumbList") && types.includes("ItemPage"), p.slug + ": Product + BreadcrumbList + ItemPage");
+  const prod = graph.find((n) => n["@type"] === "Product");
+  t.ok(prod.sku === p.ref && prod.name === p.name && prod.brand.name === "HL Supply", p.slug + ": product sku/name/brand");
+  t.ok(prod.image === "https://hotelluxurysupply.com/" + p.image.replace(/^\//, "") && distExists(prod.image.replace("https://hotelluxurysupply.com", "")), p.slug + ": product image absolute + exists");
+  t.ok(!("offers" in prod), p.slug + ": no offers until pricing exists");
+  t.ok(prod.additionalProperty.some((a) => a.name === "Minimum order quantity" && a.value === p.tiers[0].qty), p.slug + ": MOQ property");
+}
+{
+  const { graph, types, doc } = ldOf("/bespoke/");
+  t.ok(types.includes("FAQPage") && types.includes("BreadcrumbList"), "bespoke: FAQPage + BreadcrumbList");
+  const faq = graph.find((n) => n["@type"] === "FAQPage");
+  t.ok(faq.mainEntity.length === doc.querySelectorAll(".faq__item").length && faq.mainEntity.length >= 4, "bespoke: FAQ schema matches rendered");
+}
+{
+  const { types } = ldOf("/quote/");
+  t.ok(!types.includes("Product") && !types.includes("CollectionPage"), "quote: plain WebPage schema only");
+}
+
+/* ---------- sitemap / robots / llms ---------- */
+{
+  const sm = readDist("sitemap.xml");
+  const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace("https://hotelluxurysupply.com", ""));
+  const indexable = expected.filter((u) => u.endsWith("/") && u !== "/quote/");
+  t.ok(locs.length === indexable.length && indexable.every((u) => locs.includes(u)), "sitemap lists every indexable URL (" + locs.length + ")");
+  t.ok(!locs.includes("/quote/") && !locs.some((l) => l.endsWith(".html")), "sitemap excludes /quote/ and .html shims");
+  t.ok(locs.every((u) => distExists(u)), "sitemap URLs all exist");
+  t.ok(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/.test(sm), "sitemap lastmod");
+  const robots = readDist("robots.txt");
+  t.ok(/User-agent: \*\s+Allow: \/\s+Disallow: \/quote\//.test(robots), "robots: allow all, disallow /quote/");
+  ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended", "CCBot"].forEach((ua) =>
+    t.ok(new RegExp("User-agent: " + ua + "\\s+Allow: /").test(robots), "robots allows " + ua));
+  t.ok(/Sitemap: https:\/\/hotelluxurysupply\.com\/sitemap\.xml/.test(robots), "robots: sitemap line");
+  const llms = readDist("llms.txt");
+  t.ok(llms.startsWith("# HL Supply"), "llms.txt header");
+  CATS.forEach((c) => t.ok(llms.includes("https://hotelluxurysupply.com/products/" + c.slug + "/"), "llms.txt lists " + c.slug));
+  PRODS.forEach((p) => t.ok(llms.includes("/products/" + p.category + "/" + p.slug + "/") && llms.includes(p.ref), "llms.txt lists " + p.slug));
+  t.ok(/MOQ|Minimum order/.test(llms) && /4–6 weeks/.test(llms) && /info@hotelluxurysupply\.com/.test(llms), "llms.txt key facts");
+}
+
+/* ---------- performance invariants ---------- */
+for (const url of ["/", "/products/", "/products/hats/", "/products/hats/riviera-bucket-hat/", "/bespoke/", "/quote/"]) {
+  const doc = staticDom(url).window.document;
+  const ctx = "[" + url + "]";
+  t.ok(!doc.querySelector('link[rel="stylesheet"]'), ctx + " no render-blocking stylesheet links (CSS inlined)");
+  const style = doc.querySelector("head style");
+  t.ok(style && style.textContent.length > 20000 && !/\/\*/.test(style.textContent), ctx + " inlined minified CSS");
+  t.ok(!/url\(["']?\.\.\//.test(style.textContent) && /url\(["']?\/assets\/fonts\//.test(style.textContent), ctx + " inline CSS uses root-absolute font URLs");
+  t.ok(!/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(doc.documentElement.outerHTML), ctx + " no Google Fonts requests");
+  const preloads = [...doc.querySelectorAll('link[rel="preload"][as="font"]')];
+  t.ok(preloads.length === 2 && preloads.every((l) => l.hasAttribute("crossorigin") && fs.existsSync(path.join(DIST, l.getAttribute("href")))), ctx + " two font preloads that exist");
+  t.ok(/font-display:swap/.test(style.textContent), ctx + " font-display swap");
+  t.ok([...doc.querySelectorAll("script[src]")].every((s) => s.hasAttribute("defer")), ctx + " all scripts deferred");
+  const imgs = [...doc.querySelectorAll("img[src^='/assets/']")];
+  t.ok(imgs.every((i) => Number(i.getAttribute("width")) > 0 && Number(i.getAttribute("height")) > 0), ctx + " every image has width/height");
+  const hero = doc.querySelector(".hero__img, .page-hero img, .pd__ph img");
+  if (hero) t.ok(!hero.hasAttribute("loading") && hero.getAttribute("fetchpriority") === "high", ctx + " LCP image eager + high priority");
 }
 
 t.done();

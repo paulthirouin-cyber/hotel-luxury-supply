@@ -130,7 +130,7 @@
   font-weight: 400;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--terracotta, #c47e5d);
+  color: var(--terracotta-text, #a4532f);
   margin-bottom: 10px;
 }
 
@@ -155,7 +155,7 @@
   font-size: 10.5px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   min-width: 110px;
 }
 
@@ -192,7 +192,7 @@
   transition: background 0.3s, border-color 0.3s;
 }
 
-.pt-tier:hover { border-color: var(--chrome, #9aa3a8); }
+.pt-tier:hover { border-color: var(--chrome-text, #5f6a72); }
 
 .pt-tier:focus-visible { outline: 2px solid var(--pool-deep, #52869a); outline-offset: 2px; }
 
@@ -265,14 +265,14 @@
   font-size: 10.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .pcard__total strong { font-weight: 400; font-size: 14.5px; color: var(--navy, #1b2a41); }
 
 .pcard__moqwarn {
   font-size: 13.5px;
-  color: var(--terracotta, #c47e5d);
+  color: var(--terracotta-text, #a4532f);
   border-top: 1px solid rgba(216, 203, 174, 0.7);
   padding-top: 12px;
 }
@@ -317,13 +317,13 @@
   font-size: 11.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   margin-bottom: clamp(28px, 3.5vw, 44px);
   flex-wrap: wrap;
 }
 
 .pd__crumbs a { color: var(--navy-soft, #2c3e57); border-bottom: 1px solid transparent; }
-.pd__crumbs a:hover { color: var(--terracotta, #c47e5d); border-bottom-color: var(--terracotta, #c47e5d); }
+.pd__crumbs a:hover { color: var(--terracotta-text, #a4532f); border-bottom-color: var(--terracotta-text, #a4532f); }
 .pd__crumbs [aria-current] { color: var(--navy, #1b2a41); }
 
 .pd__grid {
@@ -395,7 +395,7 @@
 .pd__logonote {
   font-family: var(--sans, "Jost", sans-serif);
   font-size: 13px;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 /* ---------- quote count chip ---------- */
@@ -471,7 +471,7 @@
   font-family: var(--sans, "Jost", sans-serif);
   font-size: 13.5px;
   letter-spacing: 0.04em;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 /* ============================================================
@@ -511,7 +511,7 @@
 .pd__pricenote {
   font-family: var(--sans, "Jost", sans-serif);
   font-size: 12.5px;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   margin: -6px 0 16px;
 }
 
@@ -543,7 +543,7 @@
   font-size: 10.5px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
 }
 
 .pd__specs dd { margin: 0; font-size: 14px; color: var(--navy-soft, #2c3e57); }
@@ -603,7 +603,7 @@
   align-items: flex-start;
 }
 
-.rel-card__body h4 {
+.rel-card__body h3 {
   font-family: var(--serif, "Marcellus", serif);
   font-weight: 400;
   font-size: 18px;
@@ -636,7 +636,7 @@
   font-family: var(--sans, "Jost", sans-serif);
   font-size: 12.5px;
   letter-spacing: 0.04em;
-  color: var(--chrome, #9aa3a8);
+  color: var(--chrome-text, #5f6a72);
   border-top: 1px solid rgba(216, 203, 174, 0.7);
   padding-top: 12px;
   margin-bottom: 18px;
@@ -652,10 +652,48 @@
   font-size: 15px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--terracotta, #c47e5d);
+  color: var(--terracotta-text, #a4532f);
   margin: -8px 0 16px;
 }
 
 .pd__thumb.ph--photo .ph__img { padding: 12%; }
 
 .pd__ph.ph--photo .ph__img { padding: 7%; }
+
+
+/* ---------- direct answer + FAQ (AEO blocks) ---------- */
+.category-answer {
+  max-width: 760px;
+  margin: 0 0 28px;
+  font-family: "Marcellus", serif;
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  line-height: 1.55;
+  color: var(--navy);
+}
+.category-answer:empty { display: none; }
+.catalog-section--faq:has(#categoryFaq:empty) { display: none; }
+.faq .section-head { margin-bottom: 28px; }
+.faq__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px 40px;
+  max-width: 1100px;
+}
+.faq__item {
+  border-top: 1px solid rgba(27, 42, 65, 0.14);
+  padding-top: 18px;
+}
+.faq__q {
+  margin: 0 0 10px;
+  font-family: "Marcellus", serif;
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: var(--navy);
+}
+.faq__a {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: rgba(27, 42, 65, 0.82);
+}
