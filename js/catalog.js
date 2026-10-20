@@ -11,6 +11,11 @@
   var PRODS = window.HL_PRODUCTS || [];
   var P = window.HLPricing;
   var Q = window.HLQuote;
+  var R = window.HLRoutes;
+  var STATIC = !!(R && R.isStatic);
+
+  // link helper — emits hash routes (SPA) or clean URLs (static build)
+  function U(route) { return R ? R.href(route) : "products.html" + route; }
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -151,7 +156,7 @@
     var cat = catBySlug(product.category);
     return (
       '<article class="pcard" data-product="' + product.slug + '">' +
-      '  <a class="pcard__media-link" href="products.html#/products/' + product.category + '/' + product.slug + '" aria-label="View details for ' + esc(product.name) + '">' +
+      '  <a class="pcard__media-link" href="' + U("#/products/" + product.category + "/" + product.slug) + '" aria-label="View details for ' + esc(product.name) + '">' +
       phHTML(product.tint, product.imageLabel, "pcard__media", product.image) +
       "  </a>" +
       '  <div class="pcard__body">' +
@@ -164,7 +169,7 @@
       "    </dl>" +
       '    <p class="pcard__pricing-note">Quantity pricing shown on the product page.</p>' +
       '    <div class="pcard__ctas pcard__ctas--single">' +
-      '      <a class="tlink" href="products.html#/products/' + product.category + '/' + product.slug + '">View Details</a>' +
+      '      <a class="tlink" href="' + U("#/products/" + product.category + "/" + product.slug) + '">View Details</a>' +
       "    </div>" +
       "  </div>" +
       "</article>"
@@ -173,7 +178,7 @@
 
   function categoryCardHTML(cat) {
     return (
-      '<a class="ccard" href="products.html#/products/' + cat.slug + '" aria-label="View the ' + esc(cat.name) + ' category">' +
+      '<a class="ccard" href="' + U("#/products/" + cat.slug) + '" aria-label="View the ' + esc(cat.name) + ' category">' +
       phHTML(cat.tint, cat.imageLabel, "ccard__media", cat.image, true) +
       '  <div class="ccard__body">' +
       "    <h3>" + esc(cat.name) + "</h3>" +
@@ -280,6 +285,7 @@
       // Handle any link that targets a catalog route, without depending on
       // location.hash being writable (sandboxed iframes may reject it).
       if (e.defaultPrevented) return; // an outer shell already handled it
+      if (STATIC) return; // static site: every link is a real page load
       var nav = e.target.closest ? e.target.closest("a[href]") : null;
       if (!nav) return;
       var href = nav.getAttribute("href") || "";
@@ -305,10 +311,10 @@
   function notFoundHTML(kind) {
     return (
       '<div class="wrap pd nf">' +
-      '<nav class="pd__crumbs" aria-label="Breadcrumb"><a href="products.html#/products">Products</a></nav>' +
+      '<nav class="pd__crumbs" aria-label="Breadcrumb"><a href="' + U("#/products") + '">Products</a></nav>' +
       '<h1 class="nf__title">' + kind + " not found</h1>" +
       '<p class="nf__copy">The page you were looking for isn\u2019t in the atelier catalog. It may have moved.</p>' +
-      '<div class="btn-row"><a class="btn btn--solid" href="products.html#/products">Back to Catalog</a></div>' +
+      '<div class="btn-row"><a class="btn btn--solid" href="' + U("#/products") + '">Back to Catalog</a></div>' +
       "</div>"
     );
   }
@@ -326,7 +332,7 @@
       return;
     }
 
-    document.title = cat.name + " — HL Supply";
+    if (!STATIC) document.title = cat.name + " \u2014 HL Supply";
 
     var hero = document.getElementById("categoryHero");
     if (hero) {
@@ -361,7 +367,7 @@
         (bc
           ? '<div class="cat-bespoke" style="grid-column: 1 / -1;">' +
             "<div><h3>" + bc[0] + "</h3><p>" + bc[1] + "</p></div>" +
-            '<a class="btn btn--solid" href="products.html#/bespoke?category=' + cat.slug + '">' + bc[2] + "</a>" +
+            '<a class="btn btn--solid" href="' + U("#/bespoke?category=" + cat.slug) + '">' + bc[2] + "</a>" +
             "</div>"
           : "");
     }
@@ -384,7 +390,7 @@
     var cards = picks
       .map(function (p) {
         return (
-          '<a class="rel-card" href="products.html#/products/' + p.category + "/" + p.slug + '" aria-label="View details for ' + esc(p.name) + '">' +
+          '<a class="rel-card" href="' + U("#/products/" + p.category + "/" + p.slug) + '" aria-label="View details for ' + esc(p.name) + '">' +
           phHTML(p.tint, p.imageLabel, "rel-card__media", p.image) +
           '  <div class="rel-card__body"><h4>' + esc(p.name) + '</h4><span class="tlink">View Details</span></div>' +
           "</a>"
@@ -411,7 +417,7 @@
     var moq = product.tiers[0].qty;
     var res = P.resolve(product, moq);
 
-    document.title = product.name + " \u2014 HL Supply";
+    if (!STATIC) document.title = product.name + " \u2014 HL Supply";
 
     var mount = document.getElementById("productDetail");
     if (!mount) return;
@@ -443,8 +449,8 @@
 
     mount.innerHTML =
       '<nav class="pd__crumbs" aria-label="Breadcrumb">' +
-      '  <a href="products.html#/products">Products</a><span aria-hidden="true">/</span>' +
-      '  <a href="products.html#/products/' + product.category + '">' + esc(cat ? cat.name : "") + "</a>" +
+      '  <a href="' + U("#/products") + '">Products</a><span aria-hidden="true">/</span>' +
+      '  <a href="' + U("#/products/" + product.category) + '">' + esc(cat ? cat.name : "") + "</a>" +
       '<span aria-hidden="true">/</span><span aria-current="page">' + esc(product.name) + "</span>" +
       "</nav>" +
       '<div class="pd__grid">' +
@@ -510,6 +516,9 @@
   }
 
   function navigate(routeStr) {
+    if (STATIC) {
+      try { R.go(U(routeStr)); return; } catch (err) { /* fall through */ }
+    }
     if (window.HL_ON_NAVIGATE) window.HL_ON_NAVIGATE(routeStr); // preview hook
     route(routeStr);
     try {
@@ -520,7 +529,7 @@
   function route(forcedHash) {
     if (!document.getElementById("catalogViews")) return;
 
-    var hash = (typeof forcedHash === "string" ? forcedHash : window.location.hash) || "";
+    var hash = (typeof forcedHash === "string" ? forcedHash : (R ? R.current() : window.location.hash)) || "";
     if (hash && hash.indexOf("#/") !== 0) return; // plain #anchor — native scroll
     if (!hash) hash = "#/products";
 
@@ -540,33 +549,45 @@
 
     if (seg[0] === "bespoke") {
       showView("viewBespoke");
-      document.title = "Bespoke Atelier \u2014 HL Supply";
+      if (!STATIC) document.title = "Bespoke Atelier \u2014 HL Supply";
       if (window.HLBespokePage) window.HLBespokePage.render(query);
-      window.scrollTo(0, 0);
+      scrollTop();
       return;
     }
 
     if (seg[0] === "quote") {
       showView("viewQuote");
-      document.title = "Quote Cart \u2014 HL Supply";
+      if (!STATIC) document.title = "Quote Cart \u2014 HL Supply";
       if (window.HLQuotePage) window.HLQuotePage.render();
-      window.scrollTo(0, 0);
+      scrollTop();
       return;
     }
 
     if (seg[0] !== "products") seg = ["products"];
 
+    // Pre-rendered views (static build) already contain their markup:
+    // hydrate interactivity only, never re-render what is in the source.
     if (seg.length >= 3) {
       showView("viewProduct");
-      renderProduct(seg[2]);
+      if (!prerendered("viewProduct")) renderProduct(seg[2]);
     } else if (seg.length >= 2) {
       showView("viewCategory");
-      renderCategory(seg[1]);
+      if (!prerendered("viewCategory")) renderCategory(seg[1]);
     } else {
       showView("viewLanding");
-      document.title = "The Atelier Catalog \u2014 HL Supply";
-      renderLanding();
+      if (!STATIC) document.title = "The Atelier Catalog \u2014 HL Supply";
+      if (!prerendered("viewLanding")) renderLanding();
     }
+    scrollTop();
+  }
+
+  function prerendered(viewId) {
+    var v = document.getElementById(viewId);
+    return !!(v && v.hasAttribute("data-prerendered"));
+  }
+
+  function scrollTop() {
+    if (STATIC) return; // real page loads: let the browser honour anchors
     window.scrollTo(0, 0);
   }
 
@@ -589,6 +610,8 @@
     renderLanding: renderLanding,
     renderCategory: renderCategory,
     renderProduct: renderProduct,
+    notFoundHTML: notFoundHTML,
+    isStatic: STATIC,
     refreshCount: refreshCount,
     toast: toast
   };

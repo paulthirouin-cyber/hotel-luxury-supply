@@ -27,7 +27,7 @@
     .map(function (cat, i) {
       return (
         '<a class="at-card at-card--' + cat.size + " accent-" + cat.accent + " " + cat.micro + '"' +
-        ' href="' + esc(cat.href) + '"' +
+        ' href="' + esc(window.HLRoutes ? window.HLRoutes.href("#/products/" + cat.slug) : "products.html#/products/" + cat.slug) + '"' +
         ' style="--stagger:' + i + '"' +
         ' aria-label="View the ' + esc(cat.name) + ' category">' +
         '  <div class="at-card__media ph' + (cat.image ? " ph--cover" : "") + '">' +

@@ -53,6 +53,10 @@ window.HLBespoke = (function () {
 window.HLBespokePage = (function () {
   "use strict";
 
+  var R = window.HLRoutes;
+  function U(route) { return R ? R.href(route) : "products.html" + route; }
+  function HOME(anchor) { return R ? R.home(anchor) : "index.html" + (anchor ? "#" + anchor : ""); }
+
   var B = window.HLBespoke;
 
   var PROPERTY_TYPES = ["Hotel / Resort", "Private Club", "Golf Property", "Beach Club",
@@ -176,7 +180,7 @@ window.HLBespokePage = (function () {
       "      <h3>Adapt a Signature Product</h3>" +
       "      <p>Begin with an existing HL Supply item and adjust the details to suit your property, event, or brand standards.</p>" +
       '      <ul><li>Change dimensions</li><li>Match a Pantone color</li><li>Select alternate fabric or material</li><li>Adjust logo placement</li><li>Change strap, trim, or hardware</li><li>Add custom packaging</li></ul>' +
-      '      <a class="tlink" href="products.html#/products">Browse Products</a>' +
+      '      <a class="tlink" href="' + U("#/products") + '">Browse Products</a>' +
       "    </article>" +
       '    <article class="bpath">' +
       '      <span class="bpath__num">II</span>' +
@@ -282,8 +286,8 @@ window.HLBespokePage = (function () {
       "  <p>Our team will review your product direction, customization details, artwork, quantity, and timeline before preparing next steps.</p>" +
       '  <dl class="qsuccess__meta"><div><dt>Reference</dt><dd>' + esc(ref) + "</dd></div></dl>" +
       '  <div class="btn-row">' +
-      '    <a class="btn btn--solid" href="products.html#/products">Explore Products</a>' +
-      '    <a class="btn" href="index.html">Back to Home</a>' +
+      '    <a class="btn btn--solid" href="' + U("#/products") + '">Explore Products</a>' +
+      '    <a class="btn" href="' + HOME() + '">Back to Home</a>' +
       "  </div>" +
       "</div>"
     );
@@ -299,7 +303,7 @@ window.HLBespokePage = (function () {
       "  </div>" +
       '  <div class="btn-row">' +
       '    <a class="btn btn--solid" href="#bespokeForm">Start Bespoke Project</a>' +
-      '    <a class="btn" href="index.html#concierge">Speak with the Concierge</a>' +
+      '    <a class="btn" href="' + HOME("concierge") + '">Speak with the Concierge</a>' +
       "  </div>" +
       "</section>"
     );
@@ -438,7 +442,12 @@ window.HLBespokePage = (function () {
       if (cn) context = null; // category prefill handled via select below
     }
     bind();
-    renderInto();
+    // Static build: the page arrives pre-rendered. Hydrate only, unless a
+    // prefill (product/category) requires fresh markup.
+    var view = document.getElementById("viewBespoke");
+    var pre = !!(view && view.hasAttribute("data-prerendered"));
+    if (pre) view.removeAttribute("data-prerendered");
+    if (!pre || params.product || params.category) renderInto();
     // category prefill (no product context chip)
     if (!params.product && params.category) {
       var cn2 = catName(params.category);
@@ -456,17 +465,7 @@ window.HLBespokePage = (function () {
   var view = document.getElementById("viewBespoke");
   if (view && !view.hidden && window.HLBespokePage) {
     var params = {};
-    try {
-      var h = window.location.hash || "";
-      var qp = h.indexOf("?");
-      if (qp > -1) {
-        h.slice(qp + 1).split("&").forEach(function (kv) {
-          if (!kv) return;
-          var p = kv.split("=");
-          params[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || "");
-        });
-      }
-    } catch (e) { /* ignore */ }
+    try { params = window.HLRoutes ? window.HLRoutes.query() : {}; } catch (e) { /* ignore */ }
     window.HLBespokePage.render(params);
   }
 })();

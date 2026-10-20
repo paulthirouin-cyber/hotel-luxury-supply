@@ -7,6 +7,9 @@ window.HLQuotePage = (function () {
 
   var Q = window.HLQuote;
   var P = window.HLPricing;
+  var R = window.HLRoutes;
+  function U(route) { return R ? R.href(route) : "products.html" + route; }
+  function HOME(anchor) { return R ? R.home(anchor) : "index.html" + (anchor ? "#" + anchor : ""); }
 
   var sessionFiles = []; // File objects live only for the session; names persist at submit
 
@@ -192,7 +195,7 @@ window.HLQuotePage = (function () {
       '<div class="qempty">' +
       "  <h1>Your quote cart is waiting.</h1>" +
       "  <p>Explore the atelier and add the guest goods you would like quoted for your property, event, or collection.</p>" +
-      '  <a class="btn btn--solid" href="products.html#/products">Explore Products</a>' +
+      '  <a class="btn btn--solid" href="' + U("#/products") + '">Explore Products</a>' +
       "</div>"
     );
   }
@@ -210,8 +213,8 @@ window.HLQuotePage = (function () {
       "    <div><dt>Artwork received</dt><dd><ul>" + files + "</ul></dd></div>" +
       "  </dl>" +
       '  <div class="btn-row">' +
-      '    <a class="btn btn--solid" href="products.html#/products">Explore More Products</a>' +
-      '    <a class="btn" href="index.html">Back to Home</a>' +
+      '    <a class="btn btn--solid" href="' + U("#/products") + '">Explore More Products</a>' +
+      '    <a class="btn" href="' + HOME() + '">Back to Home</a>' +
       (Q.pdfDownloaded() ? "" : '    <button type="button" class="btn" id="btnPdfLate">Download Instant Quote PDF</button>') +
       "  </div>" +
       '  <p class="qnote"><button type="button" class="qreset" id="btnReset">Start a new project</button></p>' +

@@ -23,7 +23,7 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
 ---
 
 ## Phase 0 — Repo, tests, and deploy pipeline
-- [ ] 0.1 The GitHub repo already exists: **hotel-luxury-supply**, cloned at
+- [x] 0.1 The GitHub repo already exists: **hotel-luxury-supply**, cloned at
       `C:\Users\hlsup\OneDrive\Documents\hotel-luxury-supply`. All site
       files were placed directly into the clone on 2026-10-19 (the stub index
       was replaced). First session: run `npm install` + `npm test`, then
@@ -37,12 +37,13 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       clone to `C:\Users\hlsup\Projects\hotel-luxury-supply` (print exact
       GitHub Desktop or robocopy steps and offer to do it); GitHub is the
       backup, not OneDrive. Proceed either way if he declines.
+      ✔ 2026-10-20: Node 24 LTS installed (was missing on this PC), npm install + all suites green, baseline committed to main (4a7481b), `dev` created and pushed. OneDrive move recommended to Paul (steps in session summary); proceeding in place.
 - [x] 0.2 Test suites live in `tests/` (`site.test.js`: data integrity, catalog
       imagery, all 48 views, 1,500+ link audit, pricing interactions, routing,
       not-found, overlay guard; `flows.test.js`: quote E2E, bespoke E2E, preview
       sandbox click-through). All green. *(Pre-built 2026-10-19 during catalog
       integration; keep extending with a regression test per bug.)*
-- [ ] 0.3 Verify `git remote -v` points at the existing GitHub repo. Print
+- [x] 0.3 Verify `git remote -v` points at the existing GitHub repo. Print
       the exact Cloudflare Pages connection steps for Paul (one-time, ~15 min):
       production branch **`main`**, preview branches **all** (so `dev` gets
       its own URL), for now NO build command, output directory `/`. Tell Paul
@@ -51,20 +52,25 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       Optional, offer it: protect preview URLs with Cloudflare Access so only
       he can view them. (Phase 1 switches Pages to build command
       `node build.js`, output `dist/`.)
+      ✔ 2026-10-20: remote verified (github.com/paulthirouin-cyber/hotel-luxury-supply). Cloudflare Pages click-steps printed for Paul with build `node build.js`, output `dist` (Phase 1 already landed, so the no-build interim is skipped). PAUL ACTION PENDING: connect Pages.
 
 ## Phase 1 — Static pre-rendering (THE SEO unlock)
-- [ ] 1.1 `build.js`: generate real URLs into `dist/` from the data files:
+- [x] 1.1 `build.js`: generate real URLs into `dist/` from the data files:
       `/`, `/products/`, 7× `/products/:cat/`, 39× `/products/:cat/:slug/`,
       `/bespoke/`, `/quote/` (noindex), `/404.html`. Full content in HTML
       source; existing JS hydrates interactivity (quantity, tiers, quote,
       drawers, menus) on top without re-rendering what's already there.
-- [ ] 1.2 Shared head partial: per-page title/meta/canonical/OG from new
+      ✔ 2026-10-20: `build.js` renders 51 pages into dist/ (49 indexable) by running the browser renderers in jsdom under `<html data-static>`; views carry `data-prerendered` and catalog.js / bespoke-page.js hydrate without re-rendering.
+- [x] 1.2 Shared head partial: per-page title/meta/canonical/OG from new
       `metaTitle`/`metaDescription`/`keywords` fields added to
       `js/categories.js` and `js/products.js` (generate sensible defaults).
-- [ ] 1.3 Clean-URL internal links everywhere; hash-route redirect shim for
+      ✔ 2026-10-20: `metaTitle` / `metaDescription` / `keywords` added to all 7 categories (hand-written) and generated for 39 products; build emits title, description, keywords, canonical, OG/Twitter, theme-color; /quote/ and /404.html are noindex.
+- [x] 1.3 Clean-URL internal links everywhere; hash-route redirect shim for
       old links; `category.html`/`product.html` stubs redirect to clean URLs.
-- [ ] 1.4 Port the test suites to run against `dist/` (every URL exists, every
+      ✔ 2026-10-20: new `js/routes.js` (HLRoutes) emits hash routes in SPA/preview mode and clean URLs in static mode; every renderer uses it. Hash shim (`/#/...` → clean URL) plus dist shims for products.html / category.html / product.html.
+- [x] 1.4 Port the test suites to run against `dist/` (every URL exists, every
       link resolves, every interactive flow still passes). All green.
+      ✔ 2026-10-20: `tests/dist.test.js` — all URLs exist, per-page SEO head, 1,409 links + images resolve, content in source, hydration without re-render, quote cart from storage, bespoke prefill via ?query, legacy redirects. `npm test` = build + preview + 3 suites. ALL GREEN.
 
 ## Phase 2 — Technical SEO layer
 - [ ] 2.1 JSON-LD: Organization + WebSite (all pages), CollectionPage+ItemList+
@@ -130,3 +136,9 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
 
 ### Decision log
 *(Claude Code appends dated entries here as phases complete.)*
+
+- 2026-10-20 — Static site uses full page loads between routes (no pushState SPA); the hash router remains only for the source files and the single-file preview. Simpler, crawler-identical, keeps the "content in source" guarantee honest.
+- 2026-10-20 — Product title default is `Custom <Name> for Hotels | HL Supply` (≤ 60 chars); category titles are hand-written in `js/categories.js`. Hand-tune the top 15 products later from Search Console data.
+- 2026-10-20 — Homepage pre-renders the 7 category cards (internal links); the Guest Journey stays JS-rendered because its markup depends on viewport (desktop sticky vs mobile). Revisit if AEO needs that copy in source.
+- 2026-10-20 — `/quote/` ships the empty-cart markup and the client renders the real cart from localStorage (user state is never pre-rendered). `jsdom` moved to `dependencies` so Cloudflare Pages can run `node build.js`.
+- 2026-10-20 — Line endings normalized via `.gitattributes` (LF in repo) to stop CRLF churn on Windows. Node was installed with winget (OpenJS.NodeJS.LTS).

@@ -8,7 +8,7 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
 const exists = (p) => fs.existsSync(path.join(ROOT, p));
 
 const CATALOG_SCRIPTS = [
-  "js/main.js", "js/mobile-menu.js", "js/categories.js", "js/products.js",
+  "js/routes.js", "js/main.js", "js/mobile-menu.js", "js/categories.js", "js/products.js",
   "js/pricing.js", "js/quote-store.js", "js/catalog.js", "js/quote-pdf.js",
   "js/quote-page.js", "js/bespoke-page.js", "js/bespoke-drawers.js"
 ];
@@ -40,7 +40,7 @@ function homeDom() {
     url: "https://test.local/index.html"
   });
   stub(dom.window);
-  ["js/categories.js", "js/category-section.js"].forEach((f) => dom.window.eval(read(f)));
+  ["js/routes.js", "js/categories.js", "js/category-section.js"].forEach((f) => dom.window.eval(read(f)));
   return dom;
 }
 
@@ -81,4 +81,4 @@ function harness(name) {
 const click = (win, el) => el.dispatchEvent(new win.MouseEvent("click", { bubbles: true, cancelable: true }));
 const type = (win, el, v) => { el.value = v; el.dispatchEvent(new win.Event("input", { bubbles: true })); };
 
-module.exports = { ROOT, read, exists, catalogDom, homeDom, previewDom, data, harness, click, type };
+module.exports = { ROOT, read, exists, stub, catalogDom, homeDom, previewDom, data, harness, click, type };

@@ -49,7 +49,7 @@
       "  <h3>" + esc(scene.headline) + "</h3>" +
       "  <p class=\"journey__copy\">" + esc(scene.copy) + "</p>" +
       '  <div class="journey__chips">' + chipsHTML(scene) + "</div>" +
-      '  <a class="tlink" href="products.html#/products">Explore Products</a>' +
+      '  <a class="tlink" href="' + (window.HLRoutes ? window.HLRoutes.href("#/products") : "products.html#/products") + '">Explore Products</a>' +
       "</div>"
     );
   }

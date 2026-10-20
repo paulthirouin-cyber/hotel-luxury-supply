@@ -15,6 +15,8 @@
     t1000: [1000, 2500, 5000, 10000]
   };
 
+  function asset(p) { return window.HLRoutes ? window.HLRoutes.asset(p) : p; }
+
   function make(o) {
     var qtys = TIER_PATTERNS[o.tierPattern || "t200"];
     var specs = [
@@ -38,15 +40,29 @@
       features: o.features,
       tiers: qtys.map(function (q) { return { qty: q, price: null }; }),
       specifications: specs,
-      image: "assets/catalog/" + o.slug + ".webp",
+      image: asset("assets/catalog/" + o.slug + ".webp"),
       imageLabel: o.alt,
       gallery: [
         "Logo placement mockup \u2014 " + o.type.toLowerCase(),
         "Material detail \u2014 " + o.material.toLowerCase(),
         "Lifestyle context at the property"
       ],
-      tint: o.tint
+      tint: o.tint,
+      // SEO (defaults generated from catalog copy; hand-tune per product here)
+      metaTitle: o.metaTitle || ("Custom " + o.name.replace(/^The /, "") + " for Hotels | HL Supply"),
+      metaDescription: o.metaDescription || metaDesc(o.description),
+      keywords: o.keywords || ["custom " + o.type.toLowerCase() + " for hotels", "branded " + o.type.toLowerCase() + " for resorts", o.name.replace(/^The /, "") + " HL Supply"]
     };
+  }
+
+  // First sentence(s) of the catalog description, trimmed to ~155 chars on a word boundary.
+  function metaDesc(text) {
+    var s = String(text || "").replace(/\s+/g, " ").trim();
+    if (s.length <= 155) return s;
+    var cut = s.slice(0, 152);
+    var dot = cut.lastIndexOf(". ");
+    if (dot > 80) return cut.slice(0, dot + 1);
+    return cut.slice(0, cut.lastIndexOf(" ")) + "…";
   }
 
   window.HL_PRODUCTS = [

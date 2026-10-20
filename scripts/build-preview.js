@@ -14,7 +14,7 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
 
 const CSS = ["css/styles.css", "css/guest-journey.css", "css/category-section.css",
   "css/concierge-bell.css", "css/polish.css"];
-const HOME_JS = ["js/main.js", "js/mobile-menu.js", "js/homepage-scenes.js",
+const HOME_JS = ["js/routes.js", "js/main.js", "js/mobile-menu.js", "js/homepage-scenes.js",
   "js/guest-journey.js", "js/categories.js", "js/category-section.js", "js/concierge-bell.js"];
 const EXTRA_CSS = ["css/catalog.css", "css/quote.css", "css/bespoke.css"];
 const CATALOG_JS = ["js/products.js", "js/pricing.js", "js/quote-store.js", "js/catalog.js",
@@ -65,7 +65,7 @@ function inlineCatalogScript(f) {
     const hook = '  "use strict";';
     if (!src.includes(hook)) throw new Error("products.js hook missing");
     src = src.replace(hook, hook + "\n\n  var HL_EMBED = " + JSON.stringify(map) + ";");
-    const line = 'image: "assets/catalog/" + o.slug + ".webp",';
+    const line = 'image: asset("assets/catalog/" + o.slug + ".webp"),';
     if (!src.includes(line)) throw new Error("products.js image line missing");
     src = src.replace(line, 'image: HL_EMBED[o.slug] || ("assets/catalog/" + o.slug + ".webp"),');
   }
