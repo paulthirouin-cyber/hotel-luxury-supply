@@ -11,7 +11,7 @@ const { ROOT, stub, data, harness, click, type } = require("./helpers");
 const t = harness("DIST SUITE");
 const DIST = path.join(ROOT, "dist");
 const { CATS, PRODS } = data();
-const COUNTS = { bags: 8, hats: 6, bottles: 4, "flip-flops": 4, "leather-goods": 6, slippers: 4, accessories: 7 };
+const COUNTS = { bags: 8, hats: 6, bottles: 4, "flip-flops": 4, "leather-goods": 6, slippers: 4, accessories: 7, pets: 6 };
 
 if (!fs.existsSync(path.join(DIST, "index.html"))) {
   console.log("FAIL: dist/ not built — run `node build.js` first");
@@ -103,12 +103,16 @@ function auditPage(url) {
 
 {
   const doc = auditPage("/");
-  t.ok(doc.querySelectorAll("#atelierGrid a.at-card").length === 7, "home: 7 category cards in source");
+  t.ok(doc.querySelectorAll("#atelierGrid a.at-card").length === 8, "home: 8 category cards in source");
+  const sizes = [...doc.querySelectorAll("#atelierGrid a.at-card")].map((a) => (a.className.match(/at-card--(\w+)/) || [])[1]);
+  const span = { feature: 6, small: 3, wide: 6 };
+  t.ok(sizes.reduce((n, s) => n + span[s], 0) + span.feature === 36, "home: atelier grid closes with no orphan row (" + sizes.join(",") + ")");
   t.ok(doc.querySelector('#atelierGrid a[href="/products/hats/"]'), "home: category card links clean URL");
 }
 {
   const doc = auditPage("/products/");
-  t.ok(doc.querySelectorAll("#catalogCategories .ccard").length === 7, "landing: 7 category cards in source");
+  t.ok(doc.querySelectorAll("#catalogCategories .ccard").length === 8, "landing: 8 category cards in source");
+  t.ok(!/\.ccard:nth-child\(n \+ 5\)/.test(doc.querySelector("head style").textContent), "landing: symmetric 4x2 category grid (no span-4 tail rule)");
   t.ok(doc.getElementById("viewLanding").hasAttribute("data-prerendered"), "landing: marked prerendered");
   t.ok(!doc.getElementById("viewCategory") && !doc.getElementById("viewProduct") && !doc.getElementById("viewQuote"), "landing: other views stripped");
 }
@@ -292,11 +296,11 @@ function liveDom(url, opts) {
 
 /* ---------- Phase 4: guides, glossary, link mesh ---------- */
 const GUIDES = fs.readdirSync(path.join(ROOT, "content", "guides")).filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, ""));
-t.ok(GUIDES.length === 12, "7 buying guides + 5 comparisons in content/guides (" + GUIDES.length + ")");
+t.ok(GUIDES.length === 13, "8 buying guides + 5 comparisons in content/guides (" + GUIDES.length + ")");
 t.ok(distExists("/guides/") && distExists("/glossary/"), "guides index + glossary exist");
 {
   const doc = auditPage("/guides/");
-  t.ok(doc.querySelectorAll(".gcard").length === 17 && doc.querySelector('a[href="/glossary/"]') && doc.querySelector('a[href="/for/"]'), "guides index: 7 guides + 5 comparisons + 5 programs, glossary + programs links");
+  t.ok(doc.querySelectorAll(".gcard").length === 8 + COMPARISONS.length + USECASES.length && doc.querySelector('a[href="/glossary/"]') && doc.querySelector('a[href="/for/"]'), "guides index: 8 guides + comparisons + programs, glossary + programs links (" + doc.querySelectorAll(".gcard").length + ")");
 }
 for (const c of CATS) {
   const url = "/guides/" + c.guide + "/";
@@ -486,7 +490,7 @@ function ldOf(url) {
   const { graph, types } = ldOf("/products/");
   t.ok(types.includes("CollectionPage") && types.includes("BreadcrumbList"), "landing: CollectionPage + BreadcrumbList");
   const list = graph.find((n) => n["@type"] === "CollectionPage").mainEntity;
-  t.ok(list["@type"] === "ItemList" && list.numberOfItems === 7, "landing: ItemList of 7 categories");
+  t.ok(list["@type"] === "ItemList" && list.numberOfItems === 8, "landing: ItemList of 8 categories");
 }
 for (const c of CATS) {
   const url = "/products/" + c.slug + "/";
@@ -509,7 +513,8 @@ for (const p of PRODS) {
   t.ok(types.includes("Product") && types.includes("BreadcrumbList") && types.includes("ItemPage"), p.slug + ": Product + BreadcrumbList + ItemPage");
   const prod = graph.find((n) => n["@type"] === "Product");
   t.ok(prod.sku === p.ref && prod.name === p.name && prod.brand.name === "HL Supply", p.slug + ": product sku/name/brand");
-  t.ok(prod.image === "https://hotelluxurysupply.com/" + p.image.replace(/^\//, "") && distExists(prod.image.replace("https://hotelluxurysupply.com", "")), p.slug + ": product image absolute + exists");
+  if (p.image) t.ok(prod.image === "https://hotelluxurysupply.com/" + p.image.replace(/^\//, "") && distExists(prod.image.replace("https://hotelluxurysupply.com", "")), p.slug + ": product image absolute + exists");
+  else t.ok(!("image" in prod) && staticDom(url).window.document.querySelector(".pd__ph .ph__cap"), p.slug + ": draft piece has no fake schema image and shows the designed placeholder");
   t.ok(!("offers" in prod), p.slug + ": no offers until pricing exists");
   t.ok(prod.additionalProperty.some((a) => a.name === "Minimum order quantity" && a.value === p.tiers[0].qty), p.slug + ": MOQ property");
 }

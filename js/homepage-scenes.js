@@ -8,7 +8,7 @@ window.HL_SCENES = [
     name: "Arrival",
     headline: "The first object a guest touches should already feel considered.",
     copy: "Custom bags, luggage details, and welcome goods create a branded arrival moment before the room is even reached.",
-    chips: ["Bags", "Leather Goods", "Accessories"],
+    chips: ["Bags", "Leather Goods", "Accessories", "Pets"],
     imageLabel:
       "Luxury hotel arrival: canvas bag, leather luggage tag, stone entrance, soft lobby light, Riviera travel mood.",
     tint: "jt-tint-arrival"
@@ -38,7 +38,7 @@ window.HL_SCENES = [
     name: "The Suite",
     headline: "Quiet details are often the ones guests remember most.",
     copy: "Slippers, leather trays, bottles, sleep masks, and bathroom goods bring a finished hospitality feeling into the room.",
-    chips: ["Slippers", "Leather Goods", "Bottles", "Accessories"],
+    chips: ["Slippers", "Leather Goods", "Bottles", "Accessories", "Pets"],
     imageLabel:
       "Luxury suite: slippers beside bed, leather valet tray, bottle, soft linens, marble bathroom, warm evening light.",
     tint: "jt-tint-suite"

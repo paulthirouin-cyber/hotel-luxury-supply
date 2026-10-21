@@ -55,6 +55,7 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
       ✔ 2026-10-20: remote verified (github.com/paulthirouin-cyber/hotel-luxury-supply). Cloudflare Pages click-steps printed for Paul with build `node build.js`, output `dist` (Phase 1 already landed, so the no-build interim is skipped). PAUL ACTION PENDING: connect Pages.
       ◻ 2026-10-20 PAUL: connect Cloudflare Pages — exact clicks in `docs/LAUNCH-CHECKLIST.md` §1 (build `node build.js`, output `dist`, preview branches = all). Blocks the preview URL.
 
+      ✔ 2026-10-21: Cloudflare Pages is connected — `hotel-luxury-supply.pages.dev` (live lane, baseline only) and `dev.hotel-luxury-supply.pages.dev` (review lane) both resolve. Every push to `dev` now rebuilds the preview.
 ## Phase 1 — Static pre-rendering (THE SEO unlock)
 - [x] 1.1 `build.js`: generate real URLs into `dist/` from the data files:
       `/`, `/products/`, 7× `/products/:cat/`, 39× `/products/:cat/:slug/`,
@@ -156,6 +157,137 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
 
 ---
 
+## Phase 8 — Catalog expansion & repositioning (added 2026-10-21 from the strategy session)
+
+*Business context for every item below: HL Supply is a hotel/resort supplier
+first — ROOMS and RETAIL. Golf is property surface (pro shop, member gifts),
+never an events vertical. Incentive travel (MICE) is a welcome-inbound,
+no-outbound secondary channel. All work on `dev`; keep every suite green and
+update ALL count assertions deliberately (products 39→45, categories 7→8).*
+
+- [x] 8.1 **Eighth category: Pets** (slug `pets`, display name "Pets",
+      positioned as "The Pet Collection"). Rationale (Paul, 2026-10-21):
+      selection filter = merch-type, NO incumbent industry supplier,
+      strictly one-size, never clothing. Pets wins on all counts: luxury
+      properties now run VIP pet programs with nothing branded behind
+      them — no "hotel pet amenities" supplier exists, so HL Supply can
+      be first to define the category. Reuses existing methods (laser-
+      etched stainless like bottles, debossed vegan leather like trays,
+      embroidery/print). Serves both engines: in-room pet program (bowl +
+      toy waiting in the room) and boutique retail (guests photograph
+      pets in branded gear — organic social from every stay).
+      Category data in `js/categories.js` (tagline "Etched Steel &
+      Debossed Leather"; line "Bowls, bandanas, and leads made for the
+      four-legged guest."; hand-written metaTitle/description; keywords:
+      hotel pet amenities, pet friendly hotel supplies, custom dog
+      bandana, luxury hotel pet program, branded pet amenities; 5–6 FAQs
+      + direct-answer opener per the Phase 2.3 pattern). Six DRAFT
+      products in `js/products.js` (flag in a code comment: specs pending
+      Paul's sourcing confirmation — adjust freely later; all one-size,
+      no beds or collars):
+      P-001 The Companion Bowl — laser-etched stainless steel, non-slip
+        base, any custom color, MOQ 100 (t100);
+      P-002 The Scout Bandana — printed or embroidered, one-size tie
+        style, any custom color, MOQ 200 (t200);
+      P-003 The Promenade Leash — woven lead with metal hardware and a
+        debossed vegan leather handle wrap, MOQ 100 (t100);
+      P-004 The Voyager Travel Bowl — foldable, printed logo, MOQ 200
+        (t200);
+      P-005 The Beacon Waste-Bag Pouch — debossed vegan leather with
+        clip, MOQ 100 (t100);
+      P-006 The Harbor Rope Toy — custom colors with woven label,
+        MOQ 200 (t200).
+      No catalog photography exists for these: use the designed tint
+      placeholders (the pre-image pattern), add them to the photography-
+      day shot list, descriptions in catalog voice with features/specs
+      rows matching existing conventions.
+      *(Games & Leisure — G-001–G-006 specs preserved in the project
+      playbook — is the designated 9th category for a later phase.)*
+      ✔ 2026-10-21: `pets` category (The Pet Collection) added to `js/categories.js` with hand-written meta, 5 keywords, direct answer, 6 FAQs, bespoke CTA, guide pairing; six DRAFT pieces P-001–P-006 in `js/products.js` (`noImage: true` → designed tint placeholder; code comment flags specs pending sourcing). Image-less products/categories are now first-class: build meta, JSON-LD (no fake image), preview builder, and all three suites handle them. Bespoke form lists Pets; Guest Journey chips add Pets to Arrival and The Suite. 84 pages (80 indexable), all suites green.
+- [x] 8.2 Write the eighth category buying guide (`content/guides/`,
+      ≥1,400 words, Phase 4.2 conventions, angled as "building a hotel
+      pet program": comparison table — etched steel vs debossed leather
+      vs printed textile by use —, in-room program vs retail section,
+      brief-writing section, 6 FAQs, links to all six products +
+      glossary + bespoke). Pair it in `js/categories.js`. Add pet
+      amenity program and any new finishing terms to the glossary.
+      ✔ 2026-10-21: `content/guides/custom-hotel-pet-amenities.md` (≈1,650 words): finish comparison table (etched steel vs debossed leather vs printed textile), in-room vs retail section, brief-writing section, common mistakes, 6 FAQs, links to all six pieces + category + glossary + bespoke. Glossary +3 terms (pet amenity program, woven label, powder-coat finish; 50 total).
+- [x] 8.3 **Catalog symmetry:** /products/ landing renders the 8 category
+      cards as a clean symmetric 4×2 grid; homepage atelier section stays
+      editorial (Bags feature card) but balances to 8 cards with no orphan
+      row. Guest Journey chips: add "Pets" to the Arrival and The Suite
+      scenes (the pet arrival gift and the in-room program are the two
+      natural moments).
+      ✔ 2026-10-21: /products/ landing is a symmetric 4×2 grid (`.ccard` span-4 tail rule removed; 2-up / 1-up at breakpoints); homepage atelier grid balances 8 cards as feature + 4 small | small + wide + small (slippers small, accessories wide, pets small) — regression test asserts the grid closes with no orphan row.
+- [ ] 8.4 **Collections layer** (cross-category curation; categories remain
+      the single canonical product URL — collections list and link, never
+      duplicate pages): `js/collections.js` with five collections —
+      poolside, beach-club, spa-suite, golf-club, sports-wellness — each
+      with brand-voice intro, buyer framing, and tailored bespoke hook
+      (sports-wellness: golf, tennis, fitness, spa; hook offers tennis/
+      padel program development). `collections` array field on products.
+      Suggested memberships (Claude Code finalizes sensibly): poolside =
+      signature-tote, nautical-striped-tote, riviera-bucket-hat,
+      essential-flip-flop, pilot-aviator-sunglasses, marquis-bottle;
+      beach-club = nomad-drawstring-tote, canvas-flip-flop, impression-
+      sand-print-flip-flop, summit-trucker-hat,
+      petite-mini-tote; spa-suite = all slippers, solace-sleeping-
+      mask, vanity-bathroom-box, hideaway-tissue-box-cover, marquis-
+      bottle; golf-club = fairway-golf-cap, regent-classic-cap, heritage-
+      dad-hat, canopy-premium-umbrella, wayfarer-luggage-tag, vanguard-
+      bottle; sports-wellness = aero-sports-cap, fairway-golf-cap,
+      zenith-yoga-mat, vanguard-bottle, nomad-drawstring-tote, clarity-
+      lens-cloth. Pet products need no collection membership for now
+      (collections are optional per product); a sixth "Pet Program"
+      collection can come later if the category earns it. Pages:
+      /collections/ index + /collections/<slug>/ pre-rendered like
+      categories (CollectionPage + ItemList + BreadcrumbList schema,
+      direct-answer opener, product cards without pricing, bespoke CTA).
+      Product pages show "Featured in: <collections>" links. Homepage
+      collection cards link to the real /collections/ pages now (add a
+      Sports & Wellness card; retire the /for/beach-clubs/ stand-in).
+      Collection keywords: hotel fitness amenities, resort wellness
+      products, golf resort merchandise, hotel spa amenities, hotel pool
+      amenities.
+- [ ] 8.5 **/for/ repositioning to match the business:** rename
+      /for/golf-tournaments/ → /for/golf-resorts/ (content reframed to
+      on-property: pro shop retail, member gifts, amenity program; redirect
+      the old URL in dist + sitemap swap); retitle corporate-retreats
+      toward "Groups & Retreats at Your Property"; ADD
+      /for/incentive-travel/ (incentive travel houses, DMCs, corporate
+      event agencies; room drops, welcome gifts; steer copy toward the
+      100-MOQ items and the Petite Mini Tote as the room-drop vehicle;
+      keywords: incentive trip gifts, room drop gifts, corporate incentive
+      travel welcome gifts). Update docs/KEYWORD-MAP.md: tilt primary
+      vocabulary to hotel amenities supplier / custom hotel room amenities /
+      hotel boutique merchandise + the pet and incentive terms; drop
+      tournament-first terms.
+- [ ] 8.6 Propagate: sitemap, llms.txt, footer Resources, internal-link
+      mesh (each new product ≥3 inbound links; each collection linked from
+      homepage + relevant categories), CLAUDE.md + SEO plan count updates
+      (8 categories / 45 products / collections layer), extend all suites
+      (collections render, memberships link back, redirects work, new
+      category passes every category-level assertion). Lighthouse spot-check
+      a collection page + the towels category ≥95.
+
+## Phase 9 — Conversion & proof (added 2026-10-21)
+
+- [ ] 9.1 /work/ case-study section: template + index (`content/work/*.md`,
+      Article schema, same pipeline), placeholder-free — renders only when
+      Paul adds entries; /for/ and collection pages link related work when
+      it exists.
+- [ ] 9.2 Lookbook lead magnet: generate a lookbook PDF from catalog data at
+      build time, gate the download behind an email field wired through
+      HLLeads; thank-you state offers the sample kit.
+- [ ] 9.3 Plausible custom events: add-to-quote, instant-quote PDF, quote
+      submit, bespoke submit, lookbook download (only when analytics
+      enabled).
+- [ ] 9.4 Auto-reply email on every lead via the existing Pages Function
+      ("Your HL Supply request — next steps", same-business-day SLA copy);
+      needs the Resend env vars Paul already owes from 3.5.
+- [ ] 9.5 Contact page: phone-call CTA + scheduling-link placeholder
+      (config-driven so Paul can paste a Calendly URL later).
+
 ### Decision log
 *(Claude Code appends dated entries here as phases complete.)*
 
@@ -180,3 +312,5 @@ Strategy context: `docs/SEO-MASTER-PLAN.md`. Project rules: `CLAUDE.md`.
 - 2026-10-20 — `v1.0.0` is tagged on `main` at the moment Paul says "publish to live"; the pre-launch state on `dev` is `v1.0.0-rc.1` so the audit is pinned without touching the live lane.
 - 2026-10-20 — Analytics is Plausible by default, injected at build only when `config/site.json` → `analytics.enabled` is true and never on noindex pages; GA4 is a config switch. Verification meta tags are likewise config-driven, but DNS-TXT verification is the recommended path.
 - 2026-10-20 — Image variants are committed to the repo (generated locally with sharp) so Cloudflare's build stays `node build.js` with no native image tooling. Re-run `npm run images` whenever photography lands.
+- 2026-10-21 — Draft products without photography carry `image: null` (never a stock or placeholder photo file): the UI shows the designed tint placeholder, the build omits og:image/Product.image rather than emitting a fake one, and tests enforce the placeholder. Photography day replaces them by dropping `<slug>.webp` in `assets/catalog/` and deleting the `noImage` flag.
+- 2026-10-21 — The Pet Collection reuses existing finishing methods only (laser etch, deboss, embroidery/print, woven label) and is one-size by rule (no beds, collars, clothing), per Paul's selection filter. Games & Leisure (G-001–G-006) stays parked as the 9th category.

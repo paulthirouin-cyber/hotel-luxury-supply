@@ -402,7 +402,8 @@
       "flip-flops": ["Need custom artwork, strap design, outsole mold, or color?", "Start from one of our flip-flop styles or send us your artwork, strap direction, and quantity.", "Start Bespoke Flip-flop Project"],
       "leather-goods": ["Need a suite-specific size, leather color, debossing, or packaging detail?", "Start from one of our leather pieces or send us your dimensions, deboss artwork, and quantity.", "Start Bespoke Leather Project"],
       "slippers": ["Need a specific texture, color, fabric, or suite standard?", "Start from one of our slipper styles or send us your texture, embroidery, and quantity.", "Start Bespoke Slipper Project"],
-      "accessories": ["Need a custom guest accessory or coordinated retail detail?", "Send us the guest moment, artwork direction, and quantity and we\u2019ll shape the right accessory.", "Start Bespoke Accessories Project"]
+      "accessories": ["Need a custom guest accessory or coordinated retail detail?", "Send us the guest moment, artwork direction, and quantity and we\u2019ll shape the right accessory.", "Start Bespoke Accessories Project"],
+      "pets": ["Need a pet piece we don\u2019t make yet, or a program-specific finish?", "Start from one of the six pet pieces or send us the program moment, materials, logo treatment, and quantity.", "Start Bespoke Pet Project"]
     };
 
     var grid = document.getElementById("categoryGrid");

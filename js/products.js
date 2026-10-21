@@ -1,6 +1,7 @@
 // HL Supply — Product catalog data
 // SOURCE OF TRUTH: HL Supply Product Catalog 2025-2026 (docs/BRAND-BRIEF.md
-// has the company brief). 39 products across 7 categories, refs B-001..A-007.
+// has the company brief). 45 products across 8 categories, refs B-001..A-007
+// plus the Pet Collection P-001..P-006 (DRAFT, see below).
 // Names, descriptions, features, dimensions, and MOQs are the catalog's own.
 // Images: assets/catalog/<slug>.webp (extracted from the catalog, alpha-trimmed).
 // Pricing tiers remain null -> "$--" until real pricing is supplied.
@@ -40,7 +41,7 @@
       features: o.features,
       tiers: qtys.map(function (q) { return { qty: q, price: null }; }),
       specifications: specs,
-      image: asset("assets/catalog/" + o.slug + ".webp"),
+      image: o.noImage ? null : asset("assets/catalog/" + o.slug + ".webp"),
       imageLabel: o.alt,
       gallery: [
         "Logo placement mockup \u2014 " + o.type.toLowerCase(),
@@ -566,6 +567,97 @@
       customization: ["Any custom color", "Laser-etched logo"],
       features: ["Non-slip surface", "Eco-friendly material", "Extra-thick cushioning"],
       alt: "The Zenith Yoga Mat \u2014 yoga mat for luxury hotels and resorts, shown in a custom color",
-      tint: "tint-linen" })
+      tint: "tint-linen" }),
+
+    // ---------------------------------------------------------------
+    // THE PET COLLECTION (P-001..P-006) — DRAFT, added 2026-10-21.
+    // Specs pending Paul's sourcing confirmation: adjust materials, features,
+    // and MOQs freely once samples are confirmed. All pieces are one-size;
+    // no beds, collars, or clothing by design. No catalog photography yet
+    // (noImage -> designed tint placeholder); on the photography-day shot list.
+    // ---------------------------------------------------------------
+    make({ ref: "P-001",
+      slug: "companion-bowl",
+      name: "The Companion Bowl",
+      category: "pets",
+      type: "Pet Bowl",
+      material: "Food-grade stainless steel, powder-coat finish, non-slip base",
+      tierPattern: "t100",
+      noImage: true,
+      description: "The Companion bowl brings the suite\u2019s standard to the four-legged guest: food-grade stainless steel in any custom color with a laser-etched logo and a non-slip base that protects stone and timber floors. Set beside the door at check-in, it says the pet was expected.",
+      customization: ["Any custom color", "Laser-etched logo"],
+      features: ["Food-grade stainless steel", "Non-slip base", "Dishwasher-safe etch"],
+      alt: "The Companion Bowl \u2014 laser-etched stainless steel pet bowl for luxury hotels, shown in a custom color",
+      tint: "tint-chrome" }),
+
+    make({ ref: "P-002",
+      slug: "scout-bandana",
+      name: "The Scout Bandana",
+      category: "pets",
+      type: "Pet Bandana",
+      material: "Soft cotton twill, one-size tie style",
+      tierPattern: "t200",
+      noImage: true,
+      description: "The Scout bandana is the take-home piece of a pet program: a one-size tie bandana in any custom color with a printed or embroidered logo. It travels on the morning walk, appears in guest photographs, and carries the property\u2019s name well beyond the stay.",
+      customization: ["Any custom color", "Printed or embroidered logo"],
+      features: ["One-size tie style", "Soft cotton twill", "Colorfast finish"],
+      alt: "The Scout Bandana \u2014 one-size pet bandana for luxury hotels and resorts, shown in a custom color",
+      tint: "tint-sand" }),
+
+    make({ ref: "P-003",
+      slug: "promenade-leash",
+      name: "The Promenade Leash",
+      category: "pets",
+      type: "Pet Lead",
+      material: "Woven webbing, metal hardware, debossed vegan leather handle wrap",
+      tierPattern: "t100",
+      noImage: true,
+      description: "The Promenade leash pairs woven webbing in any custom color with metal hardware and a debossed vegan leather handle wrap. Issued at the concierge desk or sold in the boutique, it is the piece that turns a walk through the grounds into a property moment.",
+      customization: ["Any custom color", "Debossed logo on handle wrap"],
+      features: ["Woven webbing", "Metal hardware", "Vegan leather handle wrap"],
+      alt: "The Promenade Leash \u2014 woven pet lead with debossed leather handle for luxury hotels, shown in a custom color",
+      tint: "tint-green" }),
+
+    make({ ref: "P-004",
+      slug: "voyager-travel-bowl",
+      name: "The Voyager Travel Bowl",
+      category: "pets",
+      type: "Travel Bowl",
+      material: "Foldable waterproof fabric with carabiner clip",
+      tierPattern: "t200",
+      noImage: true,
+      description: "The Voyager travel bowl folds flat for the car, the beach, and the trail, with a printed logo and any custom color. Light enough for a welcome kit and useful long after checkout, it keeps the property in the picture wherever the guest and their companion go.",
+      customization: ["Any custom color", "Printed logo"],
+      features: ["Folds flat", "Waterproof lining", "Carabiner clip"],
+      alt: "The Voyager Travel Bowl \u2014 foldable pet travel bowl for luxury hotels and resorts, shown in a custom color",
+      tint: "tint-pool" }),
+
+    make({ ref: "P-005",
+      slug: "beacon-waste-bag-pouch",
+      name: "The Beacon Waste-Bag Pouch",
+      category: "pets",
+      type: "Waste-Bag Pouch",
+      material: "Debossed vegan leather with metal clip",
+      tierPattern: "t100",
+      noImage: true,
+      description: "The Beacon pouch handles the practical side of a pet stay with discretion: debossed vegan leather in any custom color, a clip for lead or belt, and a bag roll inside. Placed with the in-room set, it signals that the property has thought the whole walk through.",
+      customization: ["Any custom color", "Debossed logo"],
+      features: ["Vegan leather", "Metal clip", "Fits standard bag rolls"],
+      alt: "The Beacon Waste-Bag Pouch \u2014 debossed vegan leather pouch for luxury hotel pet programs, shown in a custom color",
+      tint: "tint-navy" }),
+
+    make({ ref: "P-006",
+      slug: "harbor-rope-toy",
+      name: "The Harbor Rope Toy",
+      category: "pets",
+      type: "Rope Toy",
+      material: "Woven cotton rope with woven label",
+      tierPattern: "t200",
+      noImage: true,
+      description: "The Harbor rope toy is the object waiting on the pet bed at arrival: woven cotton rope in custom colors with a woven label carrying the property\u2019s mark. It is the most photographed piece in the collection and the one most often bought again at the boutique.",
+      customization: ["Custom rope colors", "Woven label"],
+      features: ["Woven cotton rope", "Custom color strands", "Woven label"],
+      alt: "The Harbor Rope Toy \u2014 woven cotton rope toy with woven label for luxury hotel pet programs, shown in custom colors",
+      tint: "tint-terra" })
   ];
 })();

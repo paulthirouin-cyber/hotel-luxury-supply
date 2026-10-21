@@ -4,8 +4,8 @@
 // Turns the hash-routed catalog SPA into real, crawlable URLs in dist/:
 //   /                                 homepage
 //   /products/                        catalog landing
-//   /products/:category/              7 category pages
-//   /products/:category/:slug/        39 product pages
+//   /products/:category/              8 category pages
+//   /products/:category/:slug/        45 product pages
 //   /bespoke/                         bespoke atelier
 //   /quote/                           quote cart (noindex)
 //   /404.html                         not found
@@ -339,7 +339,7 @@ function build() {
   for (const c of CATS) {
     const meta = {
       title: c.metaTitle, description: c.metaDescription, keywords: c.keywords,
-      path: "/products/" + c.slug + "/", image: "/" + c.image.replace(/^\//, "")
+      path: "/products/" + c.slug + "/", image: c.image ? "/" + c.image.replace(/^\//, "") : undefined
     };
     emit("products/" + c.slug + "/index.html", renderCatalogPage("#/products/" + c.slug, meta,
       { view: "viewCategory", ld: () => seo.categoryLd(meta, c, PRODS.filter((p) => p.category === c.slug)) }), meta);
@@ -348,7 +348,7 @@ function build() {
   for (const p of PRODS) {
     const meta = {
       title: p.metaTitle, description: p.metaDescription, keywords: p.keywords,
-      path: "/products/" + p.category + "/" + p.slug + "/", image: "/" + p.image.replace(/^\//, ""), ogType: "product"
+      path: "/products/" + p.category + "/" + p.slug + "/", image: p.image ? "/" + p.image.replace(/^\//, "") : undefined, ogType: "product"
     };
     emit("products/" + p.category + "/" + p.slug + "/index.html",
       renderCatalogPage("#/products/" + p.category + "/" + p.slug, meta,
@@ -389,7 +389,7 @@ function build() {
 
     for (const g of GUIDES) {
       const r = content.renderGuide(g, data, helpers);
-      const meta = { title: r.meta.metaTitle || r.meta.title, description: r.meta.description, keywords: r.meta.keywords, path: g.path, image: r.category ? "/" + r.category.image.replace(/^\//, "") : undefined, ogType: "article" };
+      const meta = { title: r.meta.metaTitle || r.meta.title, description: r.meta.description, keywords: r.meta.keywords, path: g.path, image: r.category && r.category.image ? "/" + r.category.image.replace(/^\//, "") : undefined, ogType: "article" };
       emit(g.path.replace(/^\//, "") + "index.html", renderCatalogPage("#/guides/" + g.slug, meta, {
         view: "viewPage",
         mutate(doc) { doc.getElementById("pageMount").innerHTML = r.html; doc.getElementById("pageMount").setAttribute("data-page", "guide"); },
@@ -399,7 +399,7 @@ function build() {
     }
     for (const g of USECASES) {
       const r = content.renderGuide(g, data, helpers);
-      const meta = { title: r.meta.metaTitle || r.meta.title, description: r.meta.description, keywords: r.meta.keywords, path: g.path, image: r.products[0] ? "/" + r.products[0].image.replace(/^\//, "") : undefined, ogType: "article" };
+      const meta = { title: r.meta.metaTitle || r.meta.title, description: r.meta.description, keywords: r.meta.keywords, path: g.path, image: r.products.find((p) => p.image) ? "/" + r.products.find((p) => p.image).image.replace(/^\//, "") : undefined, ogType: "article" };
       emit(g.path.replace(/^\//, "") + "index.html", renderCatalogPage("#/for/" + g.slug, meta, {
         view: "viewPage",
         mutate(doc) { doc.getElementById("pageMount").innerHTML = r.html; doc.getElementById("pageMount").setAttribute("data-page", "usecase"); },

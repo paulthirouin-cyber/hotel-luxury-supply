@@ -9,21 +9,23 @@ const prodBy = Object.fromEntries(PRODS.map((p) => [p.slug, p]));
 const PAGE_SLUGS = ["about", "process", "contact", "privacy", "terms"];
 
 /* ---------- 1. data integrity (catalog as source of truth) ---------- */
-t.ok(PRODS.length === 39, "39 products");
-t.ok(CATS.length === 7, "7 categories");
-const COUNTS = { bags: 8, hats: 6, bottles: 4, "flip-flops": 4, "leather-goods": 6, slippers: 4, accessories: 7 };
+t.ok(PRODS.length === 45, "45 products");
+t.ok(CATS.length === 8, "8 categories");
+const COUNTS = { bags: 8, hats: 6, bottles: 4, "flip-flops": 4, "leather-goods": 6, slippers: 4, accessories: 7, pets: 6 };
+// draft pieces (no catalog photography yet) render the designed tint placeholder instead of a photo
+const DRAFT_CATS = new Set(["pets"]);
 for (const [slug, n] of Object.entries(COUNTS)) {
   t.ok(PRODS.filter((p) => p.category === slug).length === n, `${slug} has ${n} products`);
 }
 for (const p of PRODS) {
   t.ok(p.tiers.length === 4, `${p.slug}: 4 tiers`);
   t.ok(p.ref && p.type && p.description && p.customization.length && p.features && p.features.length, `${p.slug}: catalog copy complete`);
-  t.ok(p.image && exists(p.image), `${p.slug}: image file exists (${p.image})`);
+  t.ok(p.image ? exists(p.image) : DRAFT_CATS.has(p.category), `${p.slug}: image file exists or draft placeholder (${p.image})`);
   t.ok(p.imageLabel && p.imageLabel.length > 10, `${p.slug}: alt text present`);
   t.ok(p.specifications.some((s) => s.label === "Reference" && s.value === p.ref), `${p.slug}: ref spec`);
 }
 for (const c of CATS) {
-  t.ok(c.image && exists(c.image), `${c.slug}: category hero image exists`);
+  t.ok(c.image ? exists(c.image) : DRAFT_CATS.has(c.slug), `${c.slug}: category hero image exists or draft placeholder`);
   t.ok(c.tagline, `${c.slug}: catalog tagline`);
 }
 // spot-check official catalog names + real dimensions survived
@@ -36,10 +38,11 @@ t.ok(/16.+14/.test(prodBy["signature-tote"].specifications.find((s) => s.label =
 {
   const dom = homeDom(); const doc = dom.window.document;
   const cards = [...doc.querySelectorAll("#atelierGrid a.at-card")];
-  t.ok(cards.length === 7, "homepage renders 7 category cards");
+  t.ok(cards.length === 8, "homepage renders 8 category cards");
   cards.forEach((card) => {
     const img = card.querySelector("img.ph__img");
-    t.ok(img && img.getAttribute("alt"), "homepage card has real image with alt: " + card.getAttribute("href"));
+    const draft = DRAFT_CATS.has(card.getAttribute("href").split("/").filter(Boolean).pop());
+    t.ok(draft ? (!img && card.querySelector(".ph__cap")) : (img && img.getAttribute("alt")), "homepage card has real image with alt (or draft placeholder): " + card.getAttribute("href"));
   });
   const hero = doc.querySelector(".hero__img");
   t.ok(hero && exists(hero.getAttribute("src")) && hero.getAttribute("alt"), "hero uses real catalog photo with alt");
@@ -103,7 +106,8 @@ function auditDoc(doc, ctx) {
 auditDoc(homeDom().window.document, "[home]");
 {
   const doc = catalogDom("#/products").window.document;
-  t.ok(doc.querySelectorAll("#catalogCategories .ccard img.ph__img").length === 7, "landing: 7 real category images");
+  t.ok(doc.querySelectorAll("#catalogCategories .ccard").length === 8, "landing: 8 category cards");
+  t.ok(doc.querySelectorAll("#catalogCategories .ccard img.ph__img").length === CATS.filter((c) => c.image).length, "landing: real category images for every photographed category");
   auditDoc(doc, "[landing]");
 }
 for (const c of CATS) {
@@ -111,12 +115,12 @@ for (const c of CATS) {
   t.ok(!doc.getElementById("viewCategory").hidden, "category view visible: " + c.slug);
   t.ok(c.guide && exists("content/guides/" + c.guide + ".md") && doc.querySelector('#categoryGuide a[href="products.html#/guides/' + c.guide + '"]'), c.slug + ": links its buying guide");
   t.ok(doc.querySelector("#categoryHero h1") && doc.querySelector("#categoryHero h1").textContent === c.name, c.slug + " hero title");
-  t.ok(doc.querySelector("#categoryHero img.ph__img"), c.slug + " hero uses real lifestyle image");
+  t.ok(c.image ? doc.querySelector("#categoryHero img.ph__img") : doc.querySelector("#categoryHero .ph__cap"), c.slug + " hero uses real lifestyle image (or draft placeholder)");
   t.ok(doc.getElementById("categoryHero").textContent.includes(c.tagline), c.slug + " shows catalog tagline");
   const cards = doc.querySelectorAll("#categoryGrid .pcard");
   t.ok(cards.length === COUNTS[c.slug], c.slug + " product count");
   cards.forEach((card) => {
-    t.ok(card.querySelector("img.ph__img"), c.slug + " card has product photo");
+    t.ok(prodBy[card.getAttribute("data-product")].image ? card.querySelector("img.ph__img") : card.querySelector(".ph__cap"), c.slug + " card has product photo (or draft placeholder)");
     t.ok(!card.querySelector(".pt-tier") && !card.querySelector("[data-qty-for]") && !card.querySelector("[data-add]"),
       c.slug + " card has no pricing UI / Add to Quote");
     t.ok(/MOQ/.test(card.textContent), c.slug + " card shows MOQ");
@@ -127,7 +131,7 @@ for (const p of PRODS) {
   const doc = catalogDom("#/products/" + p.category + "/" + p.slug).window.document;
   const pd = doc.getElementById("productDetail");
   t.ok(pd.querySelector("h1") && pd.querySelector("h1").textContent === p.name, p.slug + " name renders");
-  t.ok(pd.querySelector(".pd__ph img.ph__img"), p.slug + " main catalog photo");
+  t.ok(p.image ? pd.querySelector(".pd__ph img.ph__img") : pd.querySelector(".pd__ph .ph__cap"), p.slug + " main catalog photo (or draft placeholder)");
   t.ok(pd.textContent.includes(p.description.slice(0, 40)), p.slug + " catalog description");
   t.ok(pd.querySelectorAll(".pt-tier").length === 4, p.slug + " 4 tiers");
   t.ok(pd.querySelector('[data-qty-for="' + p.slug + '"]'), p.slug + " quantity input");

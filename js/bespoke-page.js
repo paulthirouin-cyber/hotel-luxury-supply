@@ -66,7 +66,7 @@ window.HLBespokePage = (function () {
     "Build a coordinated collection", "Request help choosing products", "Other"];
 
   var CATEGORY_OPTIONS = ["Bags", "Hats", "Bottles", "Flip-flops", "Leather Goods",
-    "Slippers", "Accessories", "Multiple Categories", "Not Sure Yet"];
+    "Slippers", "Accessories", "Pets", "Multiple Categories", "Not Sure Yet"];
 
   var CAPABILITIES = [
     ["Dimensions", "Adjust size, proportion, pocketing, capacity, or product structure.", "swatch-canvas"],

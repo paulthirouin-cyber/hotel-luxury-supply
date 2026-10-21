@@ -22,7 +22,7 @@ const ORG = {
     telephone: "+1-347-669-4417",
     availableLanguage: ["English"]
   }],
-  knowsAbout: ["custom hotel amenities", "branded resort merchandise", "bespoke hospitality products", "embroidery", "debossing", "laser etching"]
+  knowsAbout: ["custom hotel amenities", "branded resort merchandise", "bespoke hospitality products", "hotel pet amenities", "embroidery", "debossing", "laser etching"]
 };
 
 const WEBSITE = {
@@ -104,7 +104,7 @@ function categoryLd(meta, cat, prods) {
   return graph([
     webPage(meta, {
       "@type": "CollectionPage",
-      primaryImageOfPage: { "@type": "ImageObject", url: abs(cat.image) },
+      primaryImageOfPage: cat.image ? { "@type": "ImageObject", url: abs(cat.image) } : undefined,
       mainEntity: {
         "@type": "ItemList",
         name: cat.name,
@@ -129,7 +129,7 @@ function productLd(meta, p, cat) {
     sku: p.ref,
     mpn: p.ref,
     url: SITE + meta.path,
-    image: abs(p.image),
+    image: p.image ? abs(p.image) : undefined,
     description: p.description,
     brand: { "@type": "Brand", name: "HL Supply" },
     manufacturer: { "@id": ORG_ID },
@@ -171,7 +171,7 @@ function articleLd(meta, guide) {
     description: meta.description,
     url: SITE + meta.path,
     mainEntityOfPage: { "@id": SITE + meta.path + "#webpage" },
-    image: guide.category ? abs(guide.category.image) : (meta.image ? abs(meta.image) : undefined),
+    image: guide.category && guide.category.image ? abs(guide.category.image) : (meta.image ? abs(meta.image) : undefined),
     datePublished: guide.meta.published,
     dateModified: guide.meta.updated || guide.meta.published,
     author: { "@id": ORG_ID },
@@ -247,14 +247,14 @@ function llmsTxt(CATS, PRODS, extra) {
   const lines = [
     "# HL Supply",
     "",
-    "> HL Supply (hotelluxurysupply.com) is a bespoke product design, development, and supply atelier for luxury hospitality. It creates custom branded guest goods — bags, hats, bottles, flip-flops, leather goods, slippers, and accessories — for five-star resorts, luxury hotel groups, private clubs, spas, golf properties, and destination events. Sales are B2B and quote-based (no online checkout). The catalog is a starting point: every piece can be adapted or developed from scratch.",
+    "> HL Supply (hotelluxurysupply.com) is a bespoke product design, development, and supply atelier for luxury hospitality. It creates custom branded guest goods — bags, hats, bottles, flip-flops, leather goods, slippers, accessories, and pet amenities — for five-star resorts, luxury hotel groups, private clubs, spas, golf properties, and destination events. Sales are B2B and quote-based (no online checkout). The catalog is a starting point: every piece can be adapted or developed from scratch.",
     "",
     "Essence: We don't simply put hotel names on products. We help hotels create products worthy of carrying their names.",
     "",
     "## Key facts",
     "",
     "- Customization methods: embroidery, debossing, laser etching, custom colors (Pantone matching), custom packaging, bespoke dimensions and materials.",
-    "- Minimum order quantities by category: hats 100, leather goods 100, bags 200, bottles 200, flip-flops 200, slippers 1,000 pairs, accessories 100–250 depending on item.",
+    "- Minimum order quantities by category: hats 100, leather goods 100, bags 200, bottles 200, flip-flops 200, slippers 1,000 pairs, accessories 100–250 depending on item, pet pieces 100–200 depending on item.",
     "- Every product has four quantity pricing tiers; pricing is confirmed by the atelier at quote review.",
     "- Lead time: 4–6 weeks after proof approval, plus delivery.",
     "- Contact: info@hotelluxurysupply.com · +1 (347) 669-4417",

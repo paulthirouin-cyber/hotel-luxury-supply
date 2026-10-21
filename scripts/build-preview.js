@@ -70,9 +70,9 @@ function inlineCatalogScript(f) {
     const hook = '  "use strict";';
     if (!src.includes(hook)) throw new Error("products.js hook missing");
     src = src.replace(hook, hook + "\n\n  var HL_EMBED = " + JSON.stringify(map) + ";");
-    const line = 'image: asset("assets/catalog/" + o.slug + ".webp"),';
+    const line = 'image: o.noImage ? null : asset("assets/catalog/" + o.slug + ".webp"),';
     if (!src.includes(line)) throw new Error("products.js image line missing");
-    src = src.replace(line, 'image: HL_EMBED[o.slug] || ("assets/catalog/" + o.slug + ".webp"),');
+    src = src.replace(line, 'image: o.noImage ? null : (HL_EMBED[o.slug] || ("assets/catalog/" + o.slug + ".webp")),');
   }
   return "<script>\n" + src + "\n</script>\n";
 }

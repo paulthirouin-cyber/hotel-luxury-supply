@@ -166,7 +166,7 @@ window.HL_CATEGORIES = [
     tint: "tint-linen",
     accent: "chrome",
     micro: "micro-weave",
-    size: "wide"
+    size: "small"
   },
   {
     slug: "accessories",
@@ -194,5 +194,34 @@ window.HL_CATEGORIES = [
     accent: "pool",
     micro: "micro-glint",
     size: "wide"
+  },
+  {
+    slug: "pets",
+    guide: "custom-hotel-pet-amenities",
+    guideTitle: "Custom Hotel Pet Amenities: Building a Hotel Pet Program",
+    collectionTitle: "Custom pet amenities for hotels, resorts, and clubs",
+    directAnswer: "Custom hotel pet amenities are the bowl, bandana, lead, and travel pieces a property produces in its own colors for a VIP pet program and its boutique. HL Supply\u2019s six pet pieces start at 100 or 200 units, each one-size with four quantity tiers, finished with laser etching, embroidery, print, or debossed vegan leather, and produced in 4\u20136 weeks after proof approval.",
+    faqs: [
+      { q: "What is the minimum order for custom hotel pet amenities?", a: "The Companion Bowl, Promenade Leash, and Beacon pouch start at 100 units; the Scout Bandana, Voyager Travel Bowl, and Harbor Rope Toy at 200. Each piece has four quantity pricing tiers, confirmed by the atelier at quote review." },
+      { q: "Which pieces make up a hotel pet program?", a: "An in-room set is usually a bowl and a toy waiting at check-in, with a bandana as the take-home piece. The lead, travel bowl, and waste-bag pouch sit in the boutique or go into a VIP arrival kit. Everything is one-size; the collection deliberately excludes beds, collars, and clothing." },
+      { q: "How is the property\u2019s logo applied to pet pieces?", a: "Laser etching on the stainless bowl, embroidery or print on the bandana, a woven label on the rope toy, and debossing on the vegan leather handle wrap and pouch. Placement and scale are confirmed on the proof before production." },
+      { q: "Can the pieces match our property\u2019s colors?", a: "Yes. Every piece is produced in any custom color, including the bowl finish, the bandana fabric, the lead webbing, and the rope-toy strands, so the pet program reads as part of the suite rather than a pet-store add-on." },
+      { q: "Are the materials suitable for pets?", a: "Materials are specified for pet use: food-grade stainless steel bowls with a non-slip base, pet-safe textiles and dyes for the bandana, lead, and rope toy, and vegan leather for the handle wrap and pouch. Final material specifications are confirmed with the atelier at proofing." },
+      { q: "How long does production take?", a: "Allow 4\u20136 weeks after proof approval, plus delivery. Pet programs often launch with a season or an opening; share the date in the quote so staged delivery can be planned." }
+    ],
+    metaTitle: "Custom Hotel Pet Amenities with Logo | HL Supply",
+    metaDescription: "Custom pet amenities for luxury hotels and resorts: laser-etched steel bowls, embroidered bandanas, debossed leather leads, and travel pieces in your colors. Quote-based.",
+    keywords: ["hotel pet amenities","pet friendly hotel supplies","custom dog bandana","luxury hotel pet program","branded pet amenities"],
+    tagline: "Etched Steel & Debossed Leather",
+    image: null, // no catalog photography yet: designed tint placeholder until photography day
+    catalogSubtitle: "The Pet Collection: bowls, bandanas, leads, and travel pieces for VIP pet programs and boutique retail.",
+    catalogIntro: "Luxury properties now welcome the four-legged guest; the Pet Collection gives that welcome a branded object in the room and in the boutique.",
+    name: "Pets",
+    line: "Bowls, bandanas, and leads made for the four-legged guest.",
+    imageLabel: "Etched steel bowl and bandana beside a suite doorway in afternoon light.",
+    tint: "tint-terra",
+    accent: "terracotta",
+    micro: "micro-deboss",
+    size: "small"
   }
 ];
