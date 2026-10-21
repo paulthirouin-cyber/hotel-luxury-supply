@@ -329,6 +329,7 @@
         }
         var noteEl = scopeFor(addBtn).querySelector('textarea[id^="notes-"]');
         Q.add(pslug, qty, noteEl ? noteEl.value : "");
+        if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Add to Quote", { product: pslug, quantity: qty });
         refreshCount();
         toast("Added to quote selections.", true);
         return;
@@ -738,7 +739,7 @@
       return;
     }
 
-    if (window.HL_PAGES && (seg[0] === "guides" || seg[0] === "glossary" || seg[0] === "for")) {
+    if (window.HL_PAGES && (seg[0] === "guides" || seg[0] === "glossary" || seg[0] === "for" || seg[0] === "work")) {
       showView("viewPage");
       window.HL_PAGES.__renderContent(seg, document.getElementById("pageMount"));
       scrollTop();

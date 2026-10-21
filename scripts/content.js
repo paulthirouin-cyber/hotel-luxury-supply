@@ -13,20 +13,26 @@ const esc = md.esc;
 // A collection is a content folder served under its own URL prefix:
 //   content/guides/*.md → /guides/<slug>/   (type: guide | comparison)
 //   content/for/*.md    → /for/<slug>/      (type: usecase)
+//   content/work/*.md   → /work/<slug>/     (type: work — case studies; the
+//                         section renders only when at least one entry exists)
+// Files starting with "_" are drafts: never built (HL_INCLUDE_DRAFTS=1 to test).
 function loadCollection(folder, prefix) {
   const dir = path.join(ROOT, "content", folder);
   if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir).filter((f) => f.endsWith(".md")).map((f) => {
-    const slug = f.replace(/\.md$/, "");
+  const drafts = !!process.env.HL_INCLUDE_DRAFTS;
+  return fs.readdirSync(dir).filter((f) => f.endsWith(".md") && !/^_?readme\.md$/i.test(f) && (drafts || !f.startsWith("_"))).map((f) => {
+    const slug = f.replace(/\.md$/, "").replace(/^_+/, "");
     const src = fs.readFileSync(path.join(dir, f), "utf8");
     const { meta } = md.parseFrontMatter(src);
-    meta.type = meta.type || (folder === "for" ? "usecase" : "guide");
+    meta.type = meta.type || (folder === "for" ? "usecase" : folder === "work" ? "work" : "guide");
     return { slug, src, meta, path: prefix + slug + "/", collection: folder };
   }).sort((a, b) => a.slug.localeCompare(b.slug));
 }
 
 function loadGuides() { return loadCollection("guides", "/guides/"); }
 function loadUseCases() { return loadCollection("for", "/for/"); }
+function loadWork() { return loadCollection("work", "/work/"); }
+const list = (v) => (v ? String(v).split(",").map((s) => s.trim()).filter(Boolean) : []);
 
 function loadGlossary() {
   const file = path.join(ROOT, "content", "glossary.json");
@@ -64,6 +70,10 @@ function makeResolver(data) {
       if (!(data.COLS || []).find((c) => c.slug === slug)) throw new Error("unknown collection link: " + slug);
       return "/collections/" + slug + "/";
     }
+    if (kind === "work") {
+      if (!(data.WORK || []).find((g) => g.slug === slug)) throw new Error("unknown work link: " + slug);
+      return "/work/" + slug + "/";
+    }
     if (kind === "glossary") {
       if (!GLOSSARY.terms.find((t) => t.slug === slug)) throw new Error("unknown glossary link: " + slug);
       return "/glossary/#" + slug;
@@ -72,6 +82,7 @@ function makeResolver(data) {
       if (slug === "quote") return "/quote/";
       if (slug === "bespoke") return "/bespoke/";
       if (slug === "collections") return "/collections/";
+      if (slug === "work") { if (!(data.WORK || []).length) throw new Error("work link but no case studies exist"); return "/work/"; }
       if (!PAGES[slug]) throw new Error("unknown page link: " + slug);
       return PAGES[slug].path;
     }
@@ -110,6 +121,7 @@ function fmtDate(iso) {
 }
 
 function cardEyebrow(g) {
+  if (g.meta.type === "work") return "Case study" + (g.meta.propertyType ? " \u00b7 " + g.meta.propertyType : "");
   if (g.meta.type === "comparison") return "Comparison";
   if (g.meta.type === "usecase") return "For " + (g.meta.audience || "properties");
   return g.categoryName || "Guide";
@@ -120,7 +132,18 @@ function guideCard(g) {
     '<span class="eyebrow">' + esc(cardEyebrow(g)) + "</span>" +
     "<h3>" + esc(g.meta.title.replace(/: The Complete Buyer.s Guide$/, "")) + "</h3>" +
     "<p>" + esc(g.meta.summary || g.meta.description) + "</p>" +
-    '<span class="tlink">Read the guide</span></a>';
+    '<span class="tlink">' + (g.meta.type === "work" ? "Read the case study" : "Read the guide") + "</span></a>";
+}
+
+// Case studies that reference a program (/for/ slug) or a collection.
+// Returns "" when none exist, so pages stay placeholder-free.
+function relatedWorkHTML(data, ref) {
+  const WORK = data.WORK || [];
+  const hits = WORK.filter((w) => (ref.program && list(w.meta.programs).includes(ref.program)) || (ref.collection && list(w.meta.collections).includes(ref.collection)));
+  if (!hits.length) return "";
+  return '<section class="guide-related work-related"><div class="section-head"><span class="eyebrow">Work</span><h2>Related projects</h2></div>' +
+    '<div class="gcards">' + hits.slice(0, 3).map(guideCard).join("") + "</div>" +
+    '<p class="page-note"><a href="/work/">All case studies</a></p></section>';
 }
 
 /* ---------------- guide page ---------------- */
@@ -137,12 +160,13 @@ function renderGuide(guide, data, helpers) {
   if (listed) listed.forEach((s) => { if (!PRODS.find((p) => p.slug === s)) throw new Error(guide.slug + ": unknown product in front matter: " + s); });
   const prods = listed ? listed.map((s) => PRODS.find((p) => p.slug === s)) : PRODS.filter((p) => p.category === meta.category);
   const isUse = meta.type === "usecase";
-  const pool = isUse ? (data.USECASES || []) : GUIDES;
+  const isWork = meta.type === "work";
+  const pool = isWork ? (data.WORK || []) : isUse ? (data.USECASES || []) : GUIDES;
   const sameType = pool.filter((g) => g.slug !== guide.slug && (g.meta.type || "guide") === (meta.type || "guide"));
   const otherType = pool.filter((g) => g.slug !== guide.slug && (g.meta.type || "guide") !== (meta.type || "guide"));
   const others = sameType.concat(otherType).slice(0, 6);
-  const rootCrumb = isUse ? { name: "For", href: "/for/" } : { name: "Guides", href: "/guides/" };
-  const eyebrow = isUse ? "For " + (meta.audience || "properties") : (meta.type === "comparison" ? "Comparison" : "Buying guide" + (cat ? " \u00b7 " + cat.name : ""));
+  const rootCrumb = isWork ? { name: "Work", href: "/work/" } : isUse ? { name: "For", href: "/for/" } : { name: "Guides", href: "/guides/" };
+  const eyebrow = isWork ? "Case study" + (meta.propertyType ? " \u00b7 " + meta.propertyType : "") : isUse ? "For " + (meta.audience || "properties") : (meta.type === "comparison" ? "Comparison" : "Buying guide" + (cat ? " \u00b7 " + cat.name : ""));
 
   // body without the H1 (the template renders it) and with FAQ answers kept
   const body = r.html.replace(/^<h1>[\s\S]*?<\/h1>\n?/, "");
@@ -153,7 +177,7 @@ function renderGuide(guide, data, helpers) {
     : "";
 
   const productsTitle = listed
-    ? (isUse ? "The pieces this program is built from" : "Products compared in this guide")
+    ? (isWork ? "The pieces in this project" : isUse ? "The pieces this program is built from" : "Products compared in this guide")
     : (cat ? "Every " + cat.name.toLowerCase() + " style in the catalog" : "Products");
   const products = prods.length
     ? '<section class="guide-products" aria-labelledby="guideProductsTitle">' +
@@ -163,8 +187,10 @@ function renderGuide(guide, data, helpers) {
       "</section>"
     : "";
 
-  const related = '<section class="guide-related"><div class="section-head"><span class="eyebrow">' + (isUse ? "Other programs" : "More guides") + '</span><h2>' + (isUse ? "Custom goods for other properties and events" : "Other guides") + "</h2></div>" +
-    '<div class="gcards">' + others.map(guideCard).join("") + "</div>" +
+  const related = (isWork && !others.length ? "" : '<section class="guide-related"><div class="section-head"><span class="eyebrow">' + (isWork ? "More work" : isUse ? "Other programs" : "More guides") + '</span><h2>' + (isWork ? "Other projects" : isUse ? "Custom goods for other properties and events" : "Other guides") + "</h2></div>" +
+    '<div class="gcards">' + others.map(guideCard).join("") + "</div>") +
+    (isWork ? '<p class="page-note">' + list(meta.programs).map((s) => { const g = (data.USECASES || []).find((x) => x.slug === s); return g ? '<a href="/for/' + s + '/">' + esc(g.meta.title) + "</a>" : ""; }).filter(Boolean).concat(list(meta.collections).map((s) => { const c = (data.COLS || []).find((x) => x.slug === s); return c ? '<a href="/collections/' + s + '/">' + esc(c.title) + "</a>" : ""; }).filter(Boolean)).join(" \u00b7 ") + "</p>" : "") +
+    (isUse ? relatedWorkHTML(data, { program: guide.slug }) : "") +
     '<p class="page-note">Unfamiliar term? The <a href="/glossary/">hospitality customization glossary</a> defines MOQs, tiers, proofs, embroidery, debossing, laser etching, and more.</p></section>';
 
   const html =
@@ -240,4 +266,13 @@ function renderUseCasesIndex(data) {
     '<section class="page-section page-section--tint"><h2>Buying guides and comparisons</h2><p>Materials, minimums, logo methods, and timelines by category, plus side-by-side comparisons of the decisions buyers ask about most.</p><p><a class="tlink" href="/guides/">Read the guides</a></p></section>';
 }
 
-module.exports = { loadGuides, loadUseCases, loadCollection, loadGlossary, makeResolver, renderGuide, renderGuidesIndex, renderUseCasesIndex, renderGlossary, readingTime };
+function renderWorkIndex(data) {
+  const WORK = data.WORK || [];
+  return crumbs([{ name: "Home", href: "/" }, { name: "Work" }]) +
+    '<header class="page-intro"><span class="eyebrow">HL Supply / Work</span><h1>Projects from the atelier</h1>' +
+    '<p class="page-intro__lede">Programs and collections produced for properties, written up with the brief, the pieces, and what the property learned. Each is a real project; names appear only with the property\u2019s permission.</p></header>' +
+    '<div class="gcards gcards--index">' + WORK.map(guideCard).join("") + "</div>" +
+    '<section class="page-section page-section--tint"><h2>Start your own</h2><p>Every project begins with a brief: the guest moment, the pieces, the colors, the quantity, the date.</p><p><a class="tlink" href="/contact/">Speak with the concierge</a></p></section>';
+}
+
+module.exports = { loadGuides, loadUseCases, loadWork, loadCollection, loadGlossary, makeResolver, renderGuide, renderGuidesIndex, renderUseCasesIndex, renderWorkIndex, renderGlossary, relatedWorkHTML, readingTime };

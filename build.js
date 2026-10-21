@@ -24,6 +24,7 @@ const { JSDOM } = require("jsdom");
 const seo = require("./scripts/seo");
 const perf = require("./scripts/perf");
 const content = require("./scripts/content");
+const lookbook = require("./scripts/lookbook");
 const SITE_CONFIG = JSON.parse(fs.readFileSync(path.join(__dirname, "config", "site.json"), "utf8"));
 
 const ROOT = __dirname;
@@ -172,7 +173,17 @@ function rewriteLinks(doc, pageIsHome) {
 
 /* ---------------- rendering ---------------- */
 
+let WORK_LIVE = false; // set in build() once content/work has entries
+
+function footerExtras(doc) {
+  if (!WORK_LIVE) return;
+  const a = doc.querySelector('.footer a[href="products.html#/bespoke"]');
+  const li = a && a.closest("li");
+  if (li && !doc.querySelector('.footer a[href="/work/"]')) li.insertAdjacentHTML("afterend", '<li><a href="/work/">Work</a></li>');
+}
+
 function stub(win) {
+  win.HL_SITE_CONFIG = SITE_CONFIG;
   win.matchMedia = win.matchMedia || (() => ({ matches: false, addEventListener() {}, addListener() {} }));
   win.scrollTo = () => {};
   win.IntersectionObserver = win.IntersectionObserver || class { observe() {} unobserve() {} disconnect() {} };
@@ -236,6 +247,7 @@ function renderCatalogPage(route, meta, opts) {
     if (opts.prerendered !== false) el.setAttribute("data-prerendered", "");
   });
   if (opts.mutate) opts.mutate(doc, win);
+  footerExtras(doc);
 
   // runtime state must never leak into the static source
   const toast = doc.getElementById("hlToast");
@@ -261,6 +273,7 @@ function renderHome() {
   // renderer (identical markup) and adds the reveal animation on top.
   const section = doc.querySelector(".categories");
   if (section) section.classList.remove("will-reveal", "is-inview");
+  footerExtras(doc);
   rewriteLinks(doc, true);
   absolutizeAssets(doc);
   replaceHead(doc, HOME_META);
@@ -319,6 +332,8 @@ function copyDir(src, dst) {
 
 function build() {
   const { CATS, PRODS, COLS } = loadData();
+  const WORK = content.loadWork();
+  WORK_LIVE = WORK.length > 0;
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
   STATIC_DIRS.forEach((d) => copyDir(path.join(ROOT, d), path.join(OUT, d)));
@@ -363,7 +378,9 @@ function build() {
     for (const c of COLS) {
       const meta = { title: c.metaTitle, description: c.metaDescription, keywords: c.keywords, path: "/collections/" + c.slug + "/", image: c.image ? "/" + c.image.replace(/^\//, "") : undefined };
       emit("collections/" + c.slug + "/index.html", renderCatalogPage("#/collections/" + c.slug, meta,
-        { view: "viewPage", ld: () => seo.collectionLd(meta, c, c.products.map((s) => PRODS.find((p) => p.slug === s)).filter(Boolean)) }), meta);
+        { view: "viewPage",
+          mutate(doc) { const w = content.relatedWorkHTML({ WORK }, { collection: c.slug }); if (w) doc.getElementById("pageMount").insertAdjacentHTML("beforeend", w); },
+          ld: () => seo.collectionLd(meta, c, c.products.map((s) => PRODS.find((p) => p.slug === s)).filter(Boolean)) }), meta);
     }
   }
 
@@ -394,7 +411,7 @@ function build() {
     const GUIDES = content.loadGuides();
     const USECASES = content.loadUseCases();
     const GLOSSARY = content.loadGlossary();
-    const data = { CATS, PRODS, COLS, GUIDES, USECASES, PAGES, GLOSSARY };
+    const data = { CATS, PRODS, COLS, GUIDES, USECASES, WORK, PAGES, GLOSSARY };
     GUIDES.forEach((g) => { const c = CATS.find((x) => x.slug === g.meta.category); g.categoryName = c ? c.name : ""; });
     // every category must point at an existing guide and vice versa
     CATS.forEach((c) => { if (c.guide && !GUIDES.find((g) => g.slug === c.guide)) throw new Error("category " + c.slug + " points at missing guide " + c.guide); });
@@ -432,6 +449,26 @@ function build() {
       mutate(doc) { doc.getElementById("pageMount").innerHTML = content.renderGuidesIndex(data); },
       ld: () => seo.pageLd(idxMeta, "CollectionPage", "Guides")
     }), idxMeta);
+    // case studies: placeholder-free — the whole section exists only with entries
+    if (WORK.length) {
+      for (const g of WORK) {
+        const r = content.renderGuide(g, data, helpers);
+        const meta = { title: r.meta.metaTitle || r.meta.title, description: r.meta.description, keywords: r.meta.keywords, path: g.path, image: r.products.find((p) => p.image) ? "/" + r.products.find((p) => p.image).image.replace(/^\//, "") : undefined, ogType: "article" };
+        emit(g.path.replace(/^\//, "") + "index.html", renderCatalogPage("#/work/" + g.slug, meta, {
+          view: "viewPage",
+          mutate(doc) { doc.getElementById("pageMount").innerHTML = r.html; doc.getElementById("pageMount").setAttribute("data-page", "work"); },
+          ld: () => seo.articleLd(meta, { meta: r.meta, faqs: r.faqs, words: r.words, category: null, root: { name: "Work", path: "/work/" } })
+        }), meta);
+        GUIDE_SUMMARIES.push({ title: r.meta.title, path: g.path, summary: r.meta.summary || r.meta.description, words: r.words });
+      }
+      const workMeta = { title: "Work: Custom Guest Goods Projects | HL Supply", description: "Case studies from the HL Supply atelier: branded guest goods programs and collections produced for hotels, resorts, clubs, and spas, with the brief, the pieces, and the outcome.", path: "/work/", keywords: ["hotel merchandise case study", "custom hotel amenities projects"] };
+      emit("work/index.html", renderCatalogPage("#/work", workMeta, {
+        view: "viewPage",
+        mutate(doc) { doc.getElementById("pageMount").innerHTML = content.renderWorkIndex(data); },
+        ld: () => seo.pageLd(workMeta, "CollectionPage", "Work")
+      }), workMeta);
+    }
+
     const glMeta = { title: "Hospitality Customization Glossary | HL Supply", description: "Plain definitions of " + GLOSSARY.terms.length + " terms used when commissioning custom branded guest goods: MOQ, quantity tiers, proof, embroidery, deboss, laser etching, lead time.", path: "/glossary/", keywords: ["hospitality customization glossary", "what is MOQ custom products", "embroidery vs deboss vs laser etching"] };
     emit("glossary/index.html", renderCatalogPage("#/glossary", glMeta, {
       view: "viewPage",
@@ -451,6 +488,10 @@ function build() {
       view.id = "viewNotFound";
     }
   }), NOT_FOUND_META);
+
+  // lookbook PDF from the same data (gated behind /lookbook/ by email, not by robots alone)
+  fs.mkdirSync(path.join(OUT, "downloads"), { recursive: true });
+  fs.writeFileSync(path.join(OUT, "downloads", "hl-supply-lookbook.pdf"), lookbook.build({ CATS, PRODS, COLS, root: ROOT }));
 
   write("products.html", PRODUCTS_SHIM);
   write("category.html", CATEGORY_SHIM);
@@ -476,6 +517,9 @@ function build() {
     "  Cache-Control: public, max-age=31536000, immutable",
     "/favicon.svg",
     "  Cache-Control: public, max-age=604800",
+    "/downloads/*",
+    "  Cache-Control: public, max-age=86400",
+    "  X-Robots-Tag: noindex",
     ""
   ].join("\n"));
   // IndexNow ownership file (config/indexnow.key → /<key>.txt)

@@ -15,6 +15,7 @@ function leadSpy(win) { const sent = []; win.HL_LEAD_ENDPOINT = "/api/lead"; win
   const dom = catalogDom("#/products/hats/fairway-golf-cap");
   const win = dom.window, doc = win.document;
   const leads = leadSpy(win);
+  const events = []; win.plausible = (n, o) => events.push([n, o]);
   type(win, doc.querySelector('[data-qty-for="fairway-golf-cap"]'), "300");
   type(win, doc.getElementById("notes-fairway-golf-cap"), "Club logo left panel");
   click(win, doc.querySelector('[data-add="fairway-golf-cap"]'));
@@ -57,6 +58,15 @@ function leadSpy(win) { const sent = []; win.HL_LEAD_ENDPOINT = "/api/lead"; win
   t.ok(/HLQ-\d{4}-\d{4}/.test(q.textContent) && q.textContent.includes("crest.svg"), "success ref + files");
   t.ok(!/Checkout|Payment|Buy Now/i.test(q.textContent), "no checkout language");
   t.ok(leads.length === 1 && leads[0].type === "quote" && /^HLQ-/.test(leads[0].payload.ref) && leads[0].payload.items[0].ref === "H-005" && leads[0].payload.items[0].quantity === 600, "quote submit -> lead POST with ref + items");
+  const names = events.map((e) => e[0]);
+  t.ok(names[0] === "Add to Quote" && events[0][1].props.product === "fairway-golf-cap" && names.includes("Instant Quote PDF") && names.includes("Quote Submit"), "analytics: Add to Quote → Instant Quote PDF → Quote Submit events (" + names.join(",") + ")");
+}
+{
+  // analytics is a no-op without a provider: the same flow must not throw
+  const dom = catalogDom("#/products/hats/fairway-golf-cap"); const win = dom.window, doc = win.document;
+  delete win.plausible;
+  click(win, doc.querySelector('[data-add="fairway-golf-cap"]'));
+  t.ok(doc.getElementById("quoteCount").textContent === "1", "analytics: tracking without a provider is a silent no-op");
 }
 
 /* ================= Bespoke E2E ================= */
@@ -64,6 +74,7 @@ function leadSpy(win) { const sent = []; win.HL_LEAD_ENDPOINT = "/api/lead"; win
   const dom = catalogDom("#/bespoke");
   const win = dom.window, doc = win.document;
   const leads = leadSpy(win);
+  const events = []; win.plausible = (n, o) => events.push([n, o]);
   const bm = doc.getElementById("bespokeMount");
   t.ok(bm.textContent.includes("Beyond the catalog.") && bm.querySelectorAll(".bcap").length === 8, "bespoke page renders");
   click(win, doc.getElementById("bfSubmit"));
@@ -78,6 +89,7 @@ function leadSpy(win) { const sent = []; win.HL_LEAD_ENDPOINT = "/api/lead"; win
   click(win, doc.getElementById("bfSubmit"));
   t.ok(/HLB-\d{4}-\d{4}/.test(bm.textContent), "bespoke success + HLB ref");
   t.ok(leads.length === 1 && leads[0].type === "bespoke" && /^HLB-/.test(leads[0].payload.reference), "bespoke submit -> lead POST");
+  t.ok(events.length === 1 && events[0][0] === "Bespoke Submit", "analytics: Bespoke Submit event");
 }
 {
   // product drawers

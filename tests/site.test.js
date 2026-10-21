@@ -7,7 +7,7 @@ const { CATS, PRODS, COLS } = data();
 const catSlugs = new Set(CATS.map((c) => c.slug));
 const colSlugs = new Set(COLS.map((c) => c.slug));
 const prodBy = Object.fromEntries(PRODS.map((p) => [p.slug, p]));
-const PAGE_SLUGS = ["about", "process", "contact", "privacy", "terms"];
+const PAGE_SLUGS = ["about", "process", "contact", "lookbook", "privacy", "terms"];
 
 /* ---------- 1. data integrity (catalog as source of truth) ---------- */
 t.ok(PRODS.length === 45, "45 products");
@@ -70,7 +70,7 @@ function auditDoc(doc, ctx) {
       if (PAGE_SLUGS.includes(seg[0]) && seg.length === 1) return;
       if (seg[0] === "glossary" && seg.length === 1) return;
       if (seg[0] === "collections") { if (seg[1] && !colSlugs.has(seg[1])) t.ok(false, ctx + " unknown collection: " + href); return; }
-      if (seg[0] === "guides" || seg[0] === "for") {
+      if (seg[0] === "guides" || seg[0] === "for" || seg[0] === "work") {
         if (seg[1] && !exists("content/" + seg[0] + "/" + seg[1] + ".md")) t.ok(false, ctx + " missing content file: " + href);
         return;
       }
@@ -89,6 +89,7 @@ function auditDoc(doc, ctx) {
       return;
     }
     if (href.startsWith("products.html") || href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+    if (href === "downloads/hl-supply-lookbook.pdf") return; // built artefact, verified by the dist suite
     if (href.startsWith("index.html")) {
       const j = href.indexOf("#");
       if (j > -1 && !homeIds.has(href.slice(j + 1))) t.ok(false, ctx + " missing home anchor: " + href);
@@ -200,6 +201,33 @@ for (const slug of PAGE_SLUGS) {
   t.ok(!doc.getElementById("contactSuccess").hidden && doc.getElementById("contactForm").hidden, "contact: success state");
   t.ok(sent.length === 1 && sent[0].url === "/api/lead" && sent[0].body.type === "contact" && sent[0].body.payload.email === "paul@grandriviera.com", "contact: lead POSTed");
   t.ok(win.HLLeads.outbox().length === 1 && win.HLLeads.outbox()[0].type === "contact", "contact: lead mirrored to local outbox");
+  t.ok(doc.querySelector('.contact-actions a[href="tel:+13476694417"]') && doc.querySelector('.contact-actions a[href^="mailto:info@hotelluxurysupply.com?subject="]'), "contact: call CTA + call-back fallback (no scheduling URL configured)");
+}
+{
+  // Phase 9.5: scheduling link is config-driven
+  const dom = catalogDom("#/products"); const win = dom.window;
+  win.HL_SITE_CONFIG = { contact: { schedulingUrl: "https://cal.example.com/hl-supply/20min" } };
+  win.eval(read("js/pages.js"));
+  const html = win.HL_PAGES.contact.render();
+  t.ok(/href="https:\/\/cal\.example\.com\/hl-supply\/20min"[^>]*>Book a Call</.test(html) && !/Request a Call Back/.test(html), "contact: configured scheduling URL renders Book a Call");
+}
+{
+  // Phase 9.2: lookbook gate (SPA mode) + 9.3 events
+  const dom = catalogDom("#/lookbook"); const win = dom.window, doc = win.document;
+  const events = []; win.plausible = (n, o) => events.push([n, o]);
+  const sent = []; win.fetch = (url, opts) => { sent.push(JSON.parse(opts.body)); return Promise.resolve({ ok: true, status: 200 }); };
+  win.HL_LEAD_ENDPOINT = "/api/lead";
+  click(win, doc.getElementById("lbSubmit"));
+  t.ok(!doc.getElementById("lbError").hidden && doc.getElementById("lookbookSuccess").hidden, "lookbook: gated until details are entered");
+  type(win, doc.getElementById("lb-name"), "Paul");
+  type(win, doc.getElementById("lb-email"), "paul@grandriviera.com");
+  click(win, doc.getElementById("lbSubmit"));
+  t.ok(!doc.getElementById("lookbookSuccess").hidden && doc.getElementById("lookbookForm").hidden && doc.getElementById("lbDownload").getAttribute("href") === "downloads/hl-supply-lookbook.pdf", "lookbook: success state with download link");
+  t.ok(sent.length === 1 && sent[0].type === "lookbook" && sent[0].payload.email === "paul@grandriviera.com", "lookbook: lead POSTed");
+  click(win, doc.getElementById("lbDownload"));
+  click(win, doc.getElementById("lbSampleKit"));
+  t.ok(sent.length === 2 && sent[1].type === "sample-kit" && sent[1].payload.email === "paul@grandriviera.com" && /Sample kit requested/.test(doc.getElementById("lbSamples").textContent), "lookbook: sample kit request POSTed with the same details");
+  t.ok(events.map((e) => e[0]).join(",") === "Lookbook Request,Lookbook Download,Sample Kit Request", "lookbook: analytics events in order (" + events.map((e) => e[0]).join(",") + ")");
 }
 {
   // SPA-mode navigation to an info page from a nav link

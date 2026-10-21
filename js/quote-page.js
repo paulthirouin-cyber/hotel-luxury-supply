@@ -307,6 +307,7 @@ window.HLQuotePage = (function () {
     var data = buildDocData();
     window.HLQuotePDF.open(data);
     Q.markPdfDownloaded();
+    if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Instant Quote PDF", { ref: data.ref, lines: data.lines ? data.lines.length : 0 });
     Q.setLead(Q.buildLead(data.lines, data.summary));
     if (window.HLCatalog && window.HLCatalog.toast) {
       window.HLCatalog.toast("Your instant quote has been generated. Submit to Concierge when you\u2019re ready for formal review.");
@@ -333,6 +334,7 @@ window.HLQuotePage = (function () {
       submittedAt: new Date().toISOString()
     };
     Q.setSubmission(sub);
+    if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Quote Submit", { ref: sub.ref, lines: sub.items ? sub.items.length : 0 });
     if (window.HLLeads) {
       window.HLLeads.send("quote", {
         ref: sub.ref, email: sub.email, fileNames: sub.fileNames, submittedAt: sub.submittedAt,

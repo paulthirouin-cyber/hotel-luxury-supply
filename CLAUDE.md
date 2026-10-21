@@ -27,14 +27,14 @@ a job, every job is measured, and measurements feed the next content cycle.
 
 Zero frameworks. Source files are a hash-routed SPA (`index.html`,
 `products.html`, `js/`, `css/`); **`node build.js` pre-renders every route
-into `dist/`** (91 pages, 87 indexable) by running the same renderers in
+into `dist/`** (92 pages, 88 indexable) by running the same renderers in
 jsdom under `<html data-static>`. Cloudflare Pages builds `dist/` from
 `main` (production) and `dev` (preview). `npm test` = build + preview +
-three jsdom suites (site, flows, dist); `npm run lighthouse` enforces ≥ 95.
+four suites (site, flows, dist, lead); `npm run lighthouse` enforces ≥ 95.
 
 - URLs: `/`, `/products/`, `/products/:cat/` ×8, `/products/:cat/:slug/` ×45,
   `/collections/` + 5 collections, `/bespoke/`, `/quote/` (noindex),
-  `/about/`, `/process/`, `/contact/`, `/privacy/` + `/terms/` (noindex
+  `/about/`, `/process/`, `/contact/`, `/lookbook/`, `/privacy/` + `/terms/` (noindex
   placeholders), `/guides/` + 13 guides (8 buying guides, 5 comparisons),
   `/for/` + 6 program pages (golf-resorts, beach-clubs, spa-wellness,
   hotel-openings, corporate-retreats, incentive-travel), `/glossary/`,
@@ -72,6 +72,23 @@ three jsdom suites (site, flows, dist); `npm run lighthouse` enforces ≥ 95.
   generated defaults on products.
 - Leads: every form calls `HLLeads.send(type, payload)` → POST `/api/lead`
   (`functions/api/lead.js`, Resend; env vars pending Paul) + local outbox.
+  Types: contact, concierge, quote, bespoke, mockup, lookbook, sample-kit.
+  The function auto-replies to the sender (`LEAD_AUTOREPLY=off` disables).
+  `HLLeads.track(name, props)` emits Plausible/GA4 custom events (Add to
+  Quote, Instant Quote PDF, Quote Submit, Bespoke Submit, Mockup Request,
+  Contact/Concierge Submit, Lookbook Request/Download, Sample Kit Request);
+  a no-op unless the analytics snippet is enabled.
+- Lookbook (Phase 9.2): `scripts/lookbook.js` + `scripts/pdf.js` (zero-dep
+  PDF writer) build `dist/downloads/hl-supply-lookbook.pdf` from the same
+  data (no prices; JPEG cutouts `<slug>-print.jpg` from `npm run images`);
+  `/lookbook/` (js/pages.js) gates the download behind an email lead and
+  offers the sample kit. `/downloads/` is noindex + robots-disallowed.
+- Case studies (Phase 9.1): `content/work/*.md` (type work; see
+  `content/work/_README.md`). The `/work/` section, footer link, and
+  “Related projects” blocks on /for/ and collection pages exist only when a
+  non-draft entry exists. Files starting with `_` are drafts (never built).
+- Contact page CTA (Phase 9.5): call button + `config/site.json` →
+  `contact.schedulingUrl` (empty → “Request a Call Back” mailto).
 - Config: `config/site.json` (analytics gate, verification tags),
   `config/indexnow.key`. Paul's click-steps: `docs/LAUNCH-CHECKLIST.md`.
   Keyword map: `docs/KEYWORD-MAP.md`. Decisions: `docs/ROADMAP.md` log.
@@ -121,7 +138,9 @@ link audit, pricing/tier interactions, info pages), `flows.test.js` (quote,
 bespoke, drawer and preview click-throughs, lead POST payloads) and
 `dist.test.js` (every URL exists, per-page SEO head, JSON-LD, sitemap/robots/
 llms, performance invariants, hydration without re-render, content pages,
-inbound-link mesh, orphan crawl). `npm run lighthouse` audits dist/ with a
+inbound-link mesh, orphan crawl, lookbook PDF, case-study fixture build) and
+`lead.test.js` (the Pages Function: validation, honeypot, delivery,
+auto-reply). `npm run lighthouse` audits dist/ with a
 ≥ 95 budget (needs Chrome; not part of `npm test`). **No phase is complete
 until all suites pass.** Add a regression test for every bug fixed.
 

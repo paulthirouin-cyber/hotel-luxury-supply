@@ -28,7 +28,7 @@ const distExists = (url) => fs.existsSync(distFile(url));
 const readDist = (rel) => fs.readFileSync(path.join(DIST, rel), "utf8");
 
 /* ---------- 1. every expected URL exists ---------- */
-const PAGES = ["/about/", "/process/", "/contact/", "/privacy/", "/terms/"];
+const PAGES = ["/about/", "/process/", "/contact/", "/lookbook/", "/privacy/", "/terms/"];
 const expected = ["/", "/products/", "/bespoke/", "/quote/", "/404.html", "/products.html", "/category.html", "/product.html", "/_redirects", ...PAGES];
 expected.push("/guides/", "/glossary/", ...CATS.map((c) => "/guides/" + c.guide + "/"));
 const COMPARISONS = ["embroidery-vs-deboss-vs-laser-etching", "canvas-vs-woven-leather-tote", "350ml-vs-500ml-hotel-bottles", "hotel-slipper-materials-compared", "hotel-tote-styles-compared"];
@@ -81,7 +81,7 @@ function auditPage(url) {
     if (/^(https?:|mailto:|tel:)/.test(href)) return;
     if (href.startsWith("#")) { t.ok(ids.has(href.slice(1)), ctx + " anchor exists: " + href); return; }
     if (!href.startsWith("/")) { t.ok(false, ctx + " relative href: " + href); return; }
-    t.ok(/\/(\?[^#]*)?(#.*)?$|\.html$/.test(href), ctx + " clean URL form: " + href);
+    t.ok(/\/(\?[^#]*)?(#.*)?$|\.(html|pdf)$/.test(href), ctx + " clean URL form: " + href);
     t.ok(distExists(href), ctx + " link resolves: " + href);
     const hi = href.indexOf("#");
     if (hi > -1 && href.slice(0, hi) === "/") t.ok(homeIds.has(href.slice(hi + 1)), ctx + " home anchor exists: " + href);
@@ -450,6 +450,84 @@ for (const c of COLS) {
   const d = liveDom("/bespoke/", { suffix: "?collection=golf-club" }).window.document;
   t.ok(d.getElementById("bf-category").value === "Multiple Categories" && /Golf & Club/.test(d.getElementById("bf-notes").value), "static bespoke: ?collection prefill");
   t.ok(staticDom("/products/hats/").window.document.querySelectorAll(".footer .footer__grid > div").length === 4, "footer has exactly four columns (duplicate Resources column removed)");
+}
+
+/* ---------- Phase 9: lookbook, case studies, auto-reply, contact CTA ---------- */
+{
+  const pdfPath = path.join(DIST, "downloads", "hl-supply-lookbook.pdf");
+  t.ok(fs.existsSync(pdfPath), "lookbook PDF built into dist/downloads/");
+  const pdf = fs.readFileSync(pdfPath);
+  const s = pdf.toString("latin1");
+  const pages = (s.match(/\/Type \/Page\b/g) || []).length;
+  t.ok(s.startsWith("%PDF-1.4") && /%%EOF\s*$/.test(s) && pdf.length > 500000, "lookbook: valid PDF container (" + (pdf.length / 1024 | 0) + " KB)");
+  t.ok(pages >= CATS.length + 3 && pages <= 40, "lookbook: one or more pages per category + cover, facts, process (" + pages + ")");
+  const nonStream = s.replace(/stream[\s\S]*?endstream/g, "");
+  t.ok(!/\$--|\$\d/.test(nonStream), "lookbook: carries no prices");
+  t.ok((s.match(/\/Subtype \/Image/g) || []).length >= PRODS.filter((p) => p.image).length, "lookbook: embeds a JPEG for every photographed piece");
+  // xref offsets resolve
+  const startxref = Number(s.slice(s.lastIndexOf("startxref") + 9).trim().split(/\s/)[0]);
+  const rows = s.slice(startxref, s.indexOf("trailer", startxref)).split("\n").filter((l) => /^\d{10} \d{5} n/.test(l));
+  t.ok(rows.length > 50 && rows.every((l, i) => s.slice(Number(l.slice(0, 10)), Number(l.slice(0, 10)) + 12).startsWith((i + 1) + " 0 obj")), "lookbook: xref table offsets resolve");
+  const h = readDist("_headers");
+  t.ok(/\/downloads\/\*\s+Cache-Control: public, max-age=86400\s+X-Robots-Tag: noindex/.test(h) && /Disallow: \/downloads\//.test(readDist("robots.txt")), "lookbook: downloads noindex + short cache, robots disallow");
+  t.ok(staticDom("/").window.document.querySelector('.footer a[href="/lookbook/"]') && staticDom("/products/").window.document.querySelector('.catalog-note a[href="/lookbook/"]'), "lookbook: linked from footer + catalog landing");
+  // static lookbook flow: gate, lead POST, download link resolves
+  let formBefore;
+  const dom = liveDom("/lookbook/", { before(win) { formBefore = win.document.getElementById("lookbookForm"); win.__posts = []; win.fetch = (url, opts) => { win.__posts.push(JSON.parse(opts.body)); return Promise.resolve({ ok: true, status: 200 }); }; } });
+  const win = dom.window, doc = win.document;
+  t.ok(doc.getElementById("lookbookForm") === formBefore, "lookbook page NOT re-rendered by JS");
+  type(win, doc.getElementById("lb-name"), "Paul");
+  type(win, doc.getElementById("lb-email"), "paul@grandriviera.com");
+  type(win, doc.getElementById("lb-property"), "Grand Riviera");
+  click(win, doc.getElementById("lbSubmit"));
+  t.ok(!doc.getElementById("lookbookSuccess").hidden && win.__posts.length === 1 && win.__posts[0].type === "lookbook" && win.__posts[0].payload.property === "Grand Riviera", "static lookbook: submit → POST /api/lead (lookbook)");
+  t.ok(doc.getElementById("lbDownload").getAttribute("href") === "/downloads/hl-supply-lookbook.pdf" && fs.existsSync(pdfPath), "static lookbook: download link resolves to the built PDF");
+  click(win, doc.getElementById("lbSampleKit"));
+  t.ok(win.__posts.length === 2 && win.__posts[1].type === "sample-kit", "static lookbook: sample kit request → POST /api/lead (sample-kit)");
+}
+{
+  // contact CTA (9.5): tel CTA always; call-back fallback until a scheduling URL is configured
+  const doc = staticDom("/contact/").window.document;
+  const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, "config", "site.json"), "utf8"));
+  const sched = cfg.contact && cfg.contact.schedulingUrl;
+  t.ok(doc.querySelector('.contact-actions a.btn--solid[href="tel:+13476694417"]'), "contact: call CTA in source");
+  if (sched) t.ok(doc.querySelector('.contact-actions a[href="' + sched + '"]'), "contact: scheduling link in source");
+  else t.ok(doc.querySelector('.contact-actions a[href^="mailto:info@hotelluxurysupply.com?subject="]') && !doc.querySelector('.contact-actions a[target="_blank"]'), "contact: call-back fallback until scheduling URL is set");
+}
+{
+  // case studies (9.1): placeholder-free — absent until Paul adds entries; pipeline proven with a draft fixture
+  const live = fs.readdirSync(path.join(ROOT, "content", "work")).filter((f) => f.endsWith(".md") && !f.startsWith("_"));
+  if (!live.length) {
+    t.ok(!distExists("/work/") && !staticDom("/").window.document.querySelector('.footer a[href="/work/"]') && !readDist("sitemap.xml").includes("/work/") && !staticDom("/for/beach-clubs/").window.document.querySelector(".work-related"), "work: no section, footer link, sitemap entry, or related block without entries");
+  }
+  const fixture = path.join(ROOT, "content", "work", "_test-sample.md");
+  const outDir = path.join(ROOT, "dist-worktest");
+  fs.writeFileSync(fixture, [
+    "---", "title: Test fixture: a pool-deck collection for a beach club", "metaTitle: Test Fixture Case Study | HL Supply",
+    "description: Build-test fixture for the case-study pipeline; never shipped (draft-prefixed file, written and deleted by the test suite).",
+    "type: work", "propertyType: Beach club (fixture)", "programs: beach-clubs", "collections: poolside", "products: nautical-striped-tote, riviera-bucket-hat, marquis-bottle",
+    "keywords: fixture", "published: 2026-10-21", "updated: 2026-10-21", "summary: Fixture summary for the card.", "---", "",
+    "# Test fixture: a pool-deck collection for a beach club", "", "## The brief", "", "A fixture brief paragraph linking [The Marquis Bottle](product:marquis-bottle) and the [poolside collection](collection:poolside).", "",
+    "## The pieces", "", "Striped totes, bucket hats, and bottles in one colorway.", "", "## The outcome", "", "Fixture outcome paragraph.", ""
+  ].join("\n"));
+  try {
+    require("child_process").execFileSync(process.execPath, ["build.js", "--out", "dist-worktest"], { cwd: ROOT, env: { ...process.env, HL_INCLUDE_DRAFTS: "1" }, stdio: "pipe" });
+    const wt = (u) => { let p = u; if (p.endsWith("/")) p += "index.html"; return path.join(outDir, p); };
+    const wdom = (u) => new JSDOM(fs.readFileSync(wt(u), "utf8")).window.document;
+    t.ok(fs.existsSync(wt("/work/")) && fs.existsSync(wt("/work/test-sample/")), "work fixture: /work/ + /work/test-sample/ built");
+    const w = wdom("/work/test-sample/");
+    t.ok(/^Case study/.test(w.querySelector(".page-intro .eyebrow").textContent) && w.querySelector('.pd__crumbs a[href="/work/"]') && w.querySelectorAll(".guide-products .pcard").length === 3, "work fixture: case-study eyebrow, Work crumb, 3 product cards");
+    const ld = JSON.parse(w.querySelector('script[type="application/ld+json"]').textContent)["@graph"];
+    t.ok(ld.some((n) => n["@type"] === "Article") && ld.find((n) => n["@type"] === "BreadcrumbList").itemListElement[1].item.endsWith("/work/"), "work fixture: Article schema + breadcrumb through /work/");
+    t.ok(wdom("/for/beach-clubs/").querySelector('.work-related a[href="/work/test-sample/"]') && wdom("/collections/poolside/").querySelector('.work-related a[href="/work/test-sample/"]'), "work fixture: related-work blocks on the program and collection pages");
+    t.ok(wdom("/").querySelector('.footer a[href="/work/"]') && wdom("/products/hats/").querySelector('.footer a[href="/work/"]') && fs.readFileSync(path.join(outDir, "sitemap.xml"), "utf8").includes("/work/test-sample/"), "work fixture: footer link + sitemap");
+    t.ok(!fs.existsSync(path.join(DIST, "work")), "work fixture: main dist untouched");
+  } catch (e) {
+    t.ok(false, "work fixture build failed: " + (e.stderr ? e.stderr.toString().slice(-400) : e.message));
+  } finally {
+    fs.unlinkSync(fixture);
+    fs.rmSync(outDir, { recursive: true, force: true });
+  }
 }
 
 /* ---------- Phase 6: pre-launch audit ---------- */

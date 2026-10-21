@@ -1,12 +1,12 @@
 {
   "name": "hl-supply",
   "private": true,
-  "version": "1.0.0-dev",
+  "version": "1.1.0-dev",
   "description": "HL Supply — bespoke branded goods for luxury hospitality (hotelluxurysupply.com)",
   "scripts": {
     "build": "node build.js",
     "build:preview": "node scripts/build-preview.js",
-    "test": "node build.js && node scripts/build-preview.js && node tests/site.test.js && node tests/flows.test.js && node tests/dist.test.js",
+    "test": "node build.js && node scripts/build-preview.js && node tests/site.test.js && node tests/flows.test.js && node tests/dist.test.js && node tests/lead.test.js",
     "serve": "node scripts/serve.js",
     "lighthouse": "node scripts/lighthouse.js",
     "indexnow": "node scripts/indexnow.js",

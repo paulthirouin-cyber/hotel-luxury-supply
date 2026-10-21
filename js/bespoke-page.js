@@ -388,6 +388,7 @@ window.HLBespokePage = (function () {
     );
     B.save(submission);
     if (window.HLLeads) window.HLLeads.send("bespoke", submission);
+    if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Bespoke Submit", { source: "bespoke-page" });
     var root = mount();
     if (root) {
       root.innerHTML = successHTML(submission.reference);

@@ -275,22 +275,27 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
       ✔ 2026-10-21: sitemap/llms.txt/footers/link mesh verified by the dist suite (every product ≥3 inbound links incl. the six pet pieces; every collection linked from the homepage and from every category it curates). CLAUDE.md “Current state” rewritten for v1.1.0-dev (8 categories / 45 products / collections layer / 6 programs / positioning note); SEO master plan page inventory and keyword architecture updated (collections + pets). Suites extended: collections render + hydration, memberships link back, golf 301, footer column count, draft-product placeholders. Lighthouse (mobile): /collections/poolside/ 96, /products/pets/ 99, /for/incentive-travel/ 96, /products/pets/companion-bowl/ 99 — all ≥95 (the roadmap's “towels” category does not exist; pets was audited instead).
 ## Phase 9 — Conversion & proof (added 2026-10-21)
 
-- [ ] 9.1 /work/ case-study section: template + index (`content/work/*.md`,
+- [x] 9.1 /work/ case-study section: template + index (`content/work/*.md`,
       Article schema, same pipeline), placeholder-free — renders only when
       Paul adds entries; /for/ and collection pages link related work when
       it exists.
-- [ ] 9.2 Lookbook lead magnet: generate a lookbook PDF from catalog data at
+      ✔ 2026-10-21: case-study pipeline in `scripts/content.js` (`content/work/*.md`, type work, `propertyType`, `programs:`, `collections:`, `products:`; `_`-prefixed files are drafts and never build; `_README.md` documents the format for Paul). Placeholder-free: `/work/`, its footer link, sitemap entry, and the “Related projects” blocks on /for/ and collection pages exist only once a real entry exists. Article schema with breadcrumb through /work/. The dist suite proves the whole pipeline with a draft fixture built into `dist-worktest/` under `HL_INCLUDE_DRAFTS=1` and deleted afterwards, and asserts the live build carries nothing.
+- [x] 9.2 Lookbook lead magnet: generate a lookbook PDF from catalog data at
       build time, gate the download behind an email field wired through
       HLLeads; thank-you state offers the sample kit.
-- [ ] 9.3 Plausible custom events: add-to-quote, instant-quote PDF, quote
+      ✔ 2026-10-21: `scripts/pdf.js` (zero-dependency PDF writer: Helvetica, WinAnsi, JPEG XObjects, wrapped text) + `scripts/lookbook.js` build `dist/downloads/hl-supply-lookbook.pdf` (16 pages, ~1.5 MB, no prices) from the same data at every build; `npm run images` now also emits `<slug>-print.jpg` (baseline JPEG on brand cream) for embedding. `/lookbook/` (js/pages.js) gates the download behind name + work email (lead type `lookbook`), tracks the download, and the thank-you state offers the sample kit (lead type `sample-kit`). Linked from the footer Resources column and the catalog landing; `/downloads/` is noindex (header + robots) with a one-day cache. Lighthouse /lookbook/ 100/100/100/100.
+- [x] 9.3 Plausible custom events: add-to-quote, instant-quote PDF, quote
       submit, bespoke submit, lookbook download (only when analytics
       enabled).
-- [ ] 9.4 Auto-reply email on every lead via the existing Pages Function
+      ✔ 2026-10-21: `HLLeads.track(name, props)` (Plausible, GA4 fallback, silent no-op otherwise) wired to Add to Quote, Instant Quote PDF, Quote Submit, Bespoke Submit (page + drawer), Mockup Request, Contact Submit, Concierge Submit, Lookbook Request / Download, Sample Kit Request. Flows + site suites assert the event sequence with a spy and that tracking without a provider cannot throw.
+- [x] 9.4 Auto-reply email on every lead via the existing Pages Function
       ("Your HL Supply request — next steps", same-business-day SLA copy);
       needs the Resend env vars Paul already owes from 3.5.
-- [ ] 9.5 Contact page: phone-call CTA + scheduling-link placeholder
+      ✔ 2026-10-21: `functions/api/lead.js` sends “Your HL Supply request — next steps” to every sender after the concierge email (first-name greeting, same-business-day SLA, reference echoed, type-specific copy for lookbook/sample kit, reply-to the concierge inbox); never fails the request; `LEAD_AUTOREPLY=off` disables. New `tests/lead.test.js` runs the Pages Function in Node (validation, honeypot, unconfigured 202, delivery, auto-reply, new lead types) and is part of `npm test`. Still needs Paul's Resend env vars (3.5).
+- [x] 9.5 Contact page: phone-call CTA + scheduling-link placeholder
       (config-driven so Paul can paste a Calendly URL later).
 
+      ✔ 2026-10-21: contact page gained a `.contact-actions` block: “Call the Concierge” (tel:) plus a config-driven second button — `config/site.json` → `contact.schedulingUrl` renders “Book a Call” when set, otherwise “Request a Call Back” (mailto with subject). Build injects `window.HL_SITE_CONFIG` into the renderers; tests cover both states. Lighthouse /contact/ 98/100/100/100.
 ### Decision log
 *(Claude Code appends dated entries here as phases complete.)*
 
@@ -321,3 +326,7 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
 - 2026-10-21 — Pet products carry no collection membership yet; a “Pet Program” collection is added only if the category earns it in Search Console.
 - 2026-10-21 — Golf is repositioned as property surface: the golf page lives at `/for/golf-resorts/` and the old tournament URL is a 301, not a second page, so authority consolidates. Tournament editions are described as a side embroidery on the standard club cap rather than a separate program.
 - 2026-10-21 — Incentive travel is a welcome-inbound, no-outbound channel: the page speaks to incentive houses/DMCs/agencies and always frames the goods as the host property's collection with the program's mark secondary.
+- 2026-10-21 — The lookbook is generated, not designed by hand: a 300-line PDF writer keeps Cloudflare's build at `node build.js` with no native dependencies, and the PDF can never drift from the catalog data. Photography day upgrades it automatically (print JPEGs come from the same `npm run images`).
+- 2026-10-21 — Case studies ship nothing until Paul writes one: no sample entries, no “coming soon” page. The pipeline is proven in CI with a draft fixture instead.
+- 2026-10-21 — The auto-reply promises a same-business-day reply (Monday–Friday). Paul can switch it off with `LEAD_AUTOREPLY=off` if the promise cannot be kept during a busy season.
+- 2026-10-21 — No Calendly account exists yet, so the contact page offers a mailto call-back request rather than a dead scheduling link; pasting a URL into config flips it.

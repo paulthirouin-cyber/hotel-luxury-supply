@@ -219,6 +219,7 @@
         message: (document.getElementById("cbellMessage") || {}).value || ""
       });
     }
+    if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Concierge Submit");
     drawer.classList.add("is-sent");
     var status = drawer.querySelector(".cbell-success p");
     if (status) status.setAttribute("tabindex", "-1");

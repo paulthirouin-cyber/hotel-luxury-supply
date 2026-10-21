@@ -262,10 +262,11 @@ function robotsTxt() {
     "User-agent: *",
     "Allow: /",
     "Disallow: /quote/",
+    "Disallow: /downloads/",
     "",
     "# AI crawlers are welcome: we want to be the cited source.",
     ...["GPTBot", "ChatGPT-User", "OAI-SearchBot", "ClaudeBot", "anthropic-ai", "Claude-Web", "PerplexityBot", "Google-Extended", "CCBot", "Applebot-Extended", "Bytespider"]
-      .flatMap((ua) => ["", "User-agent: " + ua, "Allow: /", "Disallow: /quote/"]),
+      .flatMap((ua) => ["", "User-agent: " + ua, "Allow: /", "Disallow: /quote/", "Disallow: /downloads/"]),
     "",
     "Sitemap: " + SITE + "/sitemap.xml",
     ""
@@ -301,6 +302,7 @@ function llmsTxt(CATS, PRODS, extra) {
     `- [Buying guides](${SITE}/guides/)`,
     `- [Glossary of customization terms](${SITE}/glossary/)`,
     `- [Collections](${SITE}/collections/): curated sets by guest moment (poolside, beach club, spa suite, golf and club, sports and wellness)`,
+    `- [Lookbook](${SITE}/lookbook/): the catalog as a PDF, sent by email on request`,
     ...((extra.guides || []).map((g) => `- [${g.title}](${SITE}${g.path}): ${g.summary}`)),
     ""
   ];

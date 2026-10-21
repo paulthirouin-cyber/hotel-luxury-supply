@@ -10,5 +10,9 @@
     "google": "",
     "bing": "",
     "note": "Optional HTML-tag verification. DNS TXT verification (recommended) needs nothing here."
+  },
+  "contact": {
+    "schedulingUrl": "",
+    "note": "Paste a Calendly/Cal.com booking URL to turn the contact page's 'Request a Call Back' button into 'Book a Call'."
   }
 }

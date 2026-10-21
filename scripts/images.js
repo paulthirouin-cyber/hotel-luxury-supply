@@ -3,7 +3,9 @@
 // assets/catalog/ (committed, so Cloudflare needs no image tooling).
 //   cat-<slug>.jpg      → cat-<slug>-1600.webp, cat-<slug>-960.webp  (lifestyle heroes)
 //   <slug>.webp         → <slug>-480.webp                             (product cutouts, card size)
-// perf.js adds srcset/sizes at build time whenever a variant exists.
+//   <slug>.webp         → <slug>-print.jpg                             (lookbook PDF: JPEG on cream, 600px)
+// perf.js adds srcset/sizes at build time whenever a variant exists;
+// scripts/lookbook.js embeds the -print.jpg files (PDF needs JPEG, not WebP).
 // Run after dropping new photography into assets/catalog/:  npm run images
 const fs = require("fs");
 const path = require("path");
@@ -12,6 +14,8 @@ const sharp = require("sharp");
 const DIR = path.join(__dirname, "..", "assets", "catalog");
 const HERO_WIDTHS = [1600, 960];
 const CARD_WIDTH = 480;
+const PRINT_WIDTH = 600;
+const CREAM = { r: 252, g: 249, b: 242 }; // brand cream #fcf9f2
 
 async function main() {
   const files = fs.readdirSync(DIR);
@@ -19,7 +23,7 @@ async function main() {
   for (const f of files) {
     const full = path.join(DIR, f);
     const base = f.replace(/\.(jpg|jpeg|png|webp)$/i, "");
-    if (/-\d+\.webp$/.test(f) || f === "cover.webp") continue; // already a variant / not referenced
+    if (/-\d+\.webp$/.test(f) || /-print\.jpg$/.test(f) || f === "cover.webp") continue; // already a variant / not referenced
     if (/^cat-.*\.(jpg|jpeg|png)$/i.test(f)) {
       const hmeta = await sharp(full).metadata();
       for (const w of HERO_WIDTHS) {
@@ -31,6 +35,12 @@ async function main() {
         made++;
       }
     } else if (/\.webp$/i.test(f)) {
+      // print variant for the lookbook PDF (alpha flattened on brand cream)
+      const print = path.join(DIR, `${base}-print.jpg`);
+      if (!(fs.existsSync(print) && fs.statSync(print).mtimeMs >= fs.statSync(full).mtimeMs)) {
+        await sharp(full).resize({ width: PRINT_WIDTH, withoutEnlargement: true }).flatten({ background: CREAM }).jpeg({ quality: 82, progressive: false }).toFile(print);
+        made++;
+      }
       const out = path.join(DIR, `${base}-${CARD_WIDTH}.webp`);
       const meta = await sharp(full).metadata();
       if ((meta.width || 0) <= CARD_WIDTH) { if (fs.existsSync(out)) fs.unlinkSync(out); skipped++; continue; }

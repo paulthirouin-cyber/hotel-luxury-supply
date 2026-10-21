@@ -47,6 +47,8 @@ email you:
    - `RESEND_API_KEY` = the key
    - `LEAD_TO` = `info@hotelluxurysupply.com` (or any inbox; comma-separate for several)
    - `LEAD_FROM` = `HL Supply Concierge <concierge@hotelluxurysupply.com>` (after domain verification; before that leave unset)
+   - `LEAD_AUTOREPLY` = leave unset. Every sender automatically receives "Your HL Supply request — next steps" (same-business-day promise). Set it to `off` to switch the courtesy reply off.
+   - Optional: paste a Calendly/Cal.com link into `config/site.json` → `contact.schedulingUrl` and the contact page's "Request a Call Back" button becomes "Book a Call" (tell Claude Code: "set the scheduling link to <url>").
 5. Redeploy (Deployments → ⋯ → Retry) and send a test from `/contact/`.
 
 **Decision needed from you:** which inbox should receive leads? Default is

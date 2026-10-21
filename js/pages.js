@@ -17,6 +17,9 @@ window.HL_PAGES = (function () {
     });
   }
 
+  var CFG = window.HL_SITE_CONFIG || {}; // injected at build; absent in SPA/preview mode
+  function A(p) { return R ? R.asset(p) : p; }
+
   var CONTACT = {
     email: "info@hotelluxurysupply.com",
     phone: "+1 (347) 669-4417",
@@ -186,6 +189,7 @@ window.HL_PAGES = (function () {
       '      <div><dt>Telephone</dt><dd><a href="tel:' + CONTACT.phoneHref + '">' + CONTACT.phone + "</a></dd></div>" +
       "      <div><dt>Web</dt><dd>" + CONTACT.domain + "</dd></div>" +
       "    </dl>" +
+      contactActionsHTML() +
       "    <h3>What to include</h3>" +
       "    <ul class=\"contact-card__list\"><li>The property, club, or event</li><li>The guest moment or program (arrival, suite, spa, pool, course, boutique)</li><li>Products or categories of interest</li><li>Target quantity and a delivery date, if known</li><li>Logo files or a brand guide, when you have them</li></ul>" +
       '    <p class="page-note">Prefer a structured request? <a href="' + U("#/quote") + '">Build a quote</a> from the catalog or <a href="' + U("#/bespoke") + '">start a bespoke project</a>.</p>' +
@@ -211,6 +215,21 @@ window.HL_PAGES = (function () {
       '      <div class="btn-row"><a class="btn btn--solid" href="' + U("#/products") + '">Explore Products</a><a class="btn" href="' + HOME() + '">Back to Home</a></div>' +
       "    </div>" +
       "  </section>" +
+      "</div>"
+    );
+  }
+
+  // Phase 9.5: phone-call CTA + scheduling link (config/site.json → contact.schedulingUrl;
+  // until Paul pastes a Calendly-style URL the second button requests a call back by email)
+  function contactActionsHTML() {
+    var sched = CFG.contact && CFG.contact.schedulingUrl;
+    return (
+      '<div class="contact-actions">' +
+      '  <a class="btn btn--solid" href="tel:' + CONTACT.phoneHref + '">Call the Concierge</a>' +
+      (sched
+        ? '  <a class="btn" href="' + esc(sched) + '" target="_blank" rel="noopener">Book a Call</a>'
+        : '  <a class="btn" href="mailto:' + CONTACT.email + '?subject=' + encodeURIComponent("Call request from hotelluxurysupply.com") + '">Request a Call Back</a>') +
+      '  <small>Monday to Friday. We reply to every request the same business day.</small>' +
       "</div>"
     );
   }
@@ -245,6 +264,7 @@ window.HL_PAGES = (function () {
         website: (form.querySelector("#cf-website") || {}).value || ""
       };
       if (window.HLLeads) window.HLLeads.send("contact", payload);
+      if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Contact Submit", { projectType: payload.projectType });
       form.hidden = true;
       var ok = root.querySelector("#contactSuccess");
       ok.hidden = false;
@@ -254,6 +274,104 @@ window.HL_PAGES = (function () {
     form.addEventListener("input", function (e) {
       var field = e.target.closest && e.target.closest(".qd-field");
       if (field) field.classList.remove("is-invalid");
+    });
+  }
+
+  /* ================= LOOKBOOK (Phase 9.2: lead magnet) ================= */
+
+  var LOOKBOOK_PDF = "downloads/hl-supply-lookbook.pdf";
+
+  function lookbookHTML() {
+    var cats = (window.HL_CATEGORIES || []).map(function (c) { return c.name; });
+    var n = (window.HL_PRODUCTS || []).length;
+    return (
+      crumbs("Lookbook") +
+      hero("HL Supply / Lookbook", "The Atelier Lookbook",
+        "The whole catalog as a PDF: every piece with materials, logo methods, minimums, and quantity tiers, plus the five collections and how a project runs. Enter your details and the download opens immediately.") +
+      '<div class="contact-grid lookbook-grid">' +
+      '  <aside class="contact-card">' +
+      "    <h2>What\u2019s inside</h2>" +
+      '    <ul class="contact-card__list">' +
+      "      <li>" + n + " pieces across " + cats.length + " categories: " + esc(cats.join(", ")) + "</li>" +
+      "      <li>Materials, customization methods, and minimum order quantities for every piece</li>" +
+      "      <li>The five collections: poolside, beach club, spa suite, golf and club, sports and wellness</li>" +
+      "      <li>How a project runs from brief to delivery, and how bespoke development works</li>" +
+      "    </ul>" +
+      '    <p class="page-note">No prices: pricing is confirmed by the atelier at quote review. Quantity tiers are shown on every <a href="' + U("#/products") + '">product page</a>.</p>' +
+      "  </aside>" +
+      '  <section class="qcard contact-form" aria-labelledby="lookbookFormTitle">' +
+      '    <h2 id="lookbookFormTitle">Download the lookbook</h2>' +
+      '    <form id="lookbookForm" class="qd-form" novalidate>' +
+      '      <div class="qd-field" data-field="name"><label for="lb-name">Name</label><input id="lb-name" name="name" type="text" autocomplete="name" required /></div>' +
+      '      <div class="qd-field" data-field="email"><label for="lb-email">Work email</label><input id="lb-email" name="email" type="email" autocomplete="email" required /></div>' +
+      '      <div class="qd-field qd-field--wide" data-field="property"><label for="lb-property">Property / Company <span class="qd-optional">(optional)</span></label><input id="lb-property" name="property" type="text" autocomplete="organization" /></div>' +
+      '      <input type="text" name="website" id="lb-website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />' +
+      '      <div class="qerror" id="lbError" role="alert" hidden></div>' +
+      '      <button type="submit" class="btn btn--solid qaction" id="lbSubmit">Send Me the Lookbook</button>' +
+      '      <p class="qnote">PDF, about 1.5 MB. The concierge may follow up by email; no newsletter.</p>' +
+      "    </form>" +
+      '    <div class="qsuccess contact-success" id="lookbookSuccess" hidden>' +
+      '      <div class="qsuccess__rule" aria-hidden="true"></div>' +
+      "      <h2>Your lookbook is ready.</h2>" +
+      '      <div class="btn-row"><a class="btn btn--solid" id="lbDownload" href="' + A(LOOKBOOK_PDF) + '" download="HL-Supply-Lookbook.pdf">Download the Lookbook (PDF)</a><a class="btn" href="' + U("#/products") + '">Explore the Catalog</a></div>' +
+      '      <div class="lookbook-samples" id="lbSamples">' +
+      "        <h3>Prefer to hold the materials?</h3>" +
+      "        <p>The sample kit brings canvas, leather, slipper textures, and a bottle finish to your desk. Request it and the concierge confirms by email.</p>" +
+      '        <button type="button" class="btn" id="lbSampleKit">Request the Sample Kit</button>' +
+      "      </div>" +
+      "    </div>" +
+      "  </section>" +
+      "</div>"
+    );
+  }
+
+  function bindLookbook(root) {
+    var form = root.querySelector("#lookbookForm");
+    if (!form || form.__bound) return;
+    form.__bound = true;
+    var details = null;
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var err = root.querySelector("#lbError");
+      var name = form.querySelector("#lb-name"), email = form.querySelector("#lb-email");
+      var missing = [];
+      [name, email].forEach(function (el) {
+        var field = el.closest(".qd-field");
+        var bad = !el.value.trim() || (el === email && el.value.indexOf("@") === -1);
+        if (field) field.classList.toggle("is-invalid", bad);
+        if (bad) missing.push(field ? field.querySelector("label").textContent.replace(/\(optional\)/, "").trim() : el.id);
+      });
+      if (missing.length) { err.textContent = "Please complete: " + missing.join(", ") + "."; err.hidden = false; return; }
+      err.hidden = true;
+      details = {
+        name: name.value.trim(), email: email.value.trim(),
+        property: (form.querySelector("#lb-property").value || "").trim(),
+        website: (form.querySelector("#lb-website") || {}).value || ""
+      };
+      if (window.HLLeads) window.HLLeads.send("lookbook", details);
+      if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Lookbook Request");
+      form.hidden = true;
+      var ok = root.querySelector("#lookbookSuccess");
+      ok.hidden = false;
+      var h = ok.querySelector("h2");
+      if (h) { h.setAttribute("tabindex", "-1"); try { h.focus(); } catch (x) { /* ignore */ } }
+    });
+    form.addEventListener("input", function (e) {
+      var field = e.target.closest && e.target.closest(".qd-field");
+      if (field) field.classList.remove("is-invalid");
+    });
+    var dl = root.querySelector("#lbDownload");
+    if (dl) dl.addEventListener("click", function () {
+      if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Lookbook Download");
+    });
+    var kit = root.querySelector("#lbSampleKit");
+    if (kit) kit.addEventListener("click", function () {
+      var payload = details || {};
+      payload = { name: payload.name || "", email: payload.email || "", property: payload.property || "", request: "sample kit" };
+      if (window.HLLeads) window.HLLeads.send("sample-kit", payload);
+      if (window.HLLeads && window.HLLeads.track) window.HLLeads.track("Sample Kit Request");
+      var box = root.querySelector("#lbSamples");
+      if (box) box.innerHTML = "<h3>Sample kit requested.</h3><p>The concierge will confirm the kit and the delivery address by email.</p>";
     });
   }
 
@@ -320,6 +438,16 @@ window.HL_PAGES = (function () {
       render: contactHTML,
       bind: bindContact
     },
+    lookbook: {
+      path: "/lookbook/",
+      title: "The HL Supply Lookbook: Custom Hotel Amenities PDF",
+      description: "Download the HL Supply lookbook: custom guest goods across eight categories and five collections for hotels, resorts, and clubs, with minimums, methods, and lead times.",
+      keywords: ["hotel amenities lookbook", "custom hotel products catalog pdf", "hotel merchandise catalog"],
+      schemaType: "WebPage",
+      crumb: "Lookbook",
+      render: lookbookHTML,
+      bind: bindLookbook
+    },
     privacy: {
       path: "/privacy/",
       title: "Privacy Notice | HL Supply",
@@ -361,7 +489,7 @@ window.HL_PAGES = (function () {
     var view = document.getElementById("viewPage");
     if (view && view.hasAttribute("data-prerendered")) { view.removeAttribute("data-prerendered"); return; }
     var isGlossary = seg[0] === "glossary";
-    var label = isGlossary ? "Glossary" : (seg[0] === "for" ? "Programs" : "Guides");
+    var label = isGlossary ? "Glossary" : (seg[0] === "for" ? "Programs" : seg[0] === "work" ? "Work" : "Guides");
     mount.innerHTML =
       crumbs(label) +
       hero("HL Supply / " + label,

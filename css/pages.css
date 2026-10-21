@@ -198,3 +198,11 @@
 .footer__grid { grid-template-columns: 1.3fr 0.9fr 1fr 1fr; }
 @media (max-width: 1000px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px) { .footer__grid { grid-template-columns: 1fr; } }
+
+/* Phase 9: contact actions, lookbook */
+.contact-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 28px; }
+.contact-actions small { flex-basis: 100%; font-size: 13px; color: var(--chrome-text); }
+.lookbook-samples { border-top: 1px solid var(--hairline); margin-top: 24px; padding-top: 18px; }
+.lookbook-samples h3 { font-size: 18px; margin-bottom: 6px; }
+.lookbook-samples p { font-size: 15px; color: var(--navy-soft); margin-bottom: 12px; max-width: 52ch; }
+.work-related { margin-top: clamp(28px, 4vw, 44px); }

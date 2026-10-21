@@ -54,5 +54,14 @@ window.HLLeads = (function () {
     });
   }
 
-  return { send: send, outbox: outbox, endpoint: endpoint };
+  // Custom events (Phase 9.3). The analytics snippet is injected at build only
+  // when config/site.json enables it, so this is a no-op everywhere else.
+  function track(name, props) {
+    try {
+      if (typeof window.plausible === "function") window.plausible(name, props ? { props: props } : undefined);
+      else if (typeof window.gtag === "function") window.gtag("event", name, props || {});
+    } catch (e) { /* analytics must never break the UI */ }
+  }
+
+  return { send: send, outbox: outbox, endpoint: endpoint, track: track };
 })();

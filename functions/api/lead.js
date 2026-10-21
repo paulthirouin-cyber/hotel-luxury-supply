@@ -10,7 +10,43 @@
 // the submission is simply not forwarded (the browser keeps a local copy).
 
 const MAX_BODY = 64 * 1024;
-const TYPES = new Set(["contact", "concierge", "quote", "bespoke", "mockup"]);
+const TYPES = new Set(["contact", "concierge", "quote", "bespoke", "mockup", "lookbook", "sample-kit"]);
+const SITE = "https://hotelluxurysupply.com";
+
+// Phase 9.4: auto-reply to the sender (LEAD_AUTOREPLY=off disables it)
+const TYPE_LABEL = { contact: "message", concierge: "concierge request", quote: "quote", bespoke: "bespoke request", mockup: "mockup request", lookbook: "lookbook request", "sample-kit": "sample kit request" };
+function autoReply(lead, email) {
+  const label = TYPE_LABEL[lead.type] || "request";
+  const ref = lead.payload.ref || lead.payload.reference || "";
+  const name = String(lead.payload.name || lead.payload.details?.name || "").trim();
+  const greet = name ? `Dear ${esc(name.split(" ")[0])},` : "Hello,";
+  const refLine = ref ? ` Your reference is <strong>${esc(ref)}</strong>; quote it in any reply.` : "";
+  const next = lead.type === "lookbook"
+    ? `The lookbook opened on the page you submitted from; if you need it again, write back and we will send the PDF. If a piece caught your eye, build a quote at <a href="${SITE}/products/">${SITE}/products/</a> and the concierge replies with direction.`
+    : lead.type === "sample-kit"
+      ? "We will confirm the sample kit and the delivery address by email before it ships."
+      : `The concierge reviews every ${label} personally and replies the same business day (Monday to Friday) with product direction and next steps, usually with a few questions to shape the brief.${refLine}`;
+  const html = `<div style="font-family:Jost,Helvetica,Arial,sans-serif;color:#1b2a41;max-width:600px;line-height:1.55">
+<p style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#5f6a72">HL Supply · Concierge</p>
+<h2 style="font-family:Marcellus,Georgia,serif;font-weight:400;margin:0 0 16px">Your HL Supply request — next steps</h2>
+<p>${greet}</p>
+<p>Thank you. We have your ${esc(label)}.</p>
+<p>${next}</p>
+<p>Meanwhile, the <a href="${SITE}/products/">catalog</a>, the <a href="${SITE}/collections/">collections</a>, and the <a href="${SITE}/bespoke/">Bespoke Atelier</a> are open, and you can reply to this email with artwork, a brand guide, or questions.</p>
+<p style="margin-top:24px">HL Supply<br><a href="mailto:info@hotelluxurysupply.com" style="color:#1b2a41">info@hotelluxurysupply.com</a> · +1 (347) 669-4417 · <a href="${SITE}/" style="color:#1b2a41">hotelluxurysupply.com</a></p>
+<p style="font-size:12px;color:#5f6a72;margin-top:24px">We don't simply put hotel names on products. We help hotels create products worthy of carrying their names.</p>
+</div>`;
+  const text = `${greet.replace(/<[^>]+>/g, "")}
+
+Thank you. We have your ${label}.
+
+${next.replace(/<[^>]+>/g, "")}
+
+Meanwhile, the catalog (${SITE}/products/), the collections (${SITE}/collections/), and the Bespoke Atelier (${SITE}/bespoke/) are open, and you can reply to this email with artwork, a brand guide, or questions.
+
+HL Supply · info@hotelluxurysupply.com · +1 (347) 669-4417 · hotelluxurysupply.com`;
+  return { subject: "Your HL Supply request — next steps", html, text };
+}
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -77,7 +113,27 @@ export async function onRequestPost({ request, env }) {
     })
   });
   if (!res.ok) return json({ ok: false, delivered: false, status: res.status }, 502);
-  return json({ ok: true, delivered: true }, 200);
+
+  let autoReplied = false;
+  if (env.LEAD_AUTOREPLY !== "off") {
+    try {
+      const reply = autoReply(lead, email);
+      const r2 = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: env.LEAD_FROM || "HL Supply Concierge <onboarding@resend.dev>",
+          to: [email],
+          reply_to: String(env.LEAD_TO).split(",")[0].trim(),
+          subject: reply.subject,
+          html: reply.html,
+          text: reply.text
+        })
+      });
+      autoReplied = r2.ok;
+    } catch (e) { autoReplied = false; } // the lead is already delivered; never fail the request over the courtesy reply
+  }
+  return json({ ok: true, delivered: true, autoReply: autoReplied }, 200);
 }
 
 export function onRequest({ request }) {
