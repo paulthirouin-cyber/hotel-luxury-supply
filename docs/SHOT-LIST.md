@@ -1,123 +1,112 @@
-# HL Supply — Photography / AI-Image Shot List
-*One campaign, one photographer's eye. Every image uses the SHARED STYLE
-BLOCK + PRODUCT-RENDERING STANDARD below. Products are always plain/unbranded (awaiting the client's
-monogram) — never show text or logos. No people in any shot.*
+# HL Supply — Campaign Prompts
+*Usage: every image = ONE scene prompt + THE MASTER PROMPT appended.
+Master = image quality + the world (no objects). Scene prompt = the
+objects, their materials, and where they sit — the master resolves what
+kind of suite, pool, or veranda it is.*
 
-**SCENE-LOGIC RULE (applies to every image):** each shot depicts a real
-guest-service moment, and every product appears exactly as it would be used
-in that moment — a luggage tag on a suitcase handle, slippers placed at
-turndown, flip-flops kicked off in sand. Non-product objects (a suitcase, a
-brass bell, a key, a watch) are scenery that sells the moment; our products
-are the quiet stars. If an object combination wouldn't happen in a real
-hotel, the shot is wrong.
+## MASTER PROMPT (append to every scene prompt)
 
-## Shared style block (append to every prompt)
+Ultra-refined editorial campaign photograph for a luxury hospitality brand.
+The world is a contemporary five-star flagship property in the register of
+Four Seasons or Mandarin Oriental — old money, modern hand. Warm ivory and
+cream light with accents of deep navy, resort green, and soft terracotta;
+soft directional sunlight or warm lamplight, long gentle shadows, generous
+negative space, subtle film grain, shallow depth of field, medium-format
+look. No people, no text, no logos. Portrait, 4:5 aspect ratio.
 
-Editorial luxury-hotel campaign photograph. Setting register: contemporary
-five-star flagship in the manner of Four Seasons or Mandarin Oriental —
-classical proportion executed in modern materials: walnut and natural oak
-millwork, honed marble and limestone, bronze and brushed-brass hardware,
-linen upholstery, architectural recessed lighting mixed with warm lamplight,
-a single fresh orchid or olive stem. Old money, modern hand. Warm ivory and
-cream light with accents of deep navy, resort green, and soft terracotta.
-Soft directional light, long gentle shadows, generous negative space,
-subtle film grain, shallow depth of field. No people, no text, no logos.
+## A. Front-page Guest Journey scenes — 4:5 portrait → assets/scenes/
 
-## Product-rendering standard (append after the style block, every prompt)
+**01 arrival.jpg** — In the entry of a hotel suite, a VIP welcome kit
+arranged on a walnut console: a small structured tote in heavyweight
+natural canvas with tissue paper rising from it, a matte brushed
+stainless-steel bottle with a machined cap beside it, a charcoal fabric
+sleep mask resting at its base, a brass room key laid in front; a bronze
+table lamp, a single white orchid stem, sheer curtains blurred behind.
 
-All products rendered at flagship-boutique quality: the bottle is matte
-brushed stainless steel with a precisely machined cap and soft satin sheen
-— sculptural, weighty, never glossy gym-bottle plastic. The tote is
-heavyweight tight-weave natural canvas that stands structured on its own,
-reinforced base, fine double-needle stitching, full-grain leather trim.
-Leather goods show clean edge-painting and a soft matte grain. Every object
-looks hand-finished, deliberate, and quietly expensive.
+**02 poolside.jpg** — On a pool lounger, a guest's afternoon setup: a
+structured tote in cream heavyweight canvas, a cotton-twill cap, a matte
+brushed stainless-steel bottle, and acetate sunglasses arranged on white
+linen cushions; the edge of a navy-and-cream striped umbrella above, pool
+water shimmering out of focus.
 
-## A. Guest Journey scenes — PORTRAIT 4:5 (e.g. 1024×1280+)
-Save to assets/scenes/<name>.jpg. Objects match each scene's category chips.
+**03 beach-club.jpg** — On the sand at the beach club, a pair of minimal
+flip-flops kicked off beside a striped heavyweight canvas beach bag and a
+relaxed cotton bucket hat, a matte brushed stainless-steel bottle standing
+upright; cabana-stripe fabric and a coiled rope detail at the frame's edge,
+late-afternoon sea light.
 
-1. arrival.jpg (moment: the VIP welcome kit, awaiting the guest) — A VIP
-   welcome kit in a modern five-star suite entry: on a walnut console with
-   a honed marble top, a structured natural canvas mini-tote stands crisply
-   with tissue paper rising from it, a matte brushed-steel bottle beside it
-   catching a soft satin highlight, a sleep mask in smooth charcoal fabric
-   resting at its base, a brass room key laid in front; behind, fluted oak
-   panelling, a bronze table lamp glowing warm, a single white orchid stem,
-   and the soft-blurred suggestion of a tall window with sheer linen
-   curtains. The first quiet moment of a stay.
-   (Products: Petite Mini Tote, bottle, sleep mask — the sellable "Welcome
-   Kit" bundle. Scenery: key, console, lamp, orchid. Decision 2026-10-21:
-   arrival is told through the welcome-kit vessel; doubles as the rooms-
-   program "Welcome Kit" sales story.)
-   SWAP OPTION if the journey ever drops Arrival: "The Spa" — a yoga mat
-   unrolled on a wellness terrace at morning light, waffle slippers side by
-   side at its edge, a steel bottle and rolled towel beside; journey order
-   then runs Spa → Poolside → Beach Club → Suite → Club.
-2. poolside.jpg (moment: the guest's claimed lounger) — A cream canvas
-   tote, a structured unbranded cap, and a brushed-steel bottle arranged on
-   a white linen pool lounger, sunglasses tossed beside them; the edge of a
-   navy-and-cream striped umbrella above, sun-lit pool water shimmering out
-   of focus behind.
-3. beach-club.jpg (moment: walked down to the water) — A pair of minimal
-   flip-flops kicked off on pale sand beside a striped canvas beach bag and
-   a relaxed bucket hat, a steel bottle standing in the sand; cabana stripe
-   fabric and a coiled rope detail at the frame's edge, late-afternoon
-   seaside light, yacht-club nostalgia.
-4. the-suite.jpg (moment: evening turndown service) — Evening turndown in
-   a modern five-star suite: soft terry slippers placed precisely on a
-   honed limestone floor beside a low oak bed with pressed white linens and
-   a charcoal sleep mask laid on the turned-down sheet; on the walnut
-   nightstand, a deep-navy leather valet tray with clean painted edges
-   holding a brass key and a watch, a slim matte-steel bottle beside a
-   bronze lamp casting warm light; fluted panelling and sheer curtains
-   softly blurred. Calm, precise, quietly expensive. (Scenery: key, watch,
-   lamp.)
-5. the-club.jpg (moment: the member's kit on the clubhouse veranda) — A
-   performance cap and brushed-steel bottle resting on a teak bench, a navy
-   canvas tote leaning against its leg and a wooden-handled umbrella
-   propped alongside; deep green hedge and navy canvas softly blurred
-   behind, low golden afternoon sun, private-club polish.
+**04 the-suite.jpg** — Evening turndown in a hotel suite: plush terry
+slippers placed precisely on the stone floor beside the bed's pressed white
+linens, a charcoal fabric sleep mask laid on the turned-down sheet; on the
+walnut nightstand, a full-grain navy leather valet tray with painted edges
+holding a brass key and a watch, a slim matte brushed stainless-steel
+bottle beside the lamp.
 
-## B. Homepage hero — LANDSCAPE 16:9 (keep the left third calm for text)
+**05 the-club.jpg** — On the clubhouse veranda, a performance-twill cap and
+a matte brushed stainless-steel bottle resting on a teak bench, a navy
+heavyweight canvas tote leaning against the bench leg, a wooden-handled
+umbrella propped alongside; clipped hedge and canvas awning softly blurred,
+low golden afternoon sun.
 
-hero.jpg (moment: the lounger, set for the afternoon) — A poolside still
-life at a Riviera resort: natural canvas tote on a linen lounger, folded
-cream towels, a structured cap and brushed-steel bottle, striped umbrella
-edge overhead, infinity-pool water and palms softly blurred beyond; wide
-cinematic composition with the left third kept calm for headline text.
+## B. Homepage hero — 16:9 landscape (keep left third calm for text) → assets/
 
-## C. Category lifestyle cards — LANDSCAPE 4:3 (also used at 16:9.5 crops)
-Save to assets/catalog/cat-<slug>.jpg (replacing current catalog-page scans).
+**hero.jpg** — At the edge of the resort pool, a lounger set for the
+afternoon: a structured tote in natural heavyweight canvas, folded cream
+towels, a cotton-twill cap and a matte brushed stainless-steel bottle, the
+striped umbrella edge overhead; infinity-pool water and palms softly
+blurred beyond, wide cinematic composition with the left third kept calm.
 
-1. cat-bags.jpg (boutique display) — Three canvas totes in ivory, navy, and
-   resort green lined on a weathered teak shelf in a boutique niche, one
-   casting a long soft shadow; folded linen beside them.
-2. cat-hats.jpg (courtside) — A structured cap and a relaxed bucket hat
-   resting brim-to-brim on a tennis-court bench, clay court blurred behind,
-   afternoon light.
-3. cat-bottles.jpg (spa counter) — Two brushed-steel bottles, one matte
-   navy and one cream, standing on a marble spa counter beside a rolled
-   towel, steam-soft light from a high window.
-4. cat-flip-flops.jpg (pool edge) — A pair of flip-flops at the tiled edge
-   of a pool, one askew, water reflections dancing on terracotta tile.
-5. cat-leather-goods.jpg (suite desk) — A debossed-ready leather valet
-   tray, luggage tag, and cable snap arranged on hotel-desk stationery,
-   warm lamp glow.
-6. cat-slippers.jpg (spa bathroom) — White waffle slippers side by side on
-   a marble bathroom floor, the hem of a robe and a towel stack blurred
-   above.
-7. cat-accessories.jpg (suite tray) — Aviator sunglasses, a sleep mask, and
-   a folded lens cloth composed on a linen tray with a sprig of rosemary,
-   suite light.
-8. cat-pets.jpg (pet arrival on the terrace) — A brushed-steel pet bowl on
-   a stone terrace beside a neatly coiled woven leash with a leather handle
-   and a folded bandana, dappled shade from a parasol, pool in the far
-   blur. (Pets category — Phase 8.)
+## C. Category cards — 4:3 landscape → assets/catalog/cat-<slug>.jpg
 
-## Workflow
-Generate at 4:5 (scenes), 16:9 (hero), 4:3 (cards) — Midjourney: --ar 4:5
-etc. For consistency, generate arrival.jpg first and use it as a style
-reference (--sref / "style reference") for all remaining shots. Drop
-finished files into assets/scenes/ and assets/catalog/, then tell Claude
-Code: "wire the scene photography" — the image pipeline (WebP, srcset,
-width/height, alt text) and tests handle the rest.
+**cat-bags.jpg** — In a boutique niche, three structured totes in
+heavyweight canvas — ivory, navy, resort green — lined on a walnut shelf,
+one casting a long soft shadow, folded linen beside them.
+
+**cat-hats.jpg** — On a tennis-court bench, a structured cotton-twill cap
+and a relaxed bucket hat resting brim-to-brim, clay court blurred behind,
+afternoon light.
+
+**cat-bottles.jpg** — On a marble spa counter, two matte brushed
+stainless-steel bottles with machined caps — one deep navy, one cream —
+beside a rolled towel, soft light from a high window.
+
+**cat-flip-flops.jpg** — At the tiled edge of the pool, a pair of minimal
+flip-flops, one askew, water reflections dancing on terracotta tile.
+
+**cat-leather-goods.jpg** — On a suite writing desk, a full-grain navy
+leather valet tray with painted edges, a leather luggage tag, and a leather
+cable snap arranged on hotel stationery, warm lamp glow.
+
+**cat-slippers.jpg** — On a marble bathroom floor, white waffle-weave
+slippers side by side, the hem of a robe and a towel stack blurred above.
+
+**cat-accessories.jpg** — On a linen tray in a suite, acetate aviator
+sunglasses, a charcoal fabric sleep mask, and a folded microfiber lens
+cloth composed with an olive sprig.
+
+**cat-pets.jpg** — On a stone terrace, a matte brushed stainless-steel pet
+bowl beside a neatly coiled woven leash with a leather handle and a folded
+cotton bandana, dappled parasol shade, pool in the far blur. (Pets —
+Phase 8.)
+
+---
+
+## Working notes (not part of any prompt)
+
+- Structure rule (Paul, 2026-10-21): the MASTER carries image quality and
+  the world only — never objects. Each INDIVIDUAL prompt carries objects,
+  their materials, and the specific setting noun; the master's FS/MO
+  register resolves what kind of suite/pool/veranda appears.
+- Scene-logic rule: every shot is a real guest-service moment; products
+  appear exactly as they'd be used. Non-product objects (key, watch, lamp,
+  orchid) are scenery.
+- Arrival = the sellable Welcome Kit bundle (Petite Mini Tote + bottle +
+  sleep mask). Swap option if Arrival is ever dropped: "The Spa" (yoga mat
+  on a wellness terrace, waffle slippers, bottle, rolled towel).
+- Consistency: generate 01 arrival first; use it as a style reference
+  (--sref / "style reference") for the rest.
+- Aspect ratios: scenes 4:5, hero 16:9, cards 4:3 — change the master's
+  final line (or --ar) accordingly.
+- Delivery: drop files into the paths above, then tell Claude Code: "wire
+  the scene photography." This file doubles as the brief for real
+  photography later.

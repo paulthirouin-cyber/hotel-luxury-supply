@@ -19,8 +19,9 @@ until every route is a real, pre-rendered URL:
 ```
 /                                   homepage
 /products/                          catalog landing
-/products/hats/                     7 category pages
-/products/hats/riviera-bucket-hat/  39 product pages
+/products/hats/                     8 category pages (incl. pets)
+/products/hats/riviera-bucket-hat/  45 product pages
+/collections/poolside/              5 collection pages (cross-category curation)
 /bespoke/                           bespoke atelier
 /quote/                             quote cart (noindex)
 /guides/...                         content engine (Phase SEO-2+)
@@ -54,7 +55,14 @@ cannibalize each other:
   etching", "how much do custom hotel totes cost", "resort retail program guide".
 - **Use-case pages** own vertical intent: /for/golf-resorts/,
   /for/beach-clubs/, /for/spa-wellness/, /for/hotel-openings/,
-  /for/corporate-retreats/ — each linking to relevant products.
+  /for/corporate-retreats/, /for/incentive-travel/ — each linking to relevant
+  products.
+- **Collection pages** own guest-moment intent: "hotel pool amenities",
+  "hotel spa amenities", "golf resort merchandise", "hotel fitness amenities",
+  "beach club merchandise" — curated across categories, never duplicating a
+  product URL.
+- **Pets** is the first category with no incumbent supplier: "hotel pet
+  amenities", "luxury hotel pet program" are owned by the category + guide.
 - Homepage owns the brand + the single broadest term ("bespoke branded goods
   for luxury hospitality" / "custom hospitality products").
 

@@ -23,21 +23,37 @@ answers ("the standard on the internet for these products"). The strategy is in
 reverse-engineered for compounding organic growth, MrBeast-style: every page has
 a job, every job is measured, and measurements feed the next content cycle.
 
-## Current state (v1.0.0-rc — static site + content engine, pre-launch)
+## Current state (v1.1.0-dev — catalog expansion + collections, pre-launch)
 
 Zero frameworks. Source files are a hash-routed SPA (`index.html`,
 `products.html`, `js/`, `css/`); **`node build.js` pre-renders every route
-into `dist/`** (76 pages, 72 indexable) by running the same renderers in
+into `dist/`** (91 pages, 87 indexable) by running the same renderers in
 jsdom under `<html data-static>`. Cloudflare Pages builds `dist/` from
 `main` (production) and `dev` (preview). `npm test` = build + preview +
 three jsdom suites (site, flows, dist); `npm run lighthouse` enforces ≥ 95.
 
-- URLs: `/`, `/products/`, `/products/:cat/` ×7, `/products/:cat/:slug/` ×39,
-  `/bespoke/`, `/quote/` (noindex), `/about/`, `/process/`, `/contact/`,
-  `/privacy/` + `/terms/` (noindex placeholders), `/guides/` + 12 guides
-  (7 buying guides, 5 comparisons), `/for/` + 5 program pages, `/glossary/`,
+- URLs: `/`, `/products/`, `/products/:cat/` ×8, `/products/:cat/:slug/` ×45,
+  `/collections/` + 5 collections, `/bespoke/`, `/quote/` (noindex),
+  `/about/`, `/process/`, `/contact/`, `/privacy/` + `/terms/` (noindex
+  placeholders), `/guides/` + 13 guides (8 buying guides, 5 comparisons),
+  `/for/` + 6 program pages (golf-resorts, beach-clubs, spa-wellness,
+  hotel-openings, corporate-retreats, incentive-travel), `/glossary/`,
   `/404.html`, legacy `.html` shims, `sitemap.xml`, `robots.txt`, `llms.txt`,
-  `_headers`, `_redirects`, IndexNow key file.
+  `_headers`, `_redirects` (incl. `/for/golf-tournaments/` → golf-resorts),
+  IndexNow key file.
+- Catalog: 8 categories. **Pets** (`pets`, P-001–P-006) is a DRAFT category:
+  specs pending Paul's sourcing confirmation, no photography (`noImage: true`
+  → designed tint placeholder; schema omits the image). Games & Leisure
+  (G-001–G-006) is parked as the 9th category.
+- Collections (`js/collections.js`, Phase 8.4): poolside, beach-club,
+  spa-suite, golf-club, sports-wellness. Cross-category curation rendered by
+  `catalog.js` (`#/collections`, `#/collections/:slug`); products get a
+  `collections` array; product pages show “Featured in”, category pages list
+  the collections curating them, homepage cards link them. Categories remain
+  the only canonical product URL. Hook CTAs go to `/bespoke/?collection=`.
+- Positioning (2026-10-21): hotel/resort supplier first — ROOMS and RETAIL.
+  Golf is property surface (pro shop, member gifts, amenity program), never an
+  events vertical. Incentive travel is welcome-inbound, no-outbound.
 - `js/routes.js` (load first): `HLRoutes.href("#/products/hats")` emits hash
   routes in SPA/preview mode and clean URLs in static mode. Never hard-code
   `products.html#/…` in renderers.
@@ -47,7 +63,8 @@ three jsdom suites (site, flows, dist); `npm run lighthouse` enforces ≥ 95.
   render). Content pages live in `content/guides/*.md`, `content/for/*.md`,
   `content/glossary.json` and are rendered by `scripts/content.js` +
   `scripts/markdown.js` (front matter; link shorthands `product:` `category:`
-  `guide:` `for:` `glossary:` `page:`; unknown targets fail the build).
+  `guide:` `for:` `collection:` `glossary:` `page:`; unknown targets fail
+  the build).
 - SEO: `scripts/seo.js` (JSON-LD graphs, sitemap, robots, llms.txt);
   `scripts/perf.js` (inline minified CSS, self-hosted fonts in `assets/fonts/`,
   deferred JS, image dimensions, eager LCP image). Meta fields: `metaTitle`,
@@ -59,8 +76,9 @@ three jsdom suites (site, flows, dist); `npm run lighthouse` enforces ≥ 95.
   `config/indexnow.key`. Paul's click-steps: `docs/LAUNCH-CHECKLIST.md`.
   Keyword map: `docs/KEYWORD-MAP.md`. Decisions: `docs/ROADMAP.md` log.
 - Images: `assets/catalog/` holds 39 alpha-trimmed cutouts (`<slug>.webp`)
-  and 7 lifestyle heroes (`cat-<slug>.jpg`) from the catalog PDF; Guest
-  Journey and collection cards still use tint placeholders. Product copy
+  and 7 lifestyle heroes (`cat-<slug>.jpg`) from the catalog PDF; the Pets
+  category, Guest Journey, and homepage collection cards use tint
+  placeholders until photography day (`npm run images` after adding files). Product copy
   source of truth: HL Supply Product Catalog 2025-2026 + `docs/BRAND-BRIEF.md`
   (essence line: "We don't simply put hotel names on products. We help
   hotels create products worthy of carrying their names.").

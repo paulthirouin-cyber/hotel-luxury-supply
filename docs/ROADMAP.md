@@ -264,7 +264,7 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
       hotel boutique merchandise + the pet and incentive terms; drop
       tournament-first terms.
       ✔ 2026-10-21: `/for/golf-tournaments/` → `/for/golf-resorts/` (content rewritten around the three on-property surfaces: pro shop retail, member gifts, amenity program; links the Golf & Club collection); `_redirects` carries the 301 and the old URL is gone from dist and the sitemap. `/for/corporate-retreats/` retitled “Custom Welcome Kits for Groups and Retreats at Your Property” (slug kept). New `/for/incentive-travel/` (incentive houses, DMCs, event agencies; room-drop format with the Petite Mini Tote as the vehicle; 100-MOQ pieces steered; keywords incentive trip gifts / room drop gifts / corporate incentive travel welcome gifts). Footers list Golf Resorts, Groups & Retreats, Incentive Travel. `docs/KEYWORD-MAP.md` gains a Vocabulary section (hotel amenities supplier / custom hotel room amenities / hotel boutique merchandise + pet and incentive terms; tournament-first terms dropped) plus rows for pets, the five collections, the pet guide, and incentive travel. Markdown link shorthands now include `for:` and `collection:` (previously `for:` was declared but never parsed). 91 pages (87 indexable), all suites green.
-- [ ] 8.6 Propagate: sitemap, llms.txt, footer Resources, internal-link
+- [x] 8.6 Propagate: sitemap, llms.txt, footer Resources, internal-link
       mesh (each new product ≥3 inbound links; each collection linked from
       homepage + relevant categories), CLAUDE.md + SEO plan count updates
       (8 categories / 45 products / collections layer), extend all suites
@@ -272,6 +272,7 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
       category passes every category-level assertion). Lighthouse spot-check
       a collection page + the towels category ≥95.
 
+      ✔ 2026-10-21: sitemap/llms.txt/footers/link mesh verified by the dist suite (every product ≥3 inbound links incl. the six pet pieces; every collection linked from the homepage and from every category it curates). CLAUDE.md “Current state” rewritten for v1.1.0-dev (8 categories / 45 products / collections layer / 6 programs / positioning note); SEO master plan page inventory and keyword architecture updated (collections + pets). Suites extended: collections render + hydration, memberships link back, golf 301, footer column count, draft-product placeholders. Lighthouse (mobile): /collections/poolside/ 96, /products/pets/ 99, /for/incentive-travel/ 96, /products/pets/companion-bowl/ 99 — all ≥95 (the roadmap's “towels” category does not exist; pets was audited instead).
 ## Phase 9 — Conversion & proof (added 2026-10-21)
 
 - [ ] 9.1 /work/ case-study section: template + index (`content/work/*.md`,
