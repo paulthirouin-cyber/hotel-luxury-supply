@@ -38,7 +38,7 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 
 const CATALOG_SCRIPTS = [
   "js/routes.js", "js/leads.js", "js/main.js", "js/mobile-menu.js", "js/categories.js", "js/products.js",
-  "js/pricing.js", "js/quote-store.js", "js/pages.js", "js/catalog.js", "js/quote-pdf.js",
+  "js/collections.js", "js/pricing.js", "js/quote-store.js", "js/pages.js", "js/catalog.js", "js/quote-pdf.js",
   "js/quote-page.js", "js/bespoke-page.js", "js/bespoke-drawers.js"
 ];
 const HOME_SCRIPTS = ["js/routes.js", "js/categories.js", "js/category-section.js"];
@@ -48,8 +48,8 @@ const STATIC_DIRS = ["css", "js", "assets"];
 
 function loadData() {
   const dom = new JSDOM("<!DOCTYPE html><html data-static><body></body></html>", { runScripts: "outside-only" });
-  ["js/routes.js", "js/categories.js", "js/products.js"].forEach((f) => dom.window.eval(read(f)));
-  return { CATS: dom.window.HL_CATEGORIES, PRODS: dom.window.HL_PRODUCTS };
+  ["js/routes.js", "js/categories.js", "js/products.js", "js/collections.js"].forEach((f) => dom.window.eval(read(f)));
+  return { CATS: dom.window.HL_CATEGORIES, PRODS: dom.window.HL_PRODUCTS, COLS: dom.window.HL_COLLECTIONS };
 }
 
 /* ---------------- page meta ---------------- */
@@ -318,7 +318,7 @@ function copyDir(src, dst) {
 /* ---------------- main ---------------- */
 
 function build() {
-  const { CATS, PRODS } = loadData();
+  const { CATS, PRODS, COLS } = loadData();
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
   STATIC_DIRS.forEach((d) => copyDir(path.join(ROOT, d), path.join(OUT, d)));
@@ -353,6 +353,18 @@ function build() {
     emit("products/" + p.category + "/" + p.slug + "/index.html",
       renderCatalogPage("#/products/" + p.category + "/" + p.slug, meta,
         { view: "viewProduct", ld: () => seo.productLd(meta, p, CATS.find((c) => c.slug === p.category)) }), meta);
+  }
+
+  // collections: cross-category curation rendered by catalog.js into the page view
+  {
+    const colsMeta = { title: "Collections: Custom Guest Goods by Property Moment | HL Supply", description: "Five curated collections from the HL Supply catalog: poolside, beach club, spa suite, golf and club, sports and wellness. One guest moment, one colorway.", path: "/collections/", keywords: ["hotel amenity collections", "resort merchandise collections"] };
+    emit("collections/index.html", renderCatalogPage("#/collections", colsMeta,
+      { view: "viewPage", ld: () => seo.collectionsIndexLd(colsMeta, COLS) }), colsMeta);
+    for (const c of COLS) {
+      const meta = { title: c.metaTitle, description: c.metaDescription, keywords: c.keywords, path: "/collections/" + c.slug + "/", image: c.image ? "/" + c.image.replace(/^\//, "") : undefined };
+      emit("collections/" + c.slug + "/index.html", renderCatalogPage("#/collections/" + c.slug, meta,
+        { view: "viewPage", ld: () => seo.collectionLd(meta, c, c.products.map((s) => PRODS.find((p) => p.slug === s)).filter(Boolean)) }), meta);
+    }
   }
 
   emit("bespoke/index.html", renderCatalogPage("#/bespoke", BESPOKE_META,
@@ -470,7 +482,7 @@ function build() {
   const today = new Date().toISOString().slice(0, 10);
   write("sitemap.xml", seo.sitemapXml(routes, today));
   write("robots.txt", seo.robotsTxt());
-  write("llms.txt", seo.llmsTxt(CATS, PRODS, { guides: GUIDE_SUMMARIES }));
+  write("llms.txt", seo.llmsTxt(CATS, PRODS, { guides: GUIDE_SUMMARIES, collections: COLS }));
   write("build-manifest.json", JSON.stringify({ builtAt: new Date().toISOString(), site: SITE, routes }, null, 2));
 
   console.log(`built ${pages.length} pages into ${path.relative(ROOT, OUT) || "."}/ (${routes.filter((r) => !r.noindex).length} indexable)`);

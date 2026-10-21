@@ -10,7 +10,7 @@ const { ROOT, stub, data, harness, click, type } = require("./helpers");
 
 const t = harness("DIST SUITE");
 const DIST = path.join(ROOT, "dist");
-const { CATS, PRODS } = data();
+const { CATS, PRODS, COLS } = data();
 const COUNTS = { bags: 8, hats: 6, bottles: 4, "flip-flops": 4, "leather-goods": 6, slippers: 4, accessories: 7, pets: 6 };
 
 if (!fs.existsSync(path.join(DIST, "index.html"))) {
@@ -34,6 +34,7 @@ expected.push("/guides/", "/glossary/", ...CATS.map((c) => "/guides/" + c.guide 
 const COMPARISONS = ["embroidery-vs-deboss-vs-laser-etching", "canvas-vs-woven-leather-tote", "350ml-vs-500ml-hotel-bottles", "hotel-slipper-materials-compared", "hotel-tote-styles-compared"];
 const USECASES = ["golf-tournaments", "beach-clubs", "spa-wellness", "hotel-openings", "corporate-retreats"];
 expected.push("/for/", ...COMPARISONS.map((s) => "/guides/" + s + "/"), ...USECASES.map((s) => "/for/" + s + "/"));
+expected.push("/collections/", ...COLS.map((c) => "/collections/" + c.slug + "/"));
 CATS.forEach((c) => expected.push("/products/" + c.slug + "/"));
 PRODS.forEach((p) => expected.push("/products/" + p.category + "/" + p.slug + "/"));
 expected.forEach((u) => t.ok(distExists(u), "exists: " + u));
@@ -393,8 +394,53 @@ for (const slug of USECASES) {
 {
   const home = staticDom("/").window.document;
   t.ok(home.querySelector('.footer a[href="/guides/"]') && home.querySelector('.footer a[href="/for/golf-tournaments/"]'), "home footer links guides + programs");
-  t.ok(home.querySelector('.col-card a[href="/for/spa-wellness/"]') && home.querySelector('.col-card a[href="/for/golf-tournaments/"]'), "home collection cards link programs");
+  t.ok(COLS.every((c) => home.querySelector('.col-card a[href="/collections/' + c.slug + '/"]')) && home.querySelectorAll(".col-card").length === COLS.length && !home.querySelector('.col-card a[href^="/for/"]'), "home collection cards link the real collection pages (no /for/ stand-ins)");
   t.ok(fs.existsSync(path.join(ROOT, "docs", "KEYWORD-MAP.md")), "keyword map exists");
+}
+
+/* ---------- Phase 8.4: collections layer ---------- */
+{
+  const doc = auditPage("/collections/");
+  t.ok(doc.querySelectorAll(".gcard--collection").length === COLS.length && doc.getElementById("viewPage").hasAttribute("data-prerendered"), "collections index: pre-rendered cards");
+  const { graph, types } = ldOf("/collections/");
+  t.ok(types.includes("CollectionPage") && graph.find((n) => n["@type"] === "CollectionPage").mainEntity.numberOfItems === COLS.length, "collections index: CollectionPage + ItemList");
+}
+for (const c of COLS) {
+  const url = "/collections/" + c.slug + "/";
+  const doc = auditPage(url);
+  const m = doc.getElementById("pageMount");
+  t.ok(m.querySelector("h1").textContent === c.title && doc.title === c.metaTitle, c.slug + ": h1 + metaTitle in source");
+  t.ok(m.querySelectorAll(".pcard").length === c.products.length && !m.querySelector(".pt-tier") && !/\$--/.test(m.textContent), c.slug + ": product cards, no pricing");
+  t.ok(m.querySelector(".category-answer") && m.querySelector(".category-answer").compareDocumentPosition(m.querySelector(".pgrid")) & 4, c.slug + ": direct answer precedes the grid");
+  t.ok(m.querySelector('.collection-hook a[href="/bespoke/?collection=' + c.slug + '"]'), c.slug + ": bespoke hook CTA");
+  c.products.forEach((s) => { const p = PRODS.find((x) => x.slug === s); t.ok(m.querySelector('a[href="/products/' + p.category + '/' + s + '/"]'), c.slug + " links " + s); });
+  const { graph, types } = ldOf(url);
+  t.ok(types.includes("CollectionPage") && types.includes("BreadcrumbList"), c.slug + ": CollectionPage + BreadcrumbList");
+  const list = graph.find((n) => n["@type"] === "CollectionPage").mainEntity;
+  t.ok(list["@type"] === "ItemList" && list.numberOfItems === c.products.length && list.itemListElement.every((li) => distExists(li.url.replace("https://hotelluxurysupply.com", ""))), c.slug + ": ItemList of its pieces");
+  t.ok(graph.find((n) => n["@type"] === "BreadcrumbList").itemListElement[1].item.endsWith("/collections/"), c.slug + ": breadcrumb through /collections/");
+  // linked from the homepage and from at least one relevant category page
+  t.ok(staticDom("/").window.document.querySelector('.col-card a[href="' + url + '"]'), c.slug + ": linked from homepage");
+  const cats = new Set(c.products.map((s) => PRODS.find((x) => x.slug === s).category));
+  t.ok([...cats].every((cs) => staticDom("/products/" + cs + "/").window.document.querySelector('#categoryGuide a[href="' + url + '"]')), c.slug + ": linked from every category it curates");
+  // hydration: collection page is not re-rendered by the client
+  let h1Before;
+  const live = liveDom(url, { before(win) { h1Before = win.document.querySelector("#pageMount h1"); } });
+  t.ok(live.window.document.querySelector("#pageMount h1") === h1Before, c.slug + ": NOT re-rendered by JS");
+}
+{
+  PRODS.filter((p) => p.collections.length).forEach((p) => {
+    const doc = staticDom("/products/" + p.category + "/" + p.slug + "/").window.document;
+    t.ok(p.collections.every((s) => doc.querySelector('.pd__collections a[href="/collections/' + s + '/"]')), p.slug + ": Featured in links");
+  });
+  t.ok(!staticDom("/products/pets/companion-bowl/").window.document.querySelector(".pd__collections"), "product without collections has no Featured-in block");
+  const llms = readDist("llms.txt");
+  t.ok(/## Collections/.test(llms) && COLS.every((c) => llms.includes("/collections/" + c.slug + "/")), "llms.txt lists collections");
+  const sm = readDist("sitemap.xml");
+  t.ok(COLS.every((c) => sm.includes("/collections/" + c.slug + "/")), "sitemap lists collections");
+  const d = liveDom("/bespoke/", { suffix: "?collection=golf-club" }).window.document;
+  t.ok(d.getElementById("bf-category").value === "Multiple Categories" && /Golf & Club/.test(d.getElementById("bf-notes").value), "static bespoke: ?collection prefill");
+  t.ok(staticDom("/products/hats/").window.document.querySelectorAll(".footer .footer__grid > div").length === 4, "footer has exactly four columns (duplicate Resources column removed)");
 }
 
 /* ---------- Phase 6: pre-launch audit ---------- */

@@ -219,7 +219,7 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
       scenes (the pet arrival gift and the in-room program are the two
       natural moments).
       ✔ 2026-10-21: /products/ landing is a symmetric 4×2 grid (`.ccard` span-4 tail rule removed; 2-up / 1-up at breakpoints); homepage atelier grid balances 8 cards as feature + 4 small | small + wide + small (slippers small, accessories wide, pets small) — regression test asserts the grid closes with no orphan row.
-- [ ] 8.4 **Collections layer** (cross-category curation; categories remain
+- [x] 8.4 **Collections layer** (cross-category curation; categories remain
       the single canonical product URL — collections list and link, never
       duplicate pages): `js/collections.js` with five collections —
       poolside, beach-club, spa-suite, golf-club, sports-wellness — each
@@ -249,6 +249,7 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
       Collection keywords: hotel fitness amenities, resort wellness
       products, golf resort merchandise, hotel spa amenities, hotel pool
       amenities.
+      ✔ 2026-10-21: `js/collections.js` holds five collections (poolside, beach-club, spa-suite, golf-club, sports-wellness) with brand-voice intro, buyer framing, direct answer, tailored bespoke hook (sports-wellness offers tennis/padel program development) and memberships; it annotates every product with `collections`. `/collections/` + 5 pages pre-rendered by `catalog.js` (CollectionPage + ItemList + BreadcrumbList, direct-answer opener, product cards without pricing, hook CTA to `/bespoke/?collection=`, which prefills category + notes). Product pages show “Featured in”; category pages list the collections curating them; homepage cards (now 5, 3-up + 2-wide, no orphan) link the real pages and the /for/beach-clubs stand-in is retired; footer “Collections” links the index. Also fixed the duplicated Resources column in the products.html footer. 90 pages (86 indexable), all suites green.
 - [ ] 8.5 **/for/ repositioning to match the business:** rename
       /for/golf-tournaments/ → /for/golf-resorts/ (content reframed to
       on-property: pro shop retail, member gifts, amenity program; redirect
@@ -314,3 +315,5 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
 - 2026-10-20 — Image variants are committed to the repo (generated locally with sharp) so Cloudflare's build stays `node build.js` with no native image tooling. Re-run `npm run images` whenever photography lands.
 - 2026-10-21 — Draft products without photography carry `image: null` (never a stock or placeholder photo file): the UI shows the designed tint placeholder, the build omits og:image/Product.image rather than emitting a fake one, and tests enforce the placeholder. Photography day replaces them by dropping `<slug>.webp` in `assets/catalog/` and deleting the `noImage` flag.
 - 2026-10-21 — The Pet Collection reuses existing finishing methods only (laser etch, deboss, embroidery/print, woven label) and is one-size by rule (no beds, collars, clothing), per Paul's selection filter. Games & Leisure (G-001–G-006) stays parked as the 9th category.
+- 2026-10-21 — Collections are JS data (`js/collections.js`), not Markdown: they are rendered by the same `catalog.js` renderer in SPA, preview, and static modes, so a collection works everywhere a category does and never duplicates a product URL. Homepage collection cards stay hand-written in `index.html` (editorial copy); a test asserts one card per collection.
+- 2026-10-21 — Pet products carry no collection membership yet; a “Pet Program” collection is added only if the category earns it in Search Console.

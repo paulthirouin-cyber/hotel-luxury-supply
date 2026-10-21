@@ -9,6 +9,8 @@
 
   var CATS = window.HL_CATEGORIES || [];
   var PRODS = window.HL_PRODUCTS || [];
+  var COLS = window.HL_COLLECTIONS || [];
+  var COLS = window.HL_COLLECTIONS || [];
   var P = window.HLPricing;
   var Q = window.HLQuote;
   var R = window.HLRoutes;
@@ -16,6 +18,7 @@
 
   // link helper — emits hash routes (SPA) or clean URLs (static build)
   function U(route) { return R ? R.href(route) : "products.html" + route; }
+  function HOME() { return R ? R.home() : "index.html"; }
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -33,6 +36,40 @@
 
   function prodsInCat(slug) {
     return PRODS.filter(function (p) { return p.category === slug; });
+  }
+
+  function colBySlug(slug) {
+    return COLS.filter(function (c) { return c.slug === slug; })[0] || null;
+  }
+
+  // collections that curate at least one piece from a category
+  function colsForCat(slug) {
+    return COLS.filter(function (c) {
+      return c.products.some(function (s) { var p = prodBySlug(s); return p && p.category === slug; });
+    });
+  }
+
+  function colLinksHTML(cols) {
+    return cols.map(function (c) {
+      return '<a href="' + U("#/collections/" + c.slug) + '">' + esc(c.name) + "</a>";
+    }).join(", ");
+  }
+
+  function colBySlug(slug) {
+    return COLS.filter(function (c) { return c.slug === slug; })[0] || null;
+  }
+
+  // collections that curate at least one piece from a category
+  function colsForCat(slug) {
+    return COLS.filter(function (c) {
+      return c.products.some(function (s) { var p = prodBySlug(s); return p && p.category === slug; });
+    });
+  }
+
+  function colLinksHTML(cols) {
+    return cols.map(function (c) {
+      return '<a href="' + U("#/collections/" + c.slug) + '">' + esc(c.name) + "</a>";
+    }).join(", ");
   }
 
   /* ---------------- toast ---------------- */
@@ -184,6 +221,9 @@
       '  <span class="eyebrow">Buying guide</span>' +
       '  <p><a href="' + U("#/guides/" + cat.guide) + '">' + esc(cat.guideTitle || "Read the buying guide") + "</a></p>" +
       '  <small>Materials, minimums, logo methods, and timelines, plus the <a href="' + U("#/glossary") + '">customization glossary</a>.</small>' +
+      (colsForCat(cat.slug).length
+        ? '  <small class="guide-link__collections">Curated in: ' + colLinksHTML(colsForCat(cat.slug)) + ".</small>"
+        : "") +
       "</aside>"
     );
   }
@@ -537,9 +577,79 @@
       (cat && cat.guide
         ? '    <p class="pd__guide">Planning a program? Read <a href="' + U("#/guides/" + cat.guide) + '">' + esc(cat.guideTitle || "the buying guide") + "</a>.</p>"
         : "") +
+      (product.collections && product.collections.length
+        ? '    <p class="pd__collections">Featured in: ' + colLinksHTML(product.collections.map(colBySlug).filter(Boolean)) + ".</p>"
+        : "") +
       "  </div>" +
       "</div>" +
       relatedHTML(product);
+  }
+
+  /* ---------------- collections (cross-category curation) ---------------- */
+
+  function crumbsHTML(items) {
+    return '<nav class="pd__crumbs" aria-label="Breadcrumb">' +
+      items.map(function (it, i) {
+        return i < items.length - 1
+          ? '<a href="' + it.href + '">' + esc(it.name) + '</a><span aria-hidden="true">/</span>'
+          : '<span aria-current="page">' + esc(it.name) + "</span>";
+      }).join("") +
+      "</nav>";
+  }
+
+  function collectionCardHTML(col) {
+    return (
+      '<a class="gcard gcard--collection" href="' + U("#/collections/" + col.slug) + '">' +
+      '<span class="eyebrow">Collection</span>' +
+      "<h3>" + esc(col.title) + "</h3>" +
+      "<p>" + esc(col.line) + "</p>" +
+      '<span class="tlink">Explore the collection</span></a>'
+    );
+  }
+
+  function renderCollectionsIndex(mount) {
+    if (!STATIC) document.title = "Collections \u2014 HL Supply";
+    mount.setAttribute("data-page", "collections");
+    mount.innerHTML =
+      crumbsHTML([{ name: "Home", href: HOME() }, { name: "Collections" }]) +
+      '<header class="page-intro"><span class="eyebrow">HL Supply / Collections</span><h1>Collections built around the way guests move through a property</h1>' +
+      '<p class="page-intro__lede">Five curated sets drawn from across the catalog: poolside, beach club, spa suite, golf and club, and sports and wellness. Each lists the catalog pieces that belong to one guest moment, in one colorway, with a bespoke path for what the catalog does not yet hold.</p></header>' +
+      '<div class="gcards gcards--index">' + COLS.map(collectionCardHTML).join("") + "</div>" +
+      '<section class="page-section page-section--tint"><h2>Browse by category instead</h2><p>Every piece in a collection lives in one of the eight product categories, where pricing tiers, specifications, and the buying guide sit beside it.</p>' +
+      '<p><a class="tlink" href="' + U("#/products") + '">Open the catalog</a></p></section>';
+  }
+
+  function renderCollection(slug, mount) {
+    var col = colBySlug(slug);
+    if (!col) {
+      mount.innerHTML = notFoundHTML("Collection");
+      document.title = "Collection not found \u2014 HL Supply";
+      return;
+    }
+    if (!STATIC) document.title = col.title + " \u2014 HL Supply";
+    var prods = col.products.map(prodBySlug).filter(Boolean);
+    var cats = [];
+    prods.forEach(function (p) { if (cats.indexOf(p.category) < 0) cats.push(p.category); });
+    var others = COLS.filter(function (c) { return c.slug !== col.slug; });
+    mount.setAttribute("data-page", "collection");
+    mount.innerHTML =
+      crumbsHTML([{ name: "Home", href: HOME() }, { name: "Collections", href: U("#/collections") }, { name: col.name }]) +
+      '<header class="page-intro collection-intro"><span class="eyebrow">Collection</span>' +
+      "<h1>" + esc(col.title) + "</h1>" +
+      '<p class="page-intro__lede">' + esc(col.intro) + "</p></header>" +
+      '<p class="category-answer">' + esc(col.directAnswer) + "</p>" +
+      '<p class="collection-framing">' + esc(col.framing) + "</p>" +
+      '<section class="guide-products collection-products" aria-labelledby="colProductsTitle">' +
+      '<div class="section-head"><span class="eyebrow">The pieces</span><h2 id="colProductsTitle">' + prods.length + " catalog pieces, one colorway</h2></div>" +
+      '<div class="pgrid">' + prods.map(cardHTML).join("") + "</div>" +
+      "</section>" +
+      '<div class="cat-bespoke collection-hook"><div><h3>' + esc(col.hook.title) + "</h3><p>" + esc(col.hook.copy) + "</p></div>" +
+      '<a class="btn btn--solid" href="' + U("#/bespoke?collection=" + col.slug) + '">' + esc(col.hook.cta) + "</a></div>" +
+      '<section class="page-section"><div class="section-head"><span class="eyebrow">Categories</span><h2>Where these pieces live</h2></div>' +
+      "<p>" + cats.map(function (slug) { var c = catBySlug(slug); return '<a href="' + U("#/products/" + slug) + '">' + esc(c ? c.name : slug) + "</a>"; }).join(", ") +
+      ". Each category page carries quantity tiers, specifications, and a buying guide.</p></section>" +
+      '<p class="page-note">Other collections: ' + colLinksHTML(others) + ".</p>" +
+      '<div class="btn-row"><a class="btn btn--solid" href="' + U("#/quote") + '">Build a Quote</a><a class="btn" href="' + U("#/collections") + '">All collections</a></div>';
   }
 
   /* ---------------- hash router ---------------- */
@@ -604,6 +714,26 @@
       showView("viewBespoke");
       if (!STATIC) document.title = "Bespoke Atelier \u2014 HL Supply";
       if (window.HLBespokePage) window.HLBespokePage.render(query);
+      scrollTop();
+      return;
+    }
+
+    if (seg[0] === "collections") {
+      showView("viewPage");
+      if (!prerendered("viewPage")) {
+        var cm = document.getElementById("pageMount");
+        if (cm) { if (seg.length >= 2) renderCollection(seg[1], cm); else renderCollectionsIndex(cm); }
+      }
+      scrollTop();
+      return;
+    }
+
+    if (seg[0] === "collections") {
+      showView("viewPage");
+      if (!prerendered("viewPage")) {
+        var cm = document.getElementById("pageMount");
+        if (cm) { if (seg.length >= 2) renderCollection(seg[1], cm); else renderCollectionsIndex(cm); }
+      }
       scrollTop();
       return;
     }
@@ -678,6 +808,8 @@
     renderLanding: renderLanding,
     renderCategory: renderCategory,
     renderProduct: renderProduct,
+    renderCollection: renderCollection,
+    renderCollectionsIndex: renderCollectionsIndex,
     notFoundHTML: notFoundHTML,
     faqHTML: faqHTML,
     cardHTML: cardHTML,

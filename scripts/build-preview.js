@@ -17,7 +17,7 @@ const CSS = ["css/fonts.css", "css/styles.css", "css/guest-journey.css", "css/ca
 const HOME_JS = ["js/routes.js", "js/leads.js", "js/main.js", "js/mobile-menu.js", "js/homepage-scenes.js",
   "js/guest-journey.js", "js/categories.js", "js/category-section.js", "js/concierge-bell.js"];
 const EXTRA_CSS = ["css/catalog.css", "css/quote.css", "css/bespoke.css"];
-const CATALOG_JS = ["js/products.js", "js/pricing.js", "js/quote-store.js", "js/pages.js", "js/catalog.js",
+const CATALOG_JS = ["js/products.js", "js/collections.js", "js/pricing.js", "js/quote-store.js", "js/pages.js", "js/catalog.js",
   "js/quote-pdf.js", "js/quote-page.js", "js/bespoke-page.js", "js/bespoke-drawers.js"];
 
 let html = read("index.html");

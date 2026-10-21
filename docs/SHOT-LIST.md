@@ -23,18 +23,20 @@ and unbranded.
 ## A. Guest Journey scenes — PORTRAIT 4:5 (e.g. 1024×1280+)
 Save to assets/scenes/<name>.jpg. Objects match each scene's category chips.
 
-1. arrival.jpg (moment: the bellman's staged cart) — A polished brass
-   luggage trolley standing in a stone hotel entryway, a tan leather
-   weekender resting on its rail with a plain leather luggage tag buckled
-   around its handle, a natural canvas tote set on the trolley shelf as the
-   guest's carry item; carved stone doorway softly blurred behind, morning
-   light across the floor, the shadow of an olive branch on the wall.
-   (Products: luggage tag, tote. Scenery: trolley, weekender.)
-   ALT (moment: the welcome gift at check-in) — A marble front-desk counter
-   in warm lobby light: a small natural canvas mini-tote presented as a
-   welcome gift with tissue paper rising from it, a brass concierge bell
-   and a room key beside it; panelled wood and a vase of olive branches
-   softly blurred behind. (Product: Petite Mini Tote. Scenery: bell, key.)
+1. arrival.jpg (moment: the VIP welcome kit, awaiting the guest) — A
+   welcome kit on a suite entry console: a small natural canvas mini-tote
+   with tissue paper rising from it, a brushed-steel bottle standing beside
+   it and a soft sleep mask resting against its base, a brass room key laid
+   in front; panelled wood and warm lamplight softly blurred behind, the
+   first quiet moment of a stay.
+   (Products: Petite Mini Tote, bottle, sleep mask — the sellable "Welcome
+   Kit" bundle. Scenery: key, console. Decision 2026-10-21: arrival is told
+   through the welcome-kit vessel, since no single SKU is an arrival object;
+   this doubles as the rooms-program "Welcome Kit" sales story.)
+   SWAP OPTION if the journey ever drops Arrival: "The Spa" — a yoga mat
+   unrolled on a wellness terrace at morning light, waffle slippers side by
+   side at its edge, a steel bottle and rolled towel beside; journey order
+   then runs Spa → Poolside → Beach Club → Suite → Club.
 2. poolside.jpg (moment: the guest's claimed lounger) — A cream canvas
    tote, a structured unbranded cap, and a brushed-steel bottle arranged on
    a white linen pool lounger, sunglasses tossed beside them; the edge of a

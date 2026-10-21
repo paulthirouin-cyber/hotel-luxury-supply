@@ -3,8 +3,9 @@
 const { read, exists, catalogDom, homeDom, data, harness, click, type } = require("./helpers");
 
 const t = harness("SITE SUITE");
-const { CATS, PRODS } = data();
+const { CATS, PRODS, COLS } = data();
 const catSlugs = new Set(CATS.map((c) => c.slug));
+const colSlugs = new Set(COLS.map((c) => c.slug));
 const prodBy = Object.fromEntries(PRODS.map((p) => [p.slug, p]));
 const PAGE_SLUGS = ["about", "process", "contact", "privacy", "terms"];
 
@@ -68,6 +69,7 @@ function auditDoc(doc, ctx) {
       if (seg[0] === "quote") return;
       if (PAGE_SLUGS.includes(seg[0]) && seg.length === 1) return;
       if (seg[0] === "glossary" && seg.length === 1) return;
+      if (seg[0] === "collections") { if (seg[1] && !colSlugs.has(seg[1])) t.ok(false, ctx + " unknown collection: " + href); return; }
       if (seg[0] === "guides" || seg[0] === "for") {
         if (seg[1] && !exists("content/" + seg[0] + "/" + seg[1] + ".md")) t.ok(false, ctx + " missing content file: " + href);
         return;
@@ -77,6 +79,7 @@ function auditDoc(doc, ctx) {
           const [k, v] = kv.split("=");
           if (k === "category" && v && !catSlugs.has(v)) t.ok(false, ctx + " bad bespoke category: " + href);
           if (k === "product" && v && !prodBy[v]) t.ok(false, ctx + " bad bespoke product: " + href);
+          if (k === "collection" && v && !colSlugs.has(v)) t.ok(false, ctx + " bad bespoke collection: " + href);
         }
         return;
       }
@@ -205,5 +208,33 @@ for (const slug of PAGE_SLUGS) {
   t.ok(!doc.getElementById("viewPage").hidden && doc.querySelector("#pageMount h1"), "nav link -> about renders in SPA mode");
 }
 t.ok(catalogDom("#/products/hats/nope").window.document.getElementById("productDetail").textContent.includes("Product not found"), "product not-found");
+
+/* ---------- 6. collections (Phase 8.4) ---------- */
+t.ok(COLS.length === 5 && COLS.every((c) => c.products.length >= 5 && c.intro && c.framing && c.directAnswer && c.hook && c.hook.cta), "5 collections with >= 5 pieces, intro, framing, answer, hook");
+COLS.forEach((c) => c.products.forEach((s) => t.ok(prodBy[s] && prodBy[s].collections.includes(c.slug), c.slug + ": member exists + annotated: " + s)));
+{
+  const doc = catalogDom("#/collections").window.document;
+  t.ok(!doc.getElementById("viewPage").hidden && doc.querySelectorAll("#pageMount .gcard--collection").length === 5 && doc.querySelector("#pageMount h1"), "collections index renders 5 cards");
+  auditDoc(doc, "[collections]");
+}
+for (const c of COLS) {
+  const doc = catalogDom("#/collections/" + c.slug).window.document;
+  const m = doc.getElementById("pageMount");
+  t.ok(m.querySelector("h1") && m.querySelector("h1").textContent === c.title, c.slug + ": collection h1");
+  t.ok(m.querySelectorAll(".pcard").length === c.products.length && !m.querySelector(".pt-tier") && !m.querySelector("[data-add]"), c.slug + ": product cards without pricing UI");
+  t.ok(m.querySelector(".category-answer") && /\d/.test(m.querySelector(".category-answer").textContent), c.slug + ": direct answer with a number");
+  t.ok(m.querySelector('.collection-hook a[href="products.html#/bespoke?collection=' + c.slug + '"]'), c.slug + ": bespoke hook link");
+  auditDoc(doc, "[collection:" + c.slug + "]");
+}
+{
+  const p = PRODS.find((x) => x.collections.length);
+  const doc = catalogDom("#/products/" + p.category + "/" + p.slug).window.document;
+  t.ok(p.collections.every((s) => doc.querySelector('.pd__collections a[href="products.html#/collections/' + s + '"]')), "product page lists its collections");
+  const cat = catalogDom("#/products/" + p.category).window.document;
+  t.ok(cat.querySelector('#categoryGuide a[href="products.html#/collections/' + p.collections[0] + '"]'), "category page links the collections curating it");
+  const b = catalogDom("#/bespoke?collection=sports-wellness").window.document;
+  t.ok(b.getElementById("bf-category").value === "Multiple Categories" && /Sports & Wellness/.test(b.getElementById("bf-notes").value), "bespoke ?collection= prefills category + notes");
+}
+t.ok(catalogDom("#/collections/nope").window.document.getElementById("pageMount").textContent.includes("Collection not found"), "collection not-found");
 
 t.done();

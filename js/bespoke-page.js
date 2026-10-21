@@ -462,7 +462,15 @@ window.HLBespokePage = (function () {
     var view = document.getElementById("viewBespoke");
     var pre = !!(view && view.hasAttribute("data-prerendered"));
     if (pre) view.removeAttribute("data-prerendered");
-    if (!pre || params.product || params.category) renderInto();
+    if (!pre || params.product || params.category || params.collection) renderInto();
+    // collection hook prefill: multiple categories + a note naming the collection
+    if (!params.product && !params.category && params.collection) {
+      var col = (window.HL_COLLECTIONS || []).filter(function (c) { return c.slug === params.collection; })[0];
+      var selC = document.getElementById("bf-category");
+      var notesC = document.getElementById("bf-notes");
+      if (col && selC) selC.value = "Multiple Categories";
+      if (col && notesC && !notesC.value) notesC.value = col.title + " \u2014 " + col.hook.title;
+    }
     // category prefill (no product context chip)
     if (!params.product && params.category) {
       var cn2 = catName(params.category);

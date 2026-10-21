@@ -155,6 +155,37 @@ function productLd(meta, p, cat) {
   ]);
 }
 
+function collectionsIndexLd(meta, COLS) {
+  return graph([
+    webPage(meta, {
+      "@type": "CollectionPage",
+      mainEntity: {
+        "@type": "ItemList",
+        name: "HL Supply collections",
+        numberOfItems: COLS.length,
+        itemListElement: COLS.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.title, url: SITE + "/collections/" + c.slug + "/" }))
+      }
+    }),
+    breadcrumb([{ name: "Home", path: "/" }, { name: "Collections", path: "/collections/" }])
+  ]);
+}
+
+function collectionLd(meta, col, prods) {
+  return graph([
+    webPage(meta, {
+      "@type": "CollectionPage",
+      primaryImageOfPage: col.image ? { "@type": "ImageObject", url: abs(col.image) } : undefined,
+      mainEntity: {
+        "@type": "ItemList",
+        name: col.title,
+        numberOfItems: prods.length,
+        itemListElement: prods.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.name, url: SITE + "/products/" + p.category + "/" + p.slug + "/" }))
+      }
+    }),
+    breadcrumb([{ name: "Home", path: "/" }, { name: "Collections", path: "/collections/" }, { name: col.name, path: "/collections/" + col.slug + "/" }])
+  ]);
+}
+
 function bespokeLd(meta, faqs) {
   return graph([
     webPage(meta),
@@ -269,9 +300,18 @@ function llmsTxt(CATS, PRODS, extra) {
     `- [Contact the concierge](${SITE}/contact/)`,
     `- [Buying guides](${SITE}/guides/)`,
     `- [Glossary of customization terms](${SITE}/glossary/)`,
+    `- [Collections](${SITE}/collections/): curated sets by guest moment (poolside, beach club, spa suite, golf and club, sports and wellness)`,
     ...((extra.guides || []).map((g) => `- [${g.title}](${SITE}${g.path}): ${g.summary}`)),
     ""
   ];
+  if (extra.collections && extra.collections.length) {
+    lines.push("## Collections", "");
+    for (const c of extra.collections) {
+      const names = c.products.map((s) => (PRODS.find((p) => p.slug === s) || {}).name).filter(Boolean);
+      lines.push(`- [${c.title}](${SITE}/collections/${c.slug}/): ${c.line} Pieces: ${names.join(", ")}.`);
+    }
+    lines.push("");
+  }
   for (const c of CATS) {
     lines.push(`## ${c.name}`, "", `- [${c.name} category](${SITE}/products/${c.slug}/): ${c.catalogSubtitle || c.line}`);
     for (const p of byCat(c.slug)) {
@@ -283,4 +323,4 @@ function llmsTxt(CATS, PRODS, extra) {
   return lines.join("\n");
 }
 
-module.exports = { SITE, homeLd, landingLd, categoryLd, productLd, bespokeLd, pageLd, articleLd, glossaryLd, simpleLd, sitemapXml, robotsTxt, llmsTxt };
+module.exports = { SITE, homeLd, landingLd, categoryLd, productLd, collectionLd, collectionsIndexLd, bespokeLd, pageLd, articleLd, glossaryLd, simpleLd, sitemapXml, robotsTxt, llmsTxt };

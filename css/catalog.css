@@ -696,3 +696,10 @@
   line-height: 1.65;
   color: rgba(27, 42, 65, 0.82);
 }
+
+.pd__collections { margin-top: 10px; font-size: 14px; color: var(--navy-soft, #41506a); }
+.pd__collections a { color: var(--green, #3f5c4f); text-decoration: underline; text-underline-offset: 3px; }
+.guide-link__collections { display: block; margin-top: 6px; }
+.collection-framing { max-width: 68ch; font-size: 16.5px; line-height: 1.7; color: var(--navy-soft, #41506a); margin: 0 0 clamp(28px, 4vw, 44px); }
+.collection-hook { margin: clamp(28px, 4vw, 44px) 0; }
+.gcard--collection h3 { font-size: 22px; }

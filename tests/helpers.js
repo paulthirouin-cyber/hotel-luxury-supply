@@ -9,7 +9,7 @@ const exists = (p) => fs.existsSync(path.join(ROOT, p));
 
 const CATALOG_SCRIPTS = [
   "js/routes.js", "js/leads.js", "js/main.js", "js/mobile-menu.js", "js/categories.js", "js/products.js",
-  "js/pricing.js", "js/quote-store.js", "js/pages.js", "js/catalog.js", "js/quote-pdf.js",
+  "js/collections.js", "js/pricing.js", "js/quote-store.js", "js/pages.js", "js/catalog.js", "js/quote-pdf.js",
   "js/quote-page.js", "js/bespoke-page.js", "js/bespoke-drawers.js"
 ];
 
@@ -64,7 +64,8 @@ function data() {
   const dom = new JSDOM("", { runScripts: "outside-only" });
   dom.window.eval(read("js/categories.js"));
   dom.window.eval(read("js/products.js"));
-  return { CATS: dom.window.HL_CATEGORIES, PRODS: dom.window.HL_PRODUCTS };
+  dom.window.eval(read("js/collections.js"));
+  return { CATS: dom.window.HL_CATEGORIES, PRODS: dom.window.HL_PRODUCTS, COLS: dom.window.HL_COLLECTIONS };
 }
 
 function harness(name) {
