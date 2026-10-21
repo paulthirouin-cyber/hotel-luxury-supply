@@ -31,7 +31,7 @@ function parseFrontMatter(src) {
 }
 
 function resolveHref(href, resolver) {
-  const m = href.match(/^(product|category|guide|glossary|page):([a-z0-9-]+)$/);
+  const m = href.match(/^(product|category|guide|for|collection|glossary|page):([a-z0-9-]+)$/);
   if (m) return resolver ? resolver(m[1], m[2]) : href;
   if (href === "quote" || href === "bespoke") return resolver ? resolver("page", href) : href;
   return href;

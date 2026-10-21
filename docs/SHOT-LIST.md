@@ -1,6 +1,6 @@
 # HL Supply — Photography / AI-Image Shot List
 *One campaign, one photographer's eye. Every image uses the SHARED STYLE
-BLOCK below. Products are always plain/unbranded (awaiting the client's
+BLOCK + PRODUCT-RENDERING STANDARD below. Products are always plain/unbranded (awaiting the client's
 monogram) — never show text or logos. No people in any shot.*
 
 **SCENE-LOGIC RULE (applies to every image):** each shot depicts a real
@@ -13,26 +13,42 @@ hotel, the shot is wrong.
 
 ## Shared style block (append to every prompt)
 
-Editorial luxury-hotel campaign photograph, French Riviera mood. Warm ivory
-and cream light with accents of deep navy, resort green, pool blue, and soft
-terracotta. Soft directional Mediterranean sunlight, long gentle shadows,
-generous negative space, premium still-life styling, subtle film grain,
-shallow depth of field. No people, no text, no logos — all products plain
-and unbranded.
+Editorial luxury-hotel campaign photograph. Setting register: contemporary
+five-star flagship in the manner of Four Seasons or Mandarin Oriental —
+classical proportion executed in modern materials: walnut and natural oak
+millwork, honed marble and limestone, bronze and brushed-brass hardware,
+linen upholstery, architectural recessed lighting mixed with warm lamplight,
+a single fresh orchid or olive stem. Old money, modern hand. Warm ivory and
+cream light with accents of deep navy, resort green, and soft terracotta.
+Soft directional light, long gentle shadows, generous negative space,
+subtle film grain, shallow depth of field. No people, no text, no logos.
+
+## Product-rendering standard (append after the style block, every prompt)
+
+All products rendered at flagship-boutique quality: the bottle is matte
+brushed stainless steel with a precisely machined cap and soft satin sheen
+— sculptural, weighty, never glossy gym-bottle plastic. The tote is
+heavyweight tight-weave natural canvas that stands structured on its own,
+reinforced base, fine double-needle stitching, full-grain leather trim.
+Leather goods show clean edge-painting and a soft matte grain. Every object
+looks hand-finished, deliberate, and quietly expensive.
 
 ## A. Guest Journey scenes — PORTRAIT 4:5 (e.g. 1024×1280+)
 Save to assets/scenes/<name>.jpg. Objects match each scene's category chips.
 
-1. arrival.jpg (moment: the VIP welcome kit, awaiting the guest) — A
-   welcome kit on a suite entry console: a small natural canvas mini-tote
-   with tissue paper rising from it, a brushed-steel bottle standing beside
-   it and a soft sleep mask resting against its base, a brass room key laid
-   in front; panelled wood and warm lamplight softly blurred behind, the
-   first quiet moment of a stay.
+1. arrival.jpg (moment: the VIP welcome kit, awaiting the guest) — A VIP
+   welcome kit in a modern five-star suite entry: on a walnut console with
+   a honed marble top, a structured natural canvas mini-tote stands crisply
+   with tissue paper rising from it, a matte brushed-steel bottle beside it
+   catching a soft satin highlight, a sleep mask in smooth charcoal fabric
+   resting at its base, a brass room key laid in front; behind, fluted oak
+   panelling, a bronze table lamp glowing warm, a single white orchid stem,
+   and the soft-blurred suggestion of a tall window with sheer linen
+   curtains. The first quiet moment of a stay.
    (Products: Petite Mini Tote, bottle, sleep mask — the sellable "Welcome
-   Kit" bundle. Scenery: key, console. Decision 2026-10-21: arrival is told
-   through the welcome-kit vessel, since no single SKU is an arrival object;
-   this doubles as the rooms-program "Welcome Kit" sales story.)
+   Kit" bundle. Scenery: key, console, lamp, orchid. Decision 2026-10-21:
+   arrival is told through the welcome-kit vessel; doubles as the rooms-
+   program "Welcome Kit" sales story.)
    SWAP OPTION if the journey ever drops Arrival: "The Spa" — a yoga mat
    unrolled on a wellness terrace at morning light, waffle slippers side by
    side at its edge, a steel bottle and rolled towel beside; journey order
@@ -47,11 +63,15 @@ Save to assets/scenes/<name>.jpg. Objects match each scene's category chips.
    a relaxed bucket hat, a steel bottle standing in the sand; cabana stripe
    fabric and a coiled rope detail at the frame's edge, late-afternoon
    seaside light, yacht-club nostalgia.
-4. the-suite.jpg (moment: evening turndown service) — Soft terry slippers
-   placed neatly on a marble floor beside a bed with pressed white linens,
-   a sleep mask laid on the turned-down sheet; on the nightstand, a deep-
-   navy leather valet tray holding a brass key and a watch, a slim steel
-   bottle beside it; warm lamplight, calm and quiet. (Scenery: key, watch.)
+4. the-suite.jpg (moment: evening turndown service) — Evening turndown in
+   a modern five-star suite: soft terry slippers placed precisely on a
+   honed limestone floor beside a low oak bed with pressed white linens and
+   a charcoal sleep mask laid on the turned-down sheet; on the walnut
+   nightstand, a deep-navy leather valet tray with clean painted edges
+   holding a brass key and a watch, a slim matte-steel bottle beside a
+   bronze lamp casting warm light; fluted panelling and sheer curtains
+   softly blurred. Calm, precise, quietly expensive. (Scenery: key, watch,
+   lamp.)
 5. the-club.jpg (moment: the member's kit on the clubhouse veranda) — A
    performance cap and brushed-steel bottle resting on a teak bench, a navy
    canvas tote leaning against its leg and a wooden-handled umbrella

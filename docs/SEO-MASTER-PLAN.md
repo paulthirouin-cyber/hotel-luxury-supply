@@ -46,13 +46,13 @@ cannibalize each other:
 - **Category pages** own commercial head/mid terms:
   "custom hotel tote bags", "branded resort hats wholesale", "custom hotel
   slippers with logo", "luxury hotel amenities supplier", "custom beach club
-  merchandise", "golf tournament gifts bulk", "custom spa slippers".
+  merchandise", "golf resort merchandise", "custom spa slippers".
 - **Product pages** own specific long-tail: "custom embroidered bucket hat for
   resorts", "debossed leather valet tray hotel", "custom logo flip flops MOQ".
 - **Guides** (content engine) own informational intent: "hotel welcome gift
   ideas", "what MOQ means in custom products", "embroidery vs deboss vs laser
   etching", "how much do custom hotel totes cost", "resort retail program guide".
-- **Use-case pages** own vertical intent: /for/golf-tournaments/,
+- **Use-case pages** own vertical intent: /for/golf-resorts/,
   /for/beach-clubs/, /for/spa-wellness/, /for/hotel-openings/,
   /for/corporate-retreats/ — each linking to relevant products.
 - Homepage owns the brand + the single broadest term ("bespoke branded goods

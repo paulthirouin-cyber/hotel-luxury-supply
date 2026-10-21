@@ -13,8 +13,8 @@ Status: `live` (page exists in dist/), `planned`.
 
 | Page | P | S | Status |
 | --- | --- | --- | --- |
-| `/` | bespoke branded goods for luxury hospitality | custom hospitality products, HL Supply | live |
-| `/about/` | bespoke hospitality products | luxury hotel merchandise supplier, hotel product design atelier | live |
+| `/` | bespoke branded goods for luxury hospitality | hotel amenities supplier, custom hotel room amenities, HL Supply | live |
+| `/about/` | bespoke hospitality products | hotel amenities supplier, hotel boutique merchandise, hotel product design atelier | live |
 | `/process/` | custom hotel products process | how to order custom hotel amenities, custom merchandise lead time | live |
 | `/contact/` | contact HL Supply | hotel luxury supply contact | live |
 
@@ -29,6 +29,17 @@ Status: `live` (page exists in dist/), `planned`.
 | `/products/leather-goods/` | custom hotel leather goods | debossed leather valet tray, hotel luggage tags with logo | live |
 | `/products/slippers/` | custom hotel slippers | embroidered spa slippers, luxury hotel slippers with logo | live |
 | `/products/accessories/` | custom hotel accessories | branded resort accessories, hotel guest amenities with logo | live |
+| `/products/pets/` | hotel pet amenities | pet friendly hotel supplies, custom dog bandana, luxury hotel pet program | live |
+
+## Collections (guest-moment intent)
+
+| Page | P | S | Status |
+| --- | --- | --- | --- |
+| `/collections/poolside/` | hotel pool amenities | pool deck amenities custom, resort pool merchandise | live |
+| `/collections/beach-club/` | beach club merchandise | beach club branded goods, custom beach amenities | live |
+| `/collections/spa-suite/` | hotel spa amenities | custom spa amenities, luxury spa slippers with logo | live |
+| `/collections/golf-club/` | golf resort merchandise | golf club pro shop merchandise, custom golf club gifts | live |
+| `/collections/sports-wellness/` | hotel fitness amenities | resort wellness products, hotel tennis program merchandise, padel club merchandise | live |
 
 ## Product pages (long-tail)
 
@@ -47,6 +58,7 @@ once Search Console shows which products draw impressions.
 | `/guides/custom-hotel-leather-goods/` | custom hotel leather goods guide | leather suite accessories, debossed valet tray | live |
 | `/guides/custom-hotel-slippers/` | custom hotel slippers guide | eco-friendly hotel slippers, hotel slipper minimum order | live |
 | `/guides/custom-hotel-accessories/` | custom hotel accessories guide | custom resort sunglasses, branded sleep mask | live |
+| `/guides/custom-hotel-pet-amenities/` | luxury hotel pet program | hotel pet amenities, branded pet amenities, custom dog bandana | live |
 | `/guides/embroidery-vs-deboss-vs-laser-etching/` | embroidery vs debossing | laser etching vs embroidery, debossed vs embossed logo | live |
 | `/guides/canvas-vs-woven-leather-tote/` | canvas vs leather tote | woven leather tote hotel, hotel boutique tote bag | live |
 | `/guides/350ml-vs-500ml-hotel-bottles/` | 350ml vs 500ml bottle | hotel water bottle size, spa water bottle | live |
@@ -58,11 +70,12 @@ once Search Console shows which products draw impressions.
 
 | Page | P | S | Status |
 | --- | --- | --- | --- |
-| `/for/golf-tournaments/` | golf tournament gifts bulk | custom golf tournament merchandise, pro shop branded goods | live |
+| `/for/golf-resorts/` | golf resort merchandise | pro shop branded goods, golf club member gifts, custom golf caps for clubs | live |
 | `/for/beach-clubs/` | custom beach club merchandise | beach club branded goods, pool deck amenities | live |
 | `/for/spa-wellness/` | custom spa amenities | spa slippers with logo, hotel wellness program merchandise | live |
 | `/for/hotel-openings/` | hotel opening amenities | new hotel branded products, hotel pre-opening merchandise | live |
-| `/for/corporate-retreats/` | corporate retreat welcome kit | destination event gifts, incentive trip gifts luxury | live |
+| `/for/corporate-retreats/` | corporate retreat welcome kit | hotel group welcome gifts, destination wedding welcome bags | live |
+| `/for/incentive-travel/` | incentive trip gifts | room drop gifts, corporate incentive travel welcome gifts, DMC welcome amenities | live |
 
 ## Next content cycle (planned — "continue the content calendar")
 
@@ -75,6 +88,16 @@ once Search Console shows which products draw impressions.
 | 5 | Hotel amenity programs: replace-per-stay vs launder-and-reissue | hotel slipper amenity program | comparison |
 | 6 | Custom goods for private members' clubs | private club merchandise custom | use-case |
 | 7 | Custom goods for yacht clubs and marinas | yacht club merchandise | use-case |
+
+## Vocabulary (updated 2026-10-21)
+
+HL Supply is a hotel and resort supplier first: **rooms** (amenity programs)
+and **retail** (the boutique). Primary vocabulary tilts to *hotel amenities
+supplier*, *custom hotel room amenities*, *hotel boutique merchandise*, plus the
+pet (*hotel pet amenities*, *luxury hotel pet program*) and incentive
+(*incentive trip gifts*, *room drop gifts*) terms. Golf is property surface
+(pro shop, member gifts, amenity program), never an events vertical:
+tournament-first terms are dropped from the map.
 
 ## Rules
 

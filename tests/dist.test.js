@@ -32,7 +32,7 @@ const PAGES = ["/about/", "/process/", "/contact/", "/privacy/", "/terms/"];
 const expected = ["/", "/products/", "/bespoke/", "/quote/", "/404.html", "/products.html", "/category.html", "/product.html", "/_redirects", ...PAGES];
 expected.push("/guides/", "/glossary/", ...CATS.map((c) => "/guides/" + c.guide + "/"));
 const COMPARISONS = ["embroidery-vs-deboss-vs-laser-etching", "canvas-vs-woven-leather-tote", "350ml-vs-500ml-hotel-bottles", "hotel-slipper-materials-compared", "hotel-tote-styles-compared"];
-const USECASES = ["golf-tournaments", "beach-clubs", "spa-wellness", "hotel-openings", "corporate-retreats"];
+const USECASES = ["golf-resorts", "beach-clubs", "spa-wellness", "hotel-openings", "corporate-retreats", "incentive-travel"];
 expected.push("/for/", ...COMPARISONS.map((s) => "/guides/" + s + "/"), ...USECASES.map((s) => "/for/" + s + "/"));
 expected.push("/collections/", ...COLS.map((c) => "/collections/" + c.slug + "/"));
 CATS.forEach((c) => expected.push("/products/" + c.slug + "/"));
@@ -372,7 +372,7 @@ for (const slug of COMPARISONS) {
 }
 {
   const doc = auditPage("/for/");
-  t.ok(doc.querySelectorAll(".gcard").length === 5 && doc.querySelector('a[href="/guides/"]'), "programs index: 5 cards + guides link");
+  t.ok(doc.querySelectorAll(".gcard").length === USECASES.length && doc.querySelector('a[href="/guides/"]'), "programs index: " + USECASES.length + " cards + guides link");
 }
 for (const slug of USECASES) {
   const url = "/for/" + slug + "/";
@@ -386,14 +386,23 @@ for (const slug of USECASES) {
   const cats = new Set([...cards].map((c) => c.querySelector("a").getAttribute("href").split("/")[2]));
   t.ok(cats.size >= 3, slug + ": products span >= 3 categories");
   t.ok(doc.querySelectorAll(".guide-body .faq__q").length >= 4 && doc.querySelector('a[href="/bespoke/"]'), slug + ": FAQs + bespoke link");
-  t.ok(doc.querySelectorAll(".guide-related .gcard").length === 4, slug + ": 4 other programs");
+  t.ok(doc.querySelectorAll(".guide-related .gcard").length === USECASES.length - 1, slug + ": other programs listed");
   const { graph, types } = ldOf(url);
   t.ok(types.includes("Article") && types.includes("FAQPage"), slug + ": Article + FAQPage schema");
   t.ok(graph.find((n) => n["@type"] === "BreadcrumbList").itemListElement[1].item.endsWith("/for/"), slug + ": breadcrumb through /for/");
 }
 {
   const home = staticDom("/").window.document;
-  t.ok(home.querySelector('.footer a[href="/guides/"]') && home.querySelector('.footer a[href="/for/golf-tournaments/"]'), "home footer links guides + programs");
+  t.ok(home.querySelector('.footer a[href="/guides/"]') && home.querySelector('.footer a[href="/for/golf-resorts/"]') && home.querySelector('.footer a[href="/for/incentive-travel/"]'), "home footer links guides + programs");
+  // Phase 8.5: golf repositioned to on-property; old URL redirected, never linked
+  t.ok(!distExists("/for/golf-tournaments/") && /\/for\/golf-tournaments\/ \/for\/golf-resorts\/ 301/.test(readDist("_redirects")), "golf-tournaments -> golf-resorts 301 in _redirects, old page gone");
+  t.ok(!readDist("sitemap.xml").includes("golf-tournaments"), "sitemap has no golf-tournaments URL");
+  const golf = staticDom("/for/golf-resorts/").window.document;
+  t.ok(/pro shop/i.test(golf.querySelector(".guide-body").textContent) && /member/i.test(golf.querySelector(".guide-body").textContent) && !/tournament welcome kit/i.test(golf.querySelector(".guide-body").textContent), "golf-resorts: on-property framing (pro shop, members), not tournament-first");
+  const inc = staticDom("/for/incentive-travel/").window.document;
+  t.ok(inc.querySelector('a[href="/products/bags/petite-mini-tote/"]') && /room drop/i.test(inc.querySelector(".guide-body").textContent) && inc.querySelector('a[href="/collections/sports-wellness/"]'), "incentive-travel: Petite as room-drop vehicle, links a collection");
+  t.ok(/Groups and Retreats/.test(staticDom("/for/corporate-retreats/").window.document.querySelector("h1").textContent), "corporate-retreats retitled toward groups & retreats at the property");
+  t.ok(/hotel amenities supplier/.test(fs.readFileSync(path.join(ROOT, "docs", "KEYWORD-MAP.md"), "utf8")) && !/golf-tournaments/.test(fs.readFileSync(path.join(ROOT, "docs", "KEYWORD-MAP.md"), "utf8")), "keyword map tilted to hotel amenities vocabulary");
   t.ok(COLS.every((c) => home.querySelector('.col-card a[href="/collections/' + c.slug + '/"]')) && home.querySelectorAll(".col-card").length === COLS.length && !home.querySelector('.col-card a[href^="/for/"]'), "home collection cards link the real collection pages (no /for/ stand-ins)");
   t.ok(fs.existsSync(path.join(ROOT, "docs", "KEYWORD-MAP.md")), "keyword map exists");
 }

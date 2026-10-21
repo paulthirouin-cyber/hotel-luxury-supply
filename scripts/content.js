@@ -60,6 +60,10 @@ function makeResolver(data) {
       if (!(data.USECASES || []).find((g) => g.slug === slug)) throw new Error("unknown use-case link: " + slug);
       return "/for/" + slug + "/";
     }
+    if (kind === "collection") {
+      if (!(data.COLS || []).find((c) => c.slug === slug)) throw new Error("unknown collection link: " + slug);
+      return "/collections/" + slug + "/";
+    }
     if (kind === "glossary") {
       if (!GLOSSARY.terms.find((t) => t.slug === slug)) throw new Error("unknown glossary link: " + slug);
       return "/glossary/#" + slug;
@@ -67,6 +71,7 @@ function makeResolver(data) {
     if (kind === "page") {
       if (slug === "quote") return "/quote/";
       if (slug === "bespoke") return "/bespoke/";
+      if (slug === "collections") return "/collections/";
       if (!PAGES[slug]) throw new Error("unknown page link: " + slug);
       return PAGES[slug].path;
     }
@@ -81,6 +86,7 @@ function labelFor(ref, data) {
   if (kind === "guide") { const g = data.GUIDES.find((x) => x.slug === slug); return g ? g.meta.title.replace(/:.*$/, "") : slug; }
   if (kind === "for") { const g = (data.USECASES || []).find((x) => x.slug === slug); return g ? g.meta.title : slug; }
   if (kind === "for") { const g = (data.USECASES || []).find((x) => x.slug === slug); return g ? g.meta.title : slug; }
+  if (kind === "collection") { const c = (data.COLS || []).find((x) => x.slug === slug); return c ? c.title : slug; }
   if (kind === "glossary") { const t = data.GLOSSARY.terms.find((x) => x.slug === slug); return t ? t.term : slug; }
   if (slug === "quote") return "Quote cart";
   if (slug === "bespoke") return "Bespoke Atelier";
@@ -229,7 +235,7 @@ function renderUseCasesIndex(data) {
   const usecases = data.USECASES || [];
   return crumbs([{ name: "Home", href: "/" }, { name: "For" }]) +
     '<header class="page-intro"><span class="eyebrow">HL Supply / Programs</span><h1>Custom guest goods by property and event</h1>' +
-    '<p class="page-intro__lede">Golf tournaments, beach clubs, spas, openings, and retreats each ask something different of a branded collection. These pages show what properties commission for each, built from the catalog, with the quantities and timelines that fit.</p></header>' +
+    '<p class="page-intro__lede">Golf resorts, beach clubs, spas, openings, the groups a property hosts, and the incentive programs that arrive each ask something different of a branded collection. These pages show what properties commission for each, built from the catalog, with the quantities and timelines that fit.</p></header>' +
     '<div class="gcards gcards--index">' + usecases.map(guideCard).join("") + "</div>" +
     '<section class="page-section page-section--tint"><h2>Buying guides and comparisons</h2><p>Materials, minimums, logo methods, and timelines by category, plus side-by-side comparisons of the decisions buyers ask about most.</p><p><a class="tlink" href="/guides/">Read the guides</a></p></section>';
 }

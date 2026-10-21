@@ -1,29 +1,29 @@
 ---
-title: Custom Welcome Kits for Corporate Retreats and Destination Events
-metaTitle: Custom Corporate Retreat & Destination Event Kits | HL Supply
-description: Branded welcome kits for corporate retreats, incentive trips, and destination weddings: totes, bottles, caps, sleep masks, and leather tags, from 100 units.
+title: Custom Welcome Kits for Groups and Retreats at Your Property
+metaTitle: Groups & Retreats at Your Property: Welcome Kits | HL Supply
+description: Welcome kits for the groups a property hosts: retreats, board meetings, weddings, and gatherings. Totes, bottles, caps, sleep masks, and leather tags from 100 units.
 type: usecase
-audience: retreats and destination events
-keywords: corporate retreat welcome kit, destination event gifts, incentive trip gifts luxury, executive retreat merchandise
+audience: groups and retreats at the property
+keywords: corporate retreat welcome kit, hotel group welcome gifts, destination wedding welcome bags, executive retreat merchandise
 products: pavilion-squared-tote, signature-tote, petite-mini-tote, lumiere-bottle, aura-bottle, regent-classic-cap, heritage-dad-hat, solace-sleeping-mask, clarity-lens-cloth, link-cable-snap, wayfarer-luggage-tag, zenith-yoga-mat
 categories: bags, bottles, hats, accessories, leather-goods
 published: 2026-10-20
-updated: 2026-10-20
-summary: Kits that feel like the property, carry the event, and survive the flight home.
-answer: A corporate retreat welcome kit is the tote, bottle, cap, and small leather or wellness pieces a property or event planner produces for an incentive trip, a leadership offsite, a board meeting, or a destination wedding, in the property's colors or co-branded with the group. HL Supply's hats and leather goods start at 100 units, bags and bottles at 200, and the sleep mask and lens cloth at 250, produced in 4 to 6 weeks after proof approval, which fits most event lead times.
+updated: 2026-10-21
+summary: Kits for the groups a property hosts, built from its own collection so they feel like the property, carry the group quietly, and survive the flight home.
+answer: A group welcome kit is the tote, bottle, cap, and small leather or wellness pieces a property produces for the groups it hosts, from a leadership offsite or a board meeting to a destination wedding or a family gathering, in the property's colors and co-branded with the group where wanted. HL Supply's hats and leather goods start at 100 units, bags and bottles at 200, and the sleep mask and lens cloth at 250, produced in 4 to 6 weeks after proof approval, which fits most event lead times.
 ---
 
-# Custom Welcome Kits for Corporate Retreats and Destination Events
+# Custom Welcome Kits for Groups and Retreats at Your Property
 
-The best event gift is the one that does not look like an event gift. A retreat kit that reads as the property's own collection, with the group's mark applied quietly, is kept and used; a bag of sponsor logos is left in the room. This page covers what event planners, meeting teams, and properties hosting retreats commission from HL Supply, how co-branding works, and the quantities and timelines that fit an event calendar.
+The best group gift is the one that does not look like a group gift. A retreat kit that reads as the property's own collection, with the group's mark applied quietly, is kept and used; a bag of sponsor logos is left in the room. This page covers what a property's groups and events team commissions from HL Supply for the retreats, meetings, weddings, and gatherings it hosts, how co-branding works, and the quantities and timelines that fit a group calendar. Programs placed by an incentive house or agency have their own page: [incentive travel](for:incentive-travel).
 
 ## The retreat kit
 
 A kit that works on arrival, through the program, and on the flight home usually contains five things.
 
-- **The carrier:** [The Pavilion Squared Tote](product:pavilion-squared-tote) stands on a registration table and keeps the kit presentable; [The Signature Solid Tote](product:signature-tote) is the softer alternative and the better beach companion for an incentive trip.
+- **The carrier:** [The Pavilion Squared Tote](product:pavilion-squared-tote) stands on a registration table and keeps the kit presentable; [The Signature Solid Tote](product:signature-tote) is the softer alternative and the better beach companion for a resort retreat.
 - **Hydration:** [The Lumière Bottle](product:lumiere-bottle), slim with an accent wrist strap, is the executive travel bottle; [The Aura Bottle](product:aura-bottle) in 500 ml sits on a boardroom table through a session.
-- **Headwear:** [The Regent Classic Cap](product:regent-classic-cap) for a polished group cap; [The Heritage Dad Hat](product:heritage-dad-hat) for a relaxed incentive trip.
+- **Headwear:** [The Regent Classic Cap](product:regent-classic-cap) for a polished group cap; [The Heritage Dad Hat](product:heritage-dad-hat) for a relaxed offsite.
 - **The flight home:** [The Solace Sleeping Mask](product:solace-sleeping-mask) and [The Clarity Lens Cloth](product:clarity-lens-cloth) in a [Petite Mini Tote](product:petite-mini-tote), the pieces that get used on the plane.
 - **The keepsake:** [The Link Leather Cable Snap](product:link-cable-snap) for the desk after the retreat, or [The Wayfarer Luggage Tag](product:wayfarer-luggage-tag) for the traveler. For wellness-led retreats, [The Zenith Yoga Mat](product:zenith-yoga-mat) at a 100-unit minimum is a realistic group gift.
 

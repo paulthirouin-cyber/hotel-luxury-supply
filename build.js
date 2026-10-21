@@ -394,7 +394,7 @@ function build() {
     const GUIDES = content.loadGuides();
     const USECASES = content.loadUseCases();
     const GLOSSARY = content.loadGlossary();
-    const data = { CATS, PRODS, GUIDES, USECASES, PAGES, GLOSSARY };
+    const data = { CATS, PRODS, COLS, GUIDES, USECASES, PAGES, GLOSSARY };
     GUIDES.forEach((g) => { const c = CATS.find((x) => x.slug === g.meta.category); g.categoryName = c ? c.name : ""; });
     // every category must point at an existing guide and vice versa
     CATS.forEach((c) => { if (c.guide && !GUIDES.find((g) => g.slug === c.guide)) throw new Error("category " + c.slug + " points at missing guide " + c.guide); });
@@ -419,7 +419,7 @@ function build() {
       }), meta);
       GUIDE_SUMMARIES.push({ title: r.meta.title, path: g.path, summary: r.meta.summary || r.meta.description, words: r.words });
     }
-    const forMeta = { title: "Custom Guest Goods by Property and Event | HL Supply", description: "What golf tournaments, beach clubs, spas, hotel openings, and corporate retreats commission from HL Supply, with the quantities and timelines that fit each program.", path: "/for/", keywords: ["custom hospitality products by use case", "hotel merchandise programs"] };
+    const forMeta = { title: "Custom Guest Goods by Property and Event | HL Supply", description: "What golf resorts, beach clubs, spas, openings, hosted groups, and incentive programs commission from HL Supply, with the quantities and timelines that fit each.", path: "/for/", keywords: ["custom hospitality products by use case", "hotel merchandise programs"] };
     emit("for/index.html", renderCatalogPage("#/for", forMeta, {
       view: "viewPage",
       mutate(doc) { doc.getElementById("pageMount").innerHTML = content.renderUseCasesIndex(data); },
@@ -455,7 +455,12 @@ function build() {
   write("products.html", PRODUCTS_SHIM);
   write("category.html", CATEGORY_SHIM);
   write("product.html", productShim(PRODS));
-  write("_redirects", "/index.html / 301\n");
+  write("_redirects", [
+    "/index.html / 301",
+    "/for/golf-tournaments/ /for/golf-resorts/ 301",
+    "/for/golf-tournaments /for/golf-resorts/ 301",
+    ""
+  ].join("\n"));
   write("_headers", [
     "/*",
     "  X-Content-Type-Options: nosniff",

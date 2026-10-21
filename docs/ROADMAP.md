@@ -250,7 +250,7 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
       products, golf resort merchandise, hotel spa amenities, hotel pool
       amenities.
       ✔ 2026-10-21: `js/collections.js` holds five collections (poolside, beach-club, spa-suite, golf-club, sports-wellness) with brand-voice intro, buyer framing, direct answer, tailored bespoke hook (sports-wellness offers tennis/padel program development) and memberships; it annotates every product with `collections`. `/collections/` + 5 pages pre-rendered by `catalog.js` (CollectionPage + ItemList + BreadcrumbList, direct-answer opener, product cards without pricing, hook CTA to `/bespoke/?collection=`, which prefills category + notes). Product pages show “Featured in”; category pages list the collections curating them; homepage cards (now 5, 3-up + 2-wide, no orphan) link the real pages and the /for/beach-clubs stand-in is retired; footer “Collections” links the index. Also fixed the duplicated Resources column in the products.html footer. 90 pages (86 indexable), all suites green.
-- [ ] 8.5 **/for/ repositioning to match the business:** rename
+- [x] 8.5 **/for/ repositioning to match the business:** rename
       /for/golf-tournaments/ → /for/golf-resorts/ (content reframed to
       on-property: pro shop retail, member gifts, amenity program; redirect
       the old URL in dist + sitemap swap); retitle corporate-retreats
@@ -263,6 +263,7 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
       vocabulary to hotel amenities supplier / custom hotel room amenities /
       hotel boutique merchandise + the pet and incentive terms; drop
       tournament-first terms.
+      ✔ 2026-10-21: `/for/golf-tournaments/` → `/for/golf-resorts/` (content rewritten around the three on-property surfaces: pro shop retail, member gifts, amenity program; links the Golf & Club collection); `_redirects` carries the 301 and the old URL is gone from dist and the sitemap. `/for/corporate-retreats/` retitled “Custom Welcome Kits for Groups and Retreats at Your Property” (slug kept). New `/for/incentive-travel/` (incentive houses, DMCs, event agencies; room-drop format with the Petite Mini Tote as the vehicle; 100-MOQ pieces steered; keywords incentive trip gifts / room drop gifts / corporate incentive travel welcome gifts). Footers list Golf Resorts, Groups & Retreats, Incentive Travel. `docs/KEYWORD-MAP.md` gains a Vocabulary section (hotel amenities supplier / custom hotel room amenities / hotel boutique merchandise + pet and incentive terms; tournament-first terms dropped) plus rows for pets, the five collections, the pet guide, and incentive travel. Markdown link shorthands now include `for:` and `collection:` (previously `for:` was declared but never parsed). 91 pages (87 indexable), all suites green.
 - [ ] 8.6 Propagate: sitemap, llms.txt, footer Resources, internal-link
       mesh (each new product ≥3 inbound links; each collection linked from
       homepage + relevant categories), CLAUDE.md + SEO plan count updates
@@ -317,3 +318,5 @@ update ALL count assertions deliberately (products 39→45, categories 7→8).*
 - 2026-10-21 — The Pet Collection reuses existing finishing methods only (laser etch, deboss, embroidery/print, woven label) and is one-size by rule (no beds, collars, clothing), per Paul's selection filter. Games & Leisure (G-001–G-006) stays parked as the 9th category.
 - 2026-10-21 — Collections are JS data (`js/collections.js`), not Markdown: they are rendered by the same `catalog.js` renderer in SPA, preview, and static modes, so a collection works everywhere a category does and never duplicates a product URL. Homepage collection cards stay hand-written in `index.html` (editorial copy); a test asserts one card per collection.
 - 2026-10-21 — Pet products carry no collection membership yet; a “Pet Program” collection is added only if the category earns it in Search Console.
+- 2026-10-21 — Golf is repositioned as property surface: the golf page lives at `/for/golf-resorts/` and the old tournament URL is a 301, not a second page, so authority consolidates. Tournament editions are described as a side embroidery on the standard club cap rather than a separate program.
+- 2026-10-21 — Incentive travel is a welcome-inbound, no-outbound channel: the page speaks to incentive houses/DMCs/agencies and always frames the goods as the host property's collection with the program's mark secondary.
