@@ -28,7 +28,7 @@ for (const f of CSS) {
   if (!html.includes(tag)) throw new Error("missing tag: " + tag);
   if (f === "css/fonts.css") {
     // single-file preview cannot carry font files: fall back to Google Fonts
-    html = html.replace(tag, '<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />');
+    html = html.replace(tag, '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Hanken+Grotesk:wght@300..500&display=swap" rel="stylesheet" />');
     continue;
   }
   html = html.replace(tag, "<style>\n" + read(f) + "\n</style>");

@@ -16,9 +16,9 @@
 .page-hero__copy .eyebrow { display: block; margin-bottom: 18px; }
 
 .page-hero h1 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: clamp(36px, 4.6vw, 60px);
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 500;
+  font-size: clamp(38.9px, 5vw, 64.8px);
   line-height: 1.08;
   color: var(--navy, #1b2a41);
   margin-bottom: 20px;
@@ -87,7 +87,7 @@
 
 .ccard__body { padding: 18px 20px 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; flex: 1; }
 
-.ccard__body h3 { font-family: var(--serif, "Marcellus", serif); font-weight: 400; font-size: 22px; color: var(--navy, #1b2a41); }
+.ccard__body h3 { font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 600; font-size: 23.8px; color: var(--navy, #1b2a41); }
 
 .ccard__body p { font-size: 14.5px; line-height: 1.6; color: var(--ink, #33383d); margin-bottom: 6px; }
 
@@ -124,7 +124,7 @@
 .pcard__body { padding: 22px 22px 24px; display: flex; flex-direction: column; }
 
 .pcard__cat {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   font-weight: 400;
   letter-spacing: 0.28em;
@@ -134,9 +134,9 @@
 }
 
 .pcard__body h3 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: 22px;
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 600;
+  font-size: 23.8px;
   color: var(--navy, #1b2a41);
   margin-bottom: 8px;
 }
@@ -150,7 +150,7 @@
 
 .pcard__meta dt {
   flex: 0 0 auto;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -166,7 +166,7 @@
 
 .pt__label {
   display: block;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -185,7 +185,7 @@
   background: #fffdf8;
   border: 1px solid rgba(216, 203, 174, 0.9);
   border-radius: 2px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   cursor: pointer;
   text-align: center;
   transition: background 0.3s, border-color 0.3s;
@@ -195,7 +195,7 @@
 
 .pt-tier:focus-visible { outline: 2px solid var(--pool-deep, #52869a); outline-offset: 2px; }
 
-.pt-tier__qty { font-family: var(--serif, "Marcellus", serif); font-size: 15px; color: var(--navy, #1b2a41); }
+.pt-tier__qty { font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 600; font-size: 16.2px; color: var(--navy, #1b2a41); }
 
 .pt-tier__price { font-size: 11px; font-weight: 300; color: var(--navy-soft, #2c3e57); letter-spacing: 0.02em; }
 
@@ -223,7 +223,7 @@
 .pcard__qtyrow { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
 
 .pcard__qtyrow label {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -232,7 +232,7 @@
 
 .pcard__qty {
   width: 120px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-weight: 300;
   font-size: 15px;
   color: var(--navy, #1b2a41);
@@ -257,7 +257,7 @@
   gap: 12px;
   border-top: 1px solid rgba(216, 203, 174, 0.7);
   padding-top: 12px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
 }
 
 .pcard__total span {
@@ -289,8 +289,8 @@
 }
 
 .custom-note p {
-  font-family: var(--serif, "Marcellus", serif);
-  font-size: clamp(19px, 2vw, 24px);
+  font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 500;
+  font-size: clamp(20.5px, 2.2vw, 25.9px);
   line-height: 1.5;
   color: var(--navy, #1b2a41);
   max-width: 34ch;
@@ -299,7 +299,7 @@
 .custom-note small {
   display: block;
   margin-top: 12px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 13.5px;
   color: var(--navy-soft, #2c3e57);
 }
@@ -312,7 +312,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -346,12 +346,13 @@
   top: 100px;
 }
 
-@media (max-width: 900px) { .pd__ph { position: static; aspect-ratio: 4 / 3; } }
+/* Keep the frame positioned: .ph__img is absolute and must stay inside it (390px overlap bug). */
+@media (max-width: 900px) { .pd__ph { position: relative; aspect-ratio: 4 / 3; } }
 
 .pd__info h1 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: clamp(30px, 3.4vw, 42px);
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 500;
+  font-size: clamp(32.4px, 3.7vw, 45.4px);
   color: var(--navy, #1b2a41);
   margin-bottom: 14px;
 }
@@ -363,7 +364,7 @@
 .pd__notes { margin: 4px 0 20px; display: grid; gap: 8px; }
 
 .pd__notes label {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -371,7 +372,7 @@
 }
 
 .pd__notes textarea {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-weight: 300;
   font-size: 14.5px;
   line-height: 1.6;
@@ -392,7 +393,7 @@
 .pd__ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
 
 .pd__logonote {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 13px;
   color: var(--chrome-text, #5f6a72);
 }
@@ -410,7 +411,7 @@
   border-radius: 999px;
   background: var(--green, #3f5c4f);
   color: var(--cream, #fcf9f2);
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11px;
   letter-spacing: 0.04em;
 }
@@ -428,7 +429,7 @@
   border: 1px solid rgba(154, 163, 168, 0.6);
   box-shadow: 0 16px 36px -22px rgba(27, 42, 65, 0.4);
   padding: 14px 24px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 13.5px;
   letter-spacing: 0.04em;
   max-width: min(420px, calc(100vw - 40px));
@@ -467,7 +468,7 @@
 /* ---------- landing note (fix phase) ---------- */
 .catalog-note {
   margin-top: clamp(24px, 3vw, 36px);
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 13.5px;
   letter-spacing: 0.04em;
   color: var(--chrome-text, #5f6a72);
@@ -503,12 +504,12 @@
 
 @media (min-width: 901px) {
   .pd__media { position: sticky; top: 100px; }
-  .pd__ph { position: static; }
+  .pd__ph { position: relative; }
 }
 
 /* pricing note under tiers */
 .pd__pricenote {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 12.5px;
   color: var(--chrome-text, #5f6a72);
   margin: -6px 0 16px;
@@ -522,7 +523,7 @@
 }
 
 .pd__specs h2 {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   font-weight: 400;
   letter-spacing: 0.24em;
@@ -538,7 +539,7 @@
 .pd__specs dt {
   flex: 0 0 auto;
   min-width: 110px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -555,9 +556,9 @@
 }
 
 .pd__related h2 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: clamp(24px, 2.6vw, 32px);
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 500;
+  font-size: clamp(25.9px, 2.8vw, 34.6px);
   color: var(--navy, #1b2a41);
   margin-bottom: clamp(24px, 3vw, 36px);
 }
@@ -603,9 +604,9 @@
 }
 
 .rel-card__body h3 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: 18px;
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 600;
+  font-size: 19.4px;
   color: var(--navy, #1b2a41);
 }
 
@@ -617,9 +618,9 @@
 /* ---------- not-found states (routing fix) ---------- */
 .nf { text-align: left; }
 .nf__title {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: clamp(30px, 3.6vw, 44px);
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 500;
+  font-size: clamp(32.4px, 3.9vw, 47.5px);
   color: var(--navy, #1b2a41);
   margin-bottom: 14px;
 }
@@ -632,7 +633,7 @@
 
 /* ---------- category cards: pricing lives on the product page ---------- */
 .pcard__pricing-note {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 12.5px;
   letter-spacing: 0.04em;
   color: var(--chrome-text, #5f6a72);
@@ -647,8 +648,8 @@
 /* ---------- catalog imagery additions ---------- */
 
 .page-hero__tagline {
-  font-family: var(--serif, "Marcellus", serif);
-  font-size: 15px;
+  font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 600;
+  font-size: 16.2px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--terracotta-text, #a4532f);
@@ -664,8 +665,8 @@
 .category-answer {
   max-width: 760px;
   margin: 0 0 28px;
-  font-family: "Marcellus", serif;
-  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  font-family: "Cormorant Garamond", serif; font-weight: 600;
+  font-size: clamp(1.15rem, 1.7vw, 1.4rem);
   line-height: 1.55;
   color: var(--navy);
 }
@@ -684,8 +685,8 @@
 }
 .faq__q {
   margin: 0 0 10px;
-  font-family: "Marcellus", serif;
-  font-weight: 400;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 600;
   font-size: 1.1rem;
   line-height: 1.4;
   color: var(--navy);
@@ -702,4 +703,4 @@
 .guide-link__collections { display: block; margin-top: 6px; }
 .collection-framing { max-width: 68ch; font-size: 16.5px; line-height: 1.7; color: var(--navy-soft, #41506a); margin: 0 0 clamp(28px, 4vw, 44px); }
 .collection-hook { margin: clamp(28px, 4vw, 44px) 0; }
-.gcard--collection h3 { font-size: 22px; }
+.gcard--collection h3 { font-size: 23.8px; font-weight: 600; }

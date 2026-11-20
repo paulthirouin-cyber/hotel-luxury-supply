@@ -131,17 +131,17 @@
 .accent-chrome     .at-card__accent { background: var(--chrome, #9aa3a8); }
 
 .at-card__panel h3 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: 23px;
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 500;
+  font-size: 24.8px;
   color: var(--navy, #1b2a41);
   margin-bottom: 8px;
 }
 
-.at-card--feature .at-card__panel h3 { font-size: 27px; }
+.at-card--feature .at-card__panel h3 { font-size: 29.2px; font-weight: 500; }
 
 .at-card__panel p {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-weight: 300;
   font-size: 15px;
   line-height: 1.65;
@@ -156,7 +156,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.22em;

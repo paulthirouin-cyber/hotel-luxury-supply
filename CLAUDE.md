@@ -109,7 +109,11 @@ four suites (site, flows, dist, lead); `npm run lighthouse` enforces ≥ 95.
   green `#3f5c4f`, pool blue `#7fb3c1`, canvas beige `#e7ddc6`, terracotta
   `#c47e5d`, muted chrome `#9aa3a8`. CSS vars in `css/styles.css`.
   No gold, no black-and-gold, no bright gradients, no cartoons.
-- Type: Marcellus (display serif) + Jost (body sans), Google Fonts.
+- Type: Cormorant Garamond (display serif; 500 at display sizes, 600 below
+  ~24px, never under 16px, true italic as a sparing accent) + Hanken Grotesk
+  (body sans; 300 body, 400–500 buttons/nav/small UI). Self-hosted latin
+  woff2 in `assets/fonts/`. Letterspaced-uppercase labels, CTAs and chips
+  stay as they are. No weight 700 exists: bold resolves to 500.
 - Voice: French Riviera, yacht club, hotel stationery. Editorial, calm.
 - Language: Quote Cart, Project Selections, Add to Quote, Submit to Concierge,
   Request Mockup, Bespoke. **Never:** Buy Now, Add to Cart, Checkout, Payment,

@@ -2,7 +2,7 @@
    HL SUPPLY — Phase 1 homepage
    Palette: warm ivory, cream, deep navy, resort green,
    pool blue, canvas beige, soft terracotta, muted chrome.
-   Type: Marcellus (display serif) + Jost (body sans).
+   Type: Cormorant Garamond (display serif, 500/600) + Hanken Grotesk (body sans, 300–500).
    ============================================================ */
 
 :root {
@@ -22,8 +22,8 @@
   --ink: #33383d;
   --hairline: rgba(27, 42, 65, 0.16);
 
-  --serif: "Marcellus", "Times New Roman", serif;
-  --sans: "Jost", "Helvetica Neue", Arial, sans-serif;
+  --serif: "Cormorant Garamond", "Times New Roman", serif;
+  --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
 
   --max: 1240px;
   --pad: clamp(20px, 5vw, 64px);
@@ -98,13 +98,19 @@ a { color: inherit; text-decoration: none; }
 
 h1, h2, h3 {
   font-family: var(--serif);
-  font-weight: 400;
+  font-weight: 500;
   color: var(--navy);
   line-height: 1.12;
   letter-spacing: 0.005em;
 }
 
-h2 { font-size: clamp(30px, 3.6vw, 46px); }
+h2 { font-size: clamp(32.4px, 3.9vw, 49.7px); font-weight: 500; }
+
+/* Cormorant Garamond is high-contrast: 600 below ~24px, never under 16px.
+   Neither family ships a 700, so bold always resolves to 500 (no faux-bold). */
+h3 { font-weight: 600; }
+h4, h5, h6, b, strong, th { font-weight: 500; }
+.hero h1 em, .display-accent { font-style: italic; font-weight: 500; }
 
 .section-head p {
   margin-top: 18px;
@@ -288,8 +294,8 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); }
 .header.is-scrolled .header__inner { height: 68px; }
 
 .wordmark {
-  font-family: var(--serif);
-  font-size: 23px;
+  font-family: var(--serif); font-weight: 500;
+  font-size: 24.8px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--navy);
@@ -391,7 +397,7 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); }
 }
 
 .hero h1 {
-  font-size: clamp(42px, 5.6vw, 72px);
+  font-size: clamp(45.4px, 6vw, 77.8px); font-weight: 500;
   line-height: 1.06;
   margin-bottom: 26px;
 }
@@ -508,7 +514,7 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); }
   align-items: flex-start;
 }
 
-.col-card h3 { font-size: 26px; }
+.col-card h3 { font-size: 28.1px; font-weight: 500; }
 
 .col-card p { font-size: 15.5px; max-width: 48ch; margin-bottom: 8px; }
 
@@ -541,8 +547,8 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--serif);
-  font-size: 13px;
+  font-family: var(--serif); font-weight: 600;
+  font-size: 16px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--chrome-text);
@@ -571,14 +577,14 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); }
 }
 
 .step__num {
-  font-family: var(--serif);
-  font-size: 15px;
+  font-family: var(--serif); font-weight: 600;
+  font-size: 16.2px;
   letter-spacing: 0.3em;
   color: var(--terracotta-text);
   margin-bottom: 14px;
 }
 
-.step h3 { font-size: 24px; margin-bottom: 10px; }
+.step h3 { font-size: 25.9px; font-weight: 500; margin-bottom: 10px; }
 
 .step p { font-size: 15.5px; max-width: 38ch; }
 
@@ -603,7 +609,7 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); }
 
 .concierge h2 {
   color: var(--cream);
-  font-size: clamp(32px, 4vw, 52px);
+  font-size: clamp(34.6px, 4.3vw, 56.2px); font-weight: 500;
   margin-bottom: 24px;
 }
 
@@ -633,7 +639,7 @@ h2 { font-size: clamp(30px, 3.6vw, 46px); }
 
 @media (max-width: 820px) { .footer__grid { grid-template-columns: 1fr; } }
 
-.footer .wordmark { font-size: 26px; margin-bottom: 16px; display: inline-block; }
+.footer .wordmark { font-size: 28.1px; font-weight: 500; margin-bottom: 16px; display: inline-block; }
 
 .footer__tag {
   font-size: 15px;

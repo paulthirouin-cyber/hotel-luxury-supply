@@ -696,6 +696,7 @@ for (const url of ["/", "/products/", "/products/hats/", "/products/hats/riviera
   const preloads = [...doc.querySelectorAll('link[rel="preload"][as="font"]')];
   t.ok(preloads.length === 2 && preloads.every((l) => l.hasAttribute("crossorigin") && fs.existsSync(path.join(DIST, l.getAttribute("href")))), ctx + " two font preloads that exist");
   t.ok(/font-display:swap/.test(style.textContent), ctx + " font-display swap");
+  t.ok(!/.pd__ph{position:static/.test(style.textContent), ctx + " product gallery frame never position:static (absolute photo would escape it on mobile)");
   t.ok([...doc.querySelectorAll("script[src]")].every((s) => s.hasAttribute("defer")), ctx + " all scripts deferred");
   const imgs = [...doc.querySelectorAll("img[src^='/assets/']")];
   t.ok(imgs.every((i) => Number(i.getAttribute("width")) > 0 && Number(i.getAttribute("height")) > 0), ctx + " every image has width/height");

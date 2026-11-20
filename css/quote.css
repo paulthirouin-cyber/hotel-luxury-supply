@@ -10,9 +10,9 @@
 .qhead { max-width: 720px; margin-bottom: clamp(36px, 4.5vw, 56px); }
 
 .qhead h1 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: clamp(36px, 4.4vw, 56px);
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 500;
+  font-size: clamp(38.9px, 4.8vw, 60.5px);
   color: var(--navy, #1b2a41);
   margin-bottom: 16px;
 }
@@ -40,7 +40,7 @@
 @media (max-width: 960px) { .qgrid { grid-template-columns: 1fr; } }
 
 .qgrid__lines-title {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.28em;
@@ -84,9 +84,9 @@
 }
 
 .qline__top h3 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: 21px;
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 600;
+  font-size: 22.7px;
   color: var(--navy, #1b2a41);
 }
 
@@ -95,7 +95,7 @@
   border: none;
   border-bottom: 1px solid rgba(154, 163, 168, 0.6);
   padding: 2px 0;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -113,7 +113,7 @@
 .qline__meta dt {
   flex: 0 0 auto;
   min-width: 104px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -125,7 +125,7 @@
 .qline__edit { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 
 .qline__edit label {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -134,7 +134,7 @@
 
 .qline__edit input {
   width: 110px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-weight: 300;
   font-size: 15px;
   color: var(--navy, #1b2a41);
@@ -158,7 +158,7 @@
   border-top: 1px solid rgba(216, 203, 174, 0.7);
   padding-top: 10px;
   margin-bottom: 12px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
 }
 
 .qline__total span {
@@ -175,7 +175,7 @@
 .qline__notes { display: grid; gap: 6px; }
 
 .qline__notes label {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -183,7 +183,7 @@
 }
 
 .qline__notes textarea {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-weight: 300;
   font-size: 13.5px;
   line-height: 1.55;
@@ -211,16 +211,16 @@
 }
 
 .qcard h2 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: 23px;
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 500;
+  font-size: 24.8px;
   color: var(--navy, #1b2a41);
   margin-bottom: 12px;
 }
 
 .qcard__intro { font-size: 14px; line-height: 1.65; color: var(--navy-soft, #2c3e57); margin-bottom: 18px; }
 
-.qnote { font-family: var(--sans, "Jost", sans-serif); font-size: 12.5px; color: var(--chrome-text, #5f6a72); margin-top: 12px; }
+.qnote { font-family: var(--sans, "Hanken Grotesk", sans-serif); font-size: 12.5px; color: var(--chrome-text, #5f6a72); margin-top: 12px; }
 
 .qnote--foot { margin-top: 28px; }
 
@@ -230,7 +230,7 @@
 .qsum div { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; }
 
 .qsum dt {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -242,7 +242,7 @@
 .qsum__total { border-top: 1px solid rgba(216, 203, 174, 0.8); padding-top: 12px; margin-top: 4px; }
 
 .qsum__total dt { color: var(--green, #3f5c4f); }
-.qsum__total dd { font-family: var(--serif, "Marcellus", serif); font-size: 16px; color: var(--navy, #1b2a41); }
+.qsum__total dd { font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 600; font-size: 17.3px; color: var(--navy, #1b2a41); }
 
 /* ---------- project details form ---------- */
 
@@ -256,7 +256,7 @@
 .qd-field--wide { grid-column: 1 / -1; }
 
 .qd-field label {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -268,7 +268,7 @@
 .qd-field input,
 .qd-field select,
 .qd-field textarea {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-weight: 300;
   font-size: 14px;
   color: var(--navy, #1b2a41);
@@ -309,7 +309,7 @@
 
 /* error message */
 .qerror {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 13.5px;
   color: var(--terracotta-text, #a4532f);
   border: 1px solid rgba(196, 126, 93, 0.5);
@@ -345,15 +345,15 @@
 
 .qdrop__main {
   display: block;
-  font-family: var(--serif, "Marcellus", serif);
-  font-size: 17px;
+  font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 600;
+  font-size: 18.4px;
   color: var(--navy, #1b2a41);
   margin-bottom: 6px;
 }
 
 .qdrop__sub {
   display: block;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 12px;
   letter-spacing: 0.06em;
   color: var(--chrome-text, #5f6a72);
@@ -371,7 +371,7 @@
 .qfiles { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 6px; }
 
 .qfiles li {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 13px;
   color: var(--navy-soft, #2c3e57);
   border: 1px solid rgba(216, 203, 174, 0.8);
@@ -386,9 +386,9 @@
 .qempty, .qsuccess { max-width: 640px; padding: clamp(30px, 5vw, 60px) 0; }
 
 .qempty h1, .qsuccess h1 {
-  font-family: var(--serif, "Marcellus", serif);
-  font-weight: 400;
-  font-size: clamp(30px, 3.8vw, 46px);
+  font-family: var(--serif, "Cormorant Garamond", serif);
+  font-weight: 500;
+  font-size: clamp(32.4px, 4.1vw, 49.7px);
   color: var(--navy, #1b2a41);
   margin-bottom: 16px;
 }
@@ -404,7 +404,7 @@
 .qsuccess__meta dt {
   flex: 0 0 auto;
   min-width: 160px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -419,7 +419,7 @@
   background: none;
   border: none;
   border-bottom: 1px solid rgba(154, 163, 168, 0.6);
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -444,7 +444,7 @@
   border: none;
   border-bottom: 1px solid currentColor;
   padding: 2px 0;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -482,7 +482,7 @@ body.quote-doc-open { overflow: hidden; }
   flex-wrap: wrap;
 }
 
-.qdoc__toolbar p { font-family: var(--sans, "Jost", sans-serif); font-size: 12.5px; max-width: 46ch; }
+.qdoc__toolbar p { font-family: var(--sans, "Hanken Grotesk", sans-serif); font-size: 12.5px; max-width: 46ch; }
 
 .qdoc__toolbar-actions { display: flex; gap: 10px; }
 
@@ -514,18 +514,18 @@ body.quote-doc-open { overflow: hidden; }
 .qdoc__head { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; margin-bottom: 26px; flex-wrap: wrap; }
 
 .qdoc__wordmark {
-  font-family: var(--serif, "Marcellus", serif);
-  font-size: 22px;
+  font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 600;
+  font-size: 23.8px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--navy, #1b2a41);
 }
 
-.qdoc__refblock { display: grid; gap: 2px; text-align: right; font-family: var(--sans, "Jost", sans-serif); font-size: 12.5px; color: var(--navy-soft, #2c3e57); }
+.qdoc__refblock { display: grid; gap: 2px; text-align: right; font-family: var(--sans, "Hanken Grotesk", sans-serif); font-size: 12.5px; color: var(--navy-soft, #2c3e57); }
 
-.qdoc h1 { font-family: var(--serif, "Marcellus", serif); font-weight: 400; font-size: 32px; color: var(--navy, #1b2a41); margin-bottom: 8px; }
+.qdoc h1 { font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 500; font-size: 34.6px; color: var(--navy, #1b2a41); margin-bottom: 8px; }
 
-.qdoc__sub { font-family: var(--sans, "Jost", sans-serif); font-size: 14px; color: var(--navy-soft, #2c3e57); margin-bottom: 20px; }
+.qdoc__sub { font-family: var(--sans, "Hanken Grotesk", sans-serif); font-size: 14px; color: var(--navy-soft, #2c3e57); margin-bottom: 20px; }
 
 .qdoc__rule { height: 1px; background: var(--terracotta, #c47e5d); width: 64px; margin-bottom: 24px; }
 
@@ -538,16 +538,16 @@ body.quote-doc-open { overflow: hidden; }
 .qdoc__meta dt {
   flex: 0 0 auto;
   min-width: 150px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--chrome-text, #5f6a72);
 }
 
-.qdoc__meta dd { margin: 0; font-family: var(--sans, "Jost", sans-serif); font-size: 13.5px; color: var(--navy, #1b2a41); }
+.qdoc__meta dd { margin: 0; font-family: var(--sans, "Hanken Grotesk", sans-serif); font-size: 13.5px; color: var(--navy, #1b2a41); }
 
-.qdoc__table { width: 100%; border-collapse: collapse; margin-bottom: 26px; font-family: var(--sans, "Jost", sans-serif); }
+.qdoc__table { width: 100%; border-collapse: collapse; margin-bottom: 26px; font-family: var(--sans, "Hanken Grotesk", sans-serif); }
 
 .qdoc__table th {
   text-align: left;
@@ -576,16 +576,16 @@ body.quote-doc-open { overflow: hidden; }
 
 .qdoc__summary div { display: flex; justify-content: space-between; gap: 16px; }
 
-.qdoc__summary dt { font-family: var(--sans, "Jost", sans-serif); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--chrome-text, #5f6a72); }
+.qdoc__summary dt { font-family: var(--sans, "Hanken Grotesk", sans-serif); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--chrome-text, #5f6a72); }
 
-.qdoc__summary dd { margin: 0; font-family: var(--sans, "Jost", sans-serif); font-size: 13px; color: var(--navy, #1b2a41); }
+.qdoc__summary dd { margin: 0; font-family: var(--sans, "Hanken Grotesk", sans-serif); font-size: 13px; color: var(--navy, #1b2a41); }
 
 .qdoc__total { border-top: 1px solid var(--navy, #1b2a41); padding-top: 10px; margin-top: 4px; }
 .qdoc__total dt { color: var(--green, #3f5c4f); }
-.qdoc__total dd { font-family: var(--serif, "Marcellus", serif); font-size: 15px; }
+.qdoc__total dd { font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 600; font-size: 16.2px; }
 
 .qdoc__disclaimer {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11.5px;
   line-height: 1.6;
   color: var(--navy-soft, #2c3e57);
@@ -595,7 +595,7 @@ body.quote-doc-open { overflow: hidden; }
 }
 
 .qdoc__foot {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;

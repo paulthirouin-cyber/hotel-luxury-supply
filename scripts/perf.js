@@ -7,7 +7,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const PRELOAD_FONTS = ["/assets/fonts/marcellus-latin.woff2", "/assets/fonts/jost-latin.woff2"];
+const PRELOAD_FONTS = ["/assets/fonts/cormorant-garamond-latin.woff2", "/assets/fonts/hanken-grotesk-latin.woff2"];
 
 function minifyCss(css) {
   return css

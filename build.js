@@ -295,7 +295,7 @@ function shimPage(title, body, script) {
 <script src="/js/routes.js"></script>
 <script>${script}</script>
 </head>
-<body><p style="font-family:Jost,sans-serif;padding:2rem">${body}</p></body>
+<body><p style="font-family:'Hanken Grotesk',Helvetica,sans-serif;padding:2rem">${body}</p></body>
 </html>
 `;
 }

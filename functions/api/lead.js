@@ -26,9 +26,9 @@ function autoReply(lead, email) {
     : lead.type === "sample-kit"
       ? "We will confirm the sample kit and the delivery address by email before it ships."
       : `The concierge reviews every ${label} personally and replies the same business day (Monday to Friday) with product direction and next steps, usually with a few questions to shape the brief.${refLine}`;
-  const html = `<div style="font-family:Jost,Helvetica,Arial,sans-serif;color:#1b2a41;max-width:600px;line-height:1.55">
+  const html = `<div style="font-family:'Hanken Grotesk',Helvetica,Arial,sans-serif;color:#1b2a41;max-width:600px;line-height:1.55">
 <p style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#5f6a72">HL Supply · Concierge</p>
-<h2 style="font-family:Marcellus,Georgia,serif;font-weight:400;margin:0 0 16px">Your HL Supply request — next steps</h2>
+<h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0 0 16px">Your HL Supply request — next steps</h2>
 <p>${greet}</p>
 <p>Thank you. We have your ${esc(label)}.</p>
 <p>${next}</p>
@@ -69,9 +69,9 @@ function render(lead) {
   const text = flatten(lead.payload).filter(([k]) => k !== "website").map(([k, v]) => `${k}: ${v}`).join("\n");
   return {
     subject: `[HL Supply] New ${lead.type} request` + (lead.payload.property ? ` — ${lead.payload.property}` : "") + (lead.payload.ref || lead.payload.reference ? ` (${lead.payload.ref || lead.payload.reference})` : ""),
-    html: `<div style="font-family:Jost,Helvetica,Arial,sans-serif;color:#1b2a41;max-width:640px">
+    html: `<div style="font-family:'Hanken Grotesk',Helvetica,Arial,sans-serif;color:#1b2a41;max-width:640px">
 <p style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#5f6a72">HL Supply · Concierge</p>
-<h2 style="font-family:Marcellus,Georgia,serif;font-weight:400;margin:0 0 16px">New ${esc(lead.type)} request</h2>
+<h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0 0 16px">New ${esc(lead.type)} request</h2>
 <table style="border-collapse:collapse;font-size:14px">${rows}</table>
 <p style="font-size:12px;color:#5f6a72;margin-top:24px">Sent ${esc(lead.sentAt)} from ${esc(lead.page)}</p>
 </div>`,

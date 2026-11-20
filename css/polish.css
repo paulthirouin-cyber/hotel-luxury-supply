@@ -34,7 +34,7 @@ h2 { letter-spacing: 0.012em; }
   background: none;
   border: none;
   padding: 8px 2px;
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 12.5px;
   font-weight: 400;
   letter-spacing: 0.24em;
@@ -104,8 +104,8 @@ h2 { letter-spacing: 0.012em; }
 }
 
 .mobile-menu__nav a {
-  font-family: var(--serif, "Marcellus", serif);
-  font-size: clamp(28px, 7vw, 36px);
+  font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 500;
+  font-size: clamp(30.2px, 7.6vw, 38.9px);
   color: var(--navy, #1b2a41);
   padding: 18px 2px;
   border-bottom: 1px solid rgba(216, 203, 174, 0.9);
@@ -124,7 +124,7 @@ h2 { letter-spacing: 0.012em; }
 .mobile-menu__foot .btn { justify-self: start; }
 
 .mobile-menu__foot p {
-  font-family: var(--sans, "Jost", sans-serif);
+  font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-weight: 300;
   font-size: 14px;
   color: var(--navy-soft, #2c3e57);
@@ -318,7 +318,7 @@ h2 { letter-spacing: 0.012em; }
 
   .hero__content { padding: 70px 0 96px; }
 
-  .hero h1 { font-size: clamp(36px, 10vw, 44px); }
+  .hero h1 { font-size: clamp(38.9px, 10.8vw, 47.5px); font-weight: 500; }
 
   .btn { padding: 15px 26px 14px; }
 
