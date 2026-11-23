@@ -15,7 +15,7 @@ const DIR = path.join(__dirname, "..", "assets", "catalog");
 const HERO_WIDTHS = [1600, 960];
 const CARD_WIDTH = 480;
 const PRINT_WIDTH = 600;
-const CREAM = { r: 252, g: 249, b: 242 }; // brand cream #fcf9f2
+const CREAM = { r: 252, g: 249, b: 242 }; // brand cream #FFFDF8
 
 async function main() {
   const files = fs.readdirSync(DIR);

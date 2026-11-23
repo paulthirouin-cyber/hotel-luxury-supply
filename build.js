@@ -113,7 +113,7 @@ function headHTML(meta) {
     meta.noindex ? `<meta name="robots" content="noindex,follow" />` : "",
     meta.keywords && meta.keywords.length ? `<meta name="keywords" content="${esc(meta.keywords.join(", "))}" />` : "",
     `<link rel="canonical" href="${esc(url)}" />`,
-    `<meta name="theme-color" content="#1b2a41" />`,
+    `<meta name="theme-color" content="#11224B" />`,
     `<link rel="icon" type="image/svg+xml" href="/favicon.svg" />`,
     `<meta property="og:site_name" content="HL Supply" />`,
     `<meta property="og:type" content="${meta.ogType || "website"}" />`,

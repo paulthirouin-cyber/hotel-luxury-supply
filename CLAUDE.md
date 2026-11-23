@@ -105,9 +105,17 @@ four suites (site, flows, dist, lead); `npm run lighthouse` enforces ≥ 95.
 
 ## Brand system (non-negotiable)
 
-- Palette: warm ivory `#f6f1e6`, cream `#fcf9f2`, deep navy `#1b2a41`, resort
-  green `#3f5c4f`, pool blue `#7fb3c1`, canvas beige `#e7ddc6`, terracotta
-  `#c47e5d`, muted chrome `#9aa3a8`. CSS vars in `css/styles.css`.
+- Palette (2026-11-23): sun white `#FCF8EE` (page), chalk `#FFFDF8` (cards,
+  brighter sections), deep navy `#11224B` (brand: logo, text, dark sections,
+  footer), navy-soft `#2A3A66`, ink `#222B45`, Mediterranean blue `#1D4E9E`
+  (secondary; also focus rings and active states), sage `#A9C2AE` (decorative
+  fills only, never text), clementine `#EE5E22` (highlight: fills and rules
+  only, never text or 1px lines on light; primary solid button with `#0A1020`
+  label, hover `#D9521A`), deep clementine `#B5410F` (text-safe warm text and
+  invalid states), canvas `#F1E9D8` / `#E4D9C2` (borders and hovers only),
+  chrome `#9AA3B5` / chrome-text `#56617A`. Text on navy is sun white; blue is
+  never text on navy. CSS vars in `css/styles.css` keep their historical
+  names (`--ivory`, `--cream`, `--navy`, `--green`, `--pool`, `--terracotta`…).
   No gold, no black-and-gold, no bright gradients, no cartoons.
 - Type: Cormorant Garamond (display serif; 500 at display sizes, 600 below
   ~24px, never under 16px, true italic as a sparing accent) + Hanken Grotesk

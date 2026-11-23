@@ -6,21 +6,24 @@
    ============================================================ */
 
 :root {
-  --ivory: #f6f1e6;
-  --cream: #fcf9f2;
-  --navy: #1b2a41;
-  --navy-soft: #2c3e57;
-  --green: #3f5c4f;
-  --pool: #7fb3c1;
-  --pool-deep: #52869a;
-  --canvas: #e7ddc6;
-  --canvas-deep: #d8cbae;
-  --terracotta: #c47e5d;
-  --terracotta-text: #a4532f; /* terracotta tone for text: 4.8:1 on ivory (WCAG AA) */
-  --chrome: #9aa3a8;
-  --chrome-text: #5f6a72; /* chrome tone for text: 4.9:1 on ivory (WCAG AA) */
-  --ink: #33383d;
-  --hairline: rgba(27, 42, 65, 0.16);
+  /* Brand palette (2026-11-23). Variable names are historical; roles are in the comments. */
+  --ivory: #FCF8EE;           /* Sun white — main page background */
+  --cream: #FFFDF8;           /* Chalk — brighter sections and cards */
+  --navy: #11224B;            /* BRAND — logo, text, dark sections, footer */
+  --navy-soft: #2A3A66;       /* softer navy for secondary text */
+  --green: #1D4E9E;           /* SECONDARY — Mediterranean blue (never text on navy) */
+  --pool: #A9C2AE;            /* Sage — decorative fills only, never text */
+  --pool-deep: #1D4E9E;       /* Mediterranean blue — focus rings and active states */
+  --canvas: #F1E9D8;          /* derived neutral — borders and hovers only */
+  --canvas-deep: #E4D9C2;     /* derived neutral — borders and hovers only */
+  --terracotta: #EE5E22;      /* HIGHLIGHT — Clementine: fills and rules only, never text or 1px lines on light */
+  --terracotta-hover: #D9521A;/* Clementine hover fill */
+  --terracotta-text: #B5410F; /* text-safe deep clementine: 5.3:1 on sun white (WCAG AA); invalid states */
+  --btn-ink: #0A1020;         /* label on clementine fills (cream fails contrast) */
+  --chrome: #9AA3B5;          /* chrome — decorative */
+  --chrome-text: #56617A;     /* chrome tone for text (WCAG AA on sun white) */
+  --ink: #222B45;             /* body text */
+  --hairline: rgba(17, 34, 75, 0.16);
 
   --serif: "Cormorant Garamond", "Times New Roman", serif;
   --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -137,16 +140,16 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
 
 .btn:hover { background: var(--navy); color: var(--cream); }
 
-.btn--solid { background: var(--navy); color: var(--cream); }
+.btn--solid { background: var(--terracotta); border-color: var(--terracotta); color: var(--btn-ink); }
 
 .btn--solid:hover {
-  background: var(--green);
-  border-color: var(--green);
-  color: var(--cream);
+  background: var(--terracotta-hover);
+  border-color: var(--terracotta-hover);
+  color: var(--btn-ink);
 }
 
 .btn--light {
-  border-color: rgba(252, 249, 242, 0.7);
+  border-color: rgba(255, 253, 248, 0.7);
   color: var(--cream);
 }
 
@@ -210,7 +213,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   inset: 0;
   background:
     repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 5px),
-    repeating-linear-gradient(-45deg, rgba(27,42,65,0.03) 0 2px, transparent 2px 5px);
+    repeating-linear-gradient(-45deg, rgba(17, 34, 75,0.03) 0 2px, transparent 2px 5px);
 }
 
 .ph__cap {
@@ -224,20 +227,20 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--navy);
-  background: rgba(252, 249, 242, 0.88);
+  background: rgba(255, 253, 248, 0.88);
   padding: 8px 14px;
   line-height: 1.5;
 }
 
 /* placeholder tints — sunlit, Riviera-leaning gradients */
-.tint-poolside  { background: linear-gradient(178deg, #f2ead8 0%, #ded1b2 42%, #8db9c5 43%, #6ea3b3 100%); }
-.tint-sand      { background: linear-gradient(170deg, #f5eedd 0%, #e7dcc2 55%, #d6c6a2 100%); }
-.tint-navy      { background: linear-gradient(165deg, #33465f 0%, #1b2a41 70%, #16233a 100%); }
-.tint-pool      { background: linear-gradient(165deg, #a8ccd6 0%, #7fb3c1 55%, #5d8fa0 100%); }
-.tint-green     { background: linear-gradient(165deg, #5b7a6c 0%, #3f5c4f 65%, #354e43 100%); }
-.tint-terra     { background: linear-gradient(165deg, #d99e7f 0%, #c47e5d 60%, #b06a4a 100%); }
-.tint-chrome    { background: linear-gradient(165deg, #c6ccce 0%, #9aa3a8 65%, #869095 100%); }
-.tint-linen     { background: linear-gradient(165deg, #faf5e9 0%, #ece3cc 60%, #ddd0b1 100%); }
+.tint-poolside  { background: linear-gradient(178deg, #f9f5ed 0%, #e9ddc3 42%, #b4c9b8 43%, #97b59d 100%); }
+.tint-sand      { background: linear-gradient(170deg, #fbf8f3 0%, #f0e7d5 55%, #e3d3b1 100%); }
+.tint-navy      { background: linear-gradient(165deg, #1b3677 0%, #11224B 70%, #0f1e41 100%); }
+.tint-pool      { background: linear-gradient(165deg, #cddcd0 0%, #A9C2AE 55%, #82a689 100%); }
+.tint-green     { background: linear-gradient(165deg, #2666cf 0%, #1D4E9E 65%, #19448a 100%); }
+.tint-terra     { background: linear-gradient(165deg, #f28355 0%, #EE5E22 60%, #d84b11 100%); }
+.tint-chrome    { background: linear-gradient(165deg, #c9ced8 0%, #9AA3B5 65%, #838ea5 100%); }
+.tint-linen     { background: linear-gradient(165deg, #fdfcf9 0%, #f4eee0 60%, #e9dcc1 100%); }
 
 /* sun disc used sparingly inside a few placeholders */
 .ph__sun {
@@ -247,7 +250,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   border-radius: 50%;
   right: 8%;
   top: 10%;
-  background: radial-gradient(circle at 35% 35%, rgba(252,249,242,0.9), rgba(252,249,242,0) 70%);
+  background: radial-gradient(circle at 35% 35%, rgba(255, 253, 248,0.9), rgba(255, 253, 248,0) 70%);
 }
 
 /* horizon line detail */
@@ -257,7 +260,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   right: 0;
   top: 58%;
   height: 1px;
-  background: rgba(252, 249, 242, 0.45);
+  background: rgba(255, 253, 248, 0.45);
 }
 
 /* ============================================================
@@ -268,7 +271,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(252, 249, 242, 0.92);
+  background: rgba(255, 253, 248, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid transparent;
@@ -277,9 +280,9 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
 }
 
 .header.is-scrolled {
-  background: rgba(252, 249, 242, 0.97);
+  background: rgba(255, 253, 248, 0.97);
   border-bottom-color: var(--hairline);
-  box-shadow: 0 10px 30px -18px rgba(27, 42, 65, 0.25);
+  box-shadow: 0 10px 30px -18px rgba(17, 34, 75, 0.25);
 }
 
 .header__inner {
@@ -342,16 +345,16 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   inset: 0;
   background:
     /* sunlight wash */
-    radial-gradient(120% 90% at 78% 8%, rgba(252, 249, 242, 0.85) 0%, rgba(252, 249, 242, 0) 55%),
+    radial-gradient(120% 90% at 78% 8%, rgba(255, 253, 248, 0.85) 0%, rgba(255, 253, 248, 0) 55%),
     /* sky to stone to pool */
     linear-gradient(
       178deg,
-      #f7f0df 0%,
-      #efe5cc 38%,
-      #e2d5b4 54.8%,
-      #9cc2cc 55%,
-      #7fb3c1 74%,
-      #5d92a3 100%
+      #fcfaf6 0%,
+      #f5efe2 38%,
+      #ebdfc7 54.8%,
+      #c0d3c4 55%,
+      #A9C2AE 74%,
+      #84a78b 100%
     );
 }
 
@@ -365,7 +368,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   bottom: 0;
   background: repeating-linear-gradient(
     92deg,
-    rgba(252, 249, 242, 0.14) 0 3px,
+    rgba(255, 253, 248, 0.14) 0 3px,
     transparent 3px 90px
   );
 }
@@ -390,10 +393,10 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--navy);
-  border: 1px solid rgba(27, 42, 65, 0.35);
+  border: 1px solid rgba(17, 34, 75, 0.35);
   padding: 9px 16px 8px;
   margin-bottom: 34px;
-  background: rgba(252, 249, 242, 0.5);
+  background: rgba(255, 253, 248, 0.5);
 }
 
 .hero h1 {
@@ -594,9 +597,9 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
 
 .concierge {
   background:
-    radial-gradient(90% 120% at 85% -10%, rgba(127, 179, 193, 0.28) 0%, rgba(127, 179, 193, 0) 60%),
+    radial-gradient(90% 120% at 85% -10%, rgba(169, 194, 174, 0.28) 0%, rgba(169, 194, 174, 0) 60%),
     var(--navy);
-  color: var(--cream);
+  color: var(--ivory);
 }
 
 .concierge__inner {
@@ -605,7 +608,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
   max-width: 760px;
 }
 
-.concierge .eyebrow { color: var(--pool); display: block; margin-bottom: 20px; }
+.concierge .eyebrow { color: var(--ivory); display: block; margin-bottom: 20px; }
 
 .concierge h2 {
   color: var(--cream);
@@ -614,7 +617,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
 }
 
 .concierge p {
-  color: rgba(252, 249, 242, 0.82);
+  color: rgba(255, 253, 248, 0.82);
   font-size: clamp(16.5px, 1.4vw, 18.5px);
   max-width: 56ch;
   margin-bottom: 42px;

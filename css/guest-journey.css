@@ -7,9 +7,9 @@
 /* ---------- section shell + intro ---------- */
 
 .journey {
-  background: var(--ivory, #f6f1e6);
-  border-top: 1px solid rgba(216, 203, 174, 0.6);
-  border-bottom: 1px solid rgba(216, 203, 174, 0.6);
+  background: var(--ivory, #FCF8EE);
+  border-top: 1px solid rgba(228, 217, 194, 0.6);
+  border-bottom: 1px solid rgba(228, 217, 194, 0.6);
 }
 
 .journey__intro {
@@ -26,7 +26,7 @@
 }
 
 .journey__intro p {
-  color: var(--navy-soft, #2c3e57);
+  color: var(--navy-soft, #2A3A66);
   max-width: 56ch;
 }
 
@@ -61,8 +61,8 @@
   height: min(76vh, 780px);
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid rgba(216, 203, 174, 0.9);
-  box-shadow: 0 24px 50px -34px rgba(27, 42, 65, 0.35);
+  border: 1px solid rgba(228, 217, 194, 0.9);
+  box-shadow: 0 24px 50px -34px rgba(17, 34, 75, 0.35);
 }
 
 .journey__slide {
@@ -128,7 +128,7 @@
   font-weight: 400;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--terracotta-text, #a4532f);
+  color: var(--terracotta-text, #B5410F);
   margin-bottom: 20px;
 }
 
@@ -137,7 +137,7 @@
   font-weight: 500;
   font-size: clamp(25.9px, 2.5vw, 35.6px);
   line-height: 1.22;
-  color: var(--navy, #1b2a41);
+  color: var(--navy, #11224B);
   margin-bottom: 16px;
   max-width: 21ch;
 }
@@ -147,7 +147,7 @@
   font-weight: 300;
   font-size: 16px;
   line-height: 1.7;
-  color: var(--ink, #33383d);
+  color: var(--ink, #222B45);
   max-width: 46ch;
   margin-bottom: 24px;
 }
@@ -166,9 +166,9 @@
   font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--green, #3f5c4f);
-  border: 1px solid rgba(216, 203, 174, 0.95);
-  background: var(--cream, #fcf9f2);
+  color: var(--green, #1D4E9E);
+  border: 1px solid rgba(228, 217, 194, 0.95);
+  background: var(--cream, #FFFDF8);
   border-radius: 999px;
   padding: 7px 14px 6px;
   opacity: 0;
@@ -194,7 +194,7 @@
 .journey__rail {
   position: relative;
   width: 1px;
-  background: rgba(216, 203, 174, 0.9);
+  background: rgba(228, 217, 194, 0.9);
 }
 
 .journey__rail-dot {
@@ -204,7 +204,7 @@
   width: 5px;
   height: 22px;
   border-radius: 3px;
-  background: var(--green, #3f5c4f);
+  background: var(--green, #1D4E9E);
   transition: top 0.15s linear;
 }
 
@@ -228,7 +228,7 @@
   cursor: pointer;
   font-family: var(--sans, "Hanken Grotesk", sans-serif);
   text-align: left;
-  color: var(--chrome-text, #5f6a72);
+  color: var(--chrome-text, #56617A);
   transition: color 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -245,12 +245,12 @@
   text-transform: uppercase;
 }
 
-.journey__stop:hover { color: var(--navy-soft, #2c3e57); }
+.journey__stop:hover { color: var(--navy-soft, #2A3A66); }
 
-.journey__stop.is-active { color: var(--navy, #1b2a41); }
+.journey__stop.is-active { color: var(--navy, #11224B); }
 
 .journey__stop:focus-visible {
-  outline: 2px solid var(--pool-deep, #52869a);
+  outline: 2px solid var(--pool-deep, #1D4E9E);
   outline-offset: 3px;
 }
 
@@ -259,37 +259,37 @@
 /* Arrival — cream stone, deep green, canvas, leather, soft daylight */
 .jt-tint-arrival {
   background:
-    radial-gradient(110% 80% at 20% 0%, rgba(252, 249, 242, 0.75) 0%, rgba(252, 249, 242, 0) 55%),
-    linear-gradient(168deg, #f2ead9 0%, #e3d7bc 40%, #8f9c8a 72%, #6d5a48 100%);
+    radial-gradient(110% 80% at 20% 0%, rgba(255, 253, 248, 0.75) 0%, rgba(255, 253, 248, 0) 55%),
+    linear-gradient(168deg, #f9f5ee 0%, #ede3ce 40%, #9ab7a0 72%, #214394 100%);
 }
 
 /* Poolside — pool blue, cream, cabana atmosphere */
 .jt-tint-poolside {
   background:
-    radial-gradient(120% 90% at 80% 5%, rgba(252, 249, 242, 0.8) 0%, rgba(252, 249, 242, 0) 55%),
-    linear-gradient(178deg, #f4ecd9 0%, #e6dabb 43.8%, #93bfca 44%, #6ea3b3 78%, #55879a 100%);
+    radial-gradient(120% 90% at 80% 5%, rgba(255, 253, 248, 0.8) 0%, rgba(255, 253, 248, 0) 55%),
+    linear-gradient(178deg, #f9f6f0 0%, #eee4cf 43.8%, #bacebe 44%, #97b59d 78%, #7aa081 100%);
 }
 
 /* Beach Club — sand, navy, soft red stripe, sunlight */
 .jt-tint-beach {
   background:
-    radial-gradient(100% 70% at 25% 10%, rgba(252, 249, 242, 0.7) 0%, rgba(252, 249, 242, 0) 60%),
-    linear-gradient(172deg, #f6efdc 0%, #e9dcbd 52%, #cdbb92 68%, #35496b 100%);
+    radial-gradient(100% 70% at 25% 10%, rgba(255, 253, 248, 0.7) 0%, rgba(255, 253, 248, 0) 60%),
+    linear-gradient(172deg, #fbf8f3 0%, #efe6d3 52%, #dcc99f 68%, #1e3b82 100%);
 }
 
 /* The Suite — white linen, warm ivory, soft stone, espresso */
 .jt-tint-suite {
   background:
     radial-gradient(110% 80% at 70% 0%, rgba(255, 253, 248, 0.9) 0%, rgba(255, 253, 248, 0) 55%),
-    linear-gradient(170deg, #fbf6ea 0%, #efe6d2 48%, #d9cbb0 78%, #7a604c 100%);
+    linear-gradient(170deg, #fdfcf9 0%, #f6f1e7 48%, #e7dabe 78%, #2549a1 100%);
 }
 
 /* The Club — deep navy, teak, cream, resort green */
 .jt-tint-club {
   background:
-    radial-gradient(100% 70% at 75% 8%, rgba(252, 249, 242, 0.35) 0%, rgba(252, 249, 242, 0) 55%),
-    linear-gradient(168deg, #3b4f6b 0%, #263853 30%, #1b2a41 58%, #4a5c48 86%, #6d5340 100%),
-    #1b2a41;
+    radial-gradient(100% 70% at 75% 8%, rgba(255, 253, 248, 0.35) 0%, rgba(255, 253, 248, 0) 55%),
+    linear-gradient(168deg, #1f3d87 0%, #162d63 30%, #11224B 58%, #1e52a6 86%, #20408d 100%),
+    #11224B;
 }
 
 /* subtle scene details (thin lines / stripes, no cartoons) */
@@ -304,7 +304,7 @@
   right: 0;
   top: 56%;
   height: 1px;
-  background: rgba(252, 249, 242, 0.35);
+  background: rgba(255, 253, 248, 0.35);
 }
 
 /* Poolside + Beach Club: small cabana stripe corner */
@@ -318,8 +318,8 @@
   height: 8px;
   background: repeating-linear-gradient(
     90deg,
-    rgba(252, 249, 242, 0.85) 0 12px,
-    rgba(27, 42, 65, 0.5) 12px 24px
+    rgba(255, 253, 248, 0.85) 0 12px,
+    rgba(17, 34, 75, 0.5) 12px 24px
   );
 }
 
@@ -327,14 +327,14 @@
 .jt-tint-beach .jt-detail {
   background: radial-gradient(
     circle at 76% 62%,
-    rgba(252, 249, 242, 0) 52px,
-    rgba(252, 249, 242, 0.3) 53px,
-    rgba(252, 249, 242, 0.3) 55px,
-    rgba(252, 249, 242, 0) 56px,
-    rgba(252, 249, 242, 0) 74px,
-    rgba(252, 249, 242, 0.3) 75px,
-    rgba(252, 249, 242, 0.3) 77px,
-    rgba(252, 249, 242, 0) 78px
+    rgba(255, 253, 248, 0) 52px,
+    rgba(255, 253, 248, 0.3) 53px,
+    rgba(255, 253, 248, 0.3) 55px,
+    rgba(255, 253, 248, 0) 56px,
+    rgba(255, 253, 248, 0) 74px,
+    rgba(255, 253, 248, 0.3) 75px,
+    rgba(255, 253, 248, 0.3) 77px,
+    rgba(255, 253, 248, 0) 78px
   );
 }
 
@@ -343,7 +343,7 @@
   content: "";
   position: absolute;
   inset: 16px;
-  border: 1px solid rgba(122, 96, 76, 0.18);
+  border: 1px solid rgba(181, 65, 15, 0.18);
 }
 
 /* The Club: teak deck line detail */
@@ -354,7 +354,7 @@
   right: 0;
   bottom: 18%;
   height: 1px;
-  background: rgba(252, 249, 242, 0.22);
+  background: rgba(255, 253, 248, 0.22);
 }
 
 /* ============================================================
@@ -376,8 +376,8 @@
   aspect-ratio: 4 / 3.4;
   border-radius: 6px;
   overflow: hidden;
-  border: 1px solid rgba(216, 203, 174, 0.9);
-  box-shadow: 0 18px 40px -30px rgba(27, 42, 65, 0.3);
+  border: 1px solid rgba(228, 217, 194, 0.9);
+  box-shadow: 0 18px 40px -30px rgba(17, 34, 75, 0.3);
 }
 
 .journey__panel .journey__slide .ph__art { transform: none; }

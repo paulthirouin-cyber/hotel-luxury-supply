@@ -8,8 +8,8 @@ kind of suite, pool, or veranda it is.*
 
 Ultra-refined editorial campaign photograph for a luxury hospitality brand.
 The world is a contemporary five-star flagship property in the register of
-Four Seasons or Mandarin Oriental — old money, modern hand. Warm ivory and
-cream light with accents of deep navy, resort green, and soft terracotta;
+Four Seasons or Mandarin Oriental — old money, modern hand. Sun-white and chalk
+light with accents of deep navy, Mediterranean blue, and a small hit of clementine orange;
 soft directional sunlight or warm lamplight, long gentle shadows, generous
 negative space, subtle film grain, shallow depth of field, medium-format
 look. No people, no text, no logos. Portrait, 4:5 aspect ratio.

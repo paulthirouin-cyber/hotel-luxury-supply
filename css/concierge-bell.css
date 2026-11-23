@@ -14,17 +14,17 @@
   align-items: center;
   gap: 12px;
   padding: 14px 24px 14px 18px;
-  background: var(--ivory, #f6f1e6);
-  border: 1px solid rgba(154, 163, 168, 0.55); /* muted chrome */
+  background: var(--ivory, #FCF8EE);
+  border: 1px solid rgba(154, 163, 181, 0.55); /* muted chrome */
   border-radius: 999px;
-  color: var(--navy, #1b2a41);
+  color: var(--navy, #11224B);
   font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-size: 11.5px;
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 14px 34px -18px rgba(27, 42, 65, 0.4);
+  box-shadow: 0 14px 34px -18px rgba(17, 34, 75, 0.4);
   opacity: 0;
   visibility: hidden;
   transform: translateY(14px);
@@ -44,12 +44,12 @@
 
 .cbell-btn:hover {
   transform: translateY(-2px);
-  border-color: var(--chrome-text, #5f6a72);
-  box-shadow: 0 18px 38px -18px rgba(27, 42, 65, 0.5);
+  border-color: var(--chrome-text, #56617A);
+  box-shadow: 0 18px 38px -18px rgba(17, 34, 75, 0.5);
 }
 
 .cbell-btn:focus-visible {
-  outline: 2px solid var(--pool-deep, #52869a);
+  outline: 2px solid var(--pool-deep, #1D4E9E);
   outline-offset: 3px;
 }
 
@@ -64,7 +64,7 @@
 .cbell-icon svg {
   width: 100%;
   height: 100%;
-  stroke: var(--green, #3f5c4f);
+  stroke: var(--green, #1D4E9E);
   transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
   transform-origin: 50% 12%;
 }
@@ -85,7 +85,7 @@
   top: 4px;
   width: 6px;
   height: 10px;
-  border: 1px solid var(--chrome, #9aa3a8);
+  border: 1px solid var(--chrome, #9AA3B5);
   border-radius: 50%;
   opacity: 0;
 }
@@ -149,7 +149,7 @@
   position: fixed;
   inset: 0;
   z-index: 95;
-  background: rgba(43, 33, 27, 0.18);
+  background: rgba(17, 34, 75, 0.18);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.4s ease, visibility 0.4s;
@@ -166,9 +166,9 @@
   right: 0;
   bottom: 0;
   width: min(420px, 100vw);
-  background: var(--cream, #fcf9f2);
-  border-left: 1px solid rgba(216, 203, 174, 0.9); /* soft stone */
-  box-shadow: -18px 0 50px -30px rgba(27, 42, 65, 0.35);
+  background: var(--cream, #FFFDF8);
+  border-left: 1px solid rgba(228, 217, 194, 0.9); /* soft stone */
+  box-shadow: -18px 0 50px -30px rgba(17, 34, 75, 0.35);
   transform: translateX(105%);
   transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   display: flex;
@@ -187,9 +187,9 @@
     width: 100%;
     height: 86vh;
     border-left: none;
-    border-top: 1px solid rgba(216, 203, 174, 0.9);
+    border-top: 1px solid rgba(228, 217, 194, 0.9);
     border-radius: 18px 18px 0 0;
-    box-shadow: 0 -18px 50px -30px rgba(27, 42, 65, 0.35);
+    box-shadow: 0 -18px 50px -30px rgba(17, 34, 75, 0.35);
     transform: translateY(105%);
   }
   .cbell-drawer.is-open { transform: translateY(0); }
@@ -217,7 +217,7 @@
   font-weight: 400;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--terracotta-text, #a4532f);
+  color: var(--terracotta-text, #B5410F);
   display: block;
   margin-bottom: 14px;
 }
@@ -226,7 +226,7 @@
   font-family: var(--serif, "Cormorant Garamond", serif);
   font-weight: 500;
   font-size: clamp(28.1px, 3.2vw, 34.6px);
-  color: var(--navy, #1b2a41);
+  color: var(--navy, #11224B);
   line-height: 1.15;
 }
 
@@ -238,9 +238,9 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 1px solid rgba(154, 163, 168, 0.5);
+  border: 1px solid rgba(154, 163, 181, 0.5);
   border-radius: 50%;
-  color: var(--navy, #1b2a41);
+  color: var(--navy, #11224B);
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
@@ -248,13 +248,13 @@
 }
 
 .cbell-close:hover {
-  background: var(--navy, #1b2a41);
-  border-color: var(--navy, #1b2a41);
-  color: var(--cream, #fcf9f2);
+  background: var(--navy, #11224B);
+  border-color: var(--navy, #11224B);
+  color: var(--cream, #FFFDF8);
 }
 
 .cbell-close:focus-visible {
-  outline: 2px solid var(--pool-deep, #52869a);
+  outline: 2px solid var(--pool-deep, #1D4E9E);
   outline-offset: 3px;
 }
 
@@ -263,14 +263,14 @@
   font-weight: 300;
   font-size: 15.5px;
   line-height: 1.7;
-  color: var(--navy-soft, #2c3e57);
+  color: var(--navy-soft, #2A3A66);
   margin: 14px 0 26px;
   max-width: 42ch;
 }
 
 .cbell-divider {
   height: 1px;
-  background: rgba(216, 203, 174, 0.9);
+  background: rgba(228, 217, 194, 0.9);
   margin-bottom: 28px;
 }
 
@@ -286,7 +286,7 @@
   font-weight: 400;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--green, #3f5c4f);
+  color: var(--green, #1D4E9E);
 }
 
 .cbell-field input,
@@ -295,9 +295,9 @@
   font-family: var(--sans, "Hanken Grotesk", sans-serif);
   font-weight: 300;
   font-size: 15px;
-  color: var(--navy, #1b2a41);
+  color: var(--navy, #11224B);
   background: #fffdf8; /* white linen */
-  border: 1px solid rgba(216, 203, 174, 0.95);
+  border: 1px solid rgba(228, 217, 194, 0.95);
   border-radius: 2px;
   padding: 13px 14px;
   width: 100%;
@@ -322,15 +322,15 @@
 
 .cbell-field input::placeholder,
 .cbell-field textarea::placeholder {
-  color: rgba(154, 163, 168, 0.9);
+  color: rgba(154, 163, 181, 0.9);
 }
 
 .cbell-field input:focus,
 .cbell-field select:focus,
 .cbell-field textarea:focus {
   outline: none;
-  border-color: var(--green, #3f5c4f);
-  box-shadow: 0 0 0 1px var(--green, #3f5c4f);
+  border-color: var(--green, #1D4E9E);
+  box-shadow: 0 0 0 1px var(--green, #1D4E9E);
 }
 
 .cbell-submit {
@@ -341,21 +341,21 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   padding: 16px 34px 15px;
-  background: var(--navy, #1b2a41);
-  color: var(--cream, #fcf9f2);
-  border: 1px solid var(--navy, #1b2a41);
+  background: var(--navy, #11224B);
+  color: var(--cream, #FFFDF8);
+  border: 1px solid var(--navy, #11224B);
   cursor: pointer;
   transition: background 0.35s, border-color 0.35s;
   justify-self: start;
 }
 
 .cbell-submit:hover {
-  background: var(--green, #3f5c4f);
-  border-color: var(--green, #3f5c4f);
+  background: var(--green, #1D4E9E);
+  border-color: var(--green, #1D4E9E);
 }
 
 .cbell-submit:focus-visible {
-  outline: 2px solid var(--pool-deep, #52869a);
+  outline: 2px solid var(--pool-deep, #1D4E9E);
   outline-offset: 3px;
 }
 
@@ -380,14 +380,14 @@
 .cbell-success__rule {
   width: 64px;
   height: 1px;
-  background: var(--terracotta, #c47e5d);
+  background: var(--terracotta, #EE5E22);
 }
 
 .cbell-success p {
   font-family: var(--serif, "Cormorant Garamond", serif); font-weight: 500;
   font-size: clamp(23.8px, 2.6vw, 29.2px);
   line-height: 1.35;
-  color: var(--navy, #1b2a41);
+  color: var(--navy, #11224B);
   max-width: 20ch;
 }
 

@@ -26,15 +26,15 @@ function autoReply(lead, email) {
     : lead.type === "sample-kit"
       ? "We will confirm the sample kit and the delivery address by email before it ships."
       : `The concierge reviews every ${label} personally and replies the same business day (Monday to Friday) with product direction and next steps, usually with a few questions to shape the brief.${refLine}`;
-  const html = `<div style="font-family:'Hanken Grotesk',Helvetica,Arial,sans-serif;color:#1b2a41;max-width:600px;line-height:1.55">
-<p style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#5f6a72">HL Supply · Concierge</p>
+  const html = `<div style="font-family:'Hanken Grotesk',Helvetica,Arial,sans-serif;color:#11224B;max-width:600px;line-height:1.55">
+<p style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#56617A">HL Supply · Concierge</p>
 <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0 0 16px">Your HL Supply request — next steps</h2>
 <p>${greet}</p>
 <p>Thank you. We have your ${esc(label)}.</p>
 <p>${next}</p>
 <p>Meanwhile, the <a href="${SITE}/products/">catalog</a>, the <a href="${SITE}/collections/">collections</a>, and the <a href="${SITE}/bespoke/">Bespoke Atelier</a> are open, and you can reply to this email with artwork, a brand guide, or questions.</p>
-<p style="margin-top:24px">HL Supply<br><a href="mailto:info@hotelluxurysupply.com" style="color:#1b2a41">info@hotelluxurysupply.com</a> · +1 (347) 669-4417 · <a href="${SITE}/" style="color:#1b2a41">hotelluxurysupply.com</a></p>
-<p style="font-size:12px;color:#5f6a72;margin-top:24px">We don't simply put hotel names on products. We help hotels create products worthy of carrying their names.</p>
+<p style="margin-top:24px">HL Supply<br><a href="mailto:info@hotelluxurysupply.com" style="color:#11224B">info@hotelluxurysupply.com</a> · +1 (347) 669-4417 · <a href="${SITE}/" style="color:#11224B">hotelluxurysupply.com</a></p>
+<p style="font-size:12px;color:#56617A;margin-top:24px">We don't simply put hotel names on products. We help hotels create products worthy of carrying their names.</p>
 </div>`;
   const text = `${greet.replace(/<[^>]+>/g, "")}
 
@@ -64,16 +64,16 @@ function flatten(obj, prefix, out) {
 
 function render(lead) {
   const rows = flatten(lead.payload).filter(([k]) => k !== "website")
-    .map(([k, v]) => `<tr><td style="padding:6px 12px 6px 0;color:#5f6a72;vertical-align:top;white-space:nowrap">${esc(k)}</td><td style="padding:6px 0;white-space:pre-wrap">${esc(v)}</td></tr>`)
+    .map(([k, v]) => `<tr><td style="padding:6px 12px 6px 0;color:#56617A;vertical-align:top;white-space:nowrap">${esc(k)}</td><td style="padding:6px 0;white-space:pre-wrap">${esc(v)}</td></tr>`)
     .join("");
   const text = flatten(lead.payload).filter(([k]) => k !== "website").map(([k, v]) => `${k}: ${v}`).join("\n");
   return {
     subject: `[HL Supply] New ${lead.type} request` + (lead.payload.property ? ` — ${lead.payload.property}` : "") + (lead.payload.ref || lead.payload.reference ? ` (${lead.payload.ref || lead.payload.reference})` : ""),
-    html: `<div style="font-family:'Hanken Grotesk',Helvetica,Arial,sans-serif;color:#1b2a41;max-width:640px">
-<p style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#5f6a72">HL Supply · Concierge</p>
+    html: `<div style="font-family:'Hanken Grotesk',Helvetica,Arial,sans-serif;color:#11224B;max-width:640px">
+<p style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#56617A">HL Supply · Concierge</p>
 <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;margin:0 0 16px">New ${esc(lead.type)} request</h2>
 <table style="border-collapse:collapse;font-size:14px">${rows}</table>
-<p style="font-size:12px;color:#5f6a72;margin-top:24px">Sent ${esc(lead.sentAt)} from ${esc(lead.page)}</p>
+<p style="font-size:12px;color:#56617A;margin-top:24px">Sent ${esc(lead.sentAt)} from ${esc(lead.page)}</p>
 </div>`,
     text: `New ${lead.type} request\n\n${text}\n\nSent ${lead.sentAt} from ${lead.page}`
   };
