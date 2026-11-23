@@ -49,6 +49,7 @@
         "Lifestyle context at the property"
       ],
       tint: o.tint,
+      flat: !!o.flat, // opaque photo with the brand beige baked in (no tint frame, no alpha)
       // SEO (defaults generated from catalog copy; hand-tune per product here)
       metaTitle: o.metaTitle || ("Custom " + o.name.replace(/^The /, "") + " for Hotels | HL Supply"),
       metaDescription: o.metaDescription || metaDesc(o.description),
@@ -173,6 +174,7 @@
 
     make({ ref: "H-001",
       slug: "regent-classic-cap",
+      flat: true,
       name: "The Regent Classic Cap",
       category: "hats",
       type: "Classic Cap",
@@ -186,6 +188,7 @@
 
     make({ ref: "H-002",
       slug: "riviera-bucket-hat",
+      flat: true,
       name: "The Riviera Bucket Hat",
       category: "hats",
       type: "Bucket Hat",
@@ -199,6 +202,7 @@
 
     make({ ref: "H-003",
       slug: "heritage-dad-hat",
+      flat: true,
       name: "The Heritage Dad Hat",
       category: "hats",
       type: "Dad Hat",
@@ -212,6 +216,7 @@
 
     make({ ref: "H-004",
       slug: "aero-sports-cap",
+      flat: true,
       name: "The Aero Sports Cap",
       category: "hats",
       type: "Sports Cap",
@@ -225,6 +230,7 @@
 
     make({ ref: "H-005",
       slug: "fairway-golf-cap",
+      flat: true,
       name: "The Fairway Golf Cap",
       category: "hats",
       type: "Golf Cap",
@@ -238,6 +244,7 @@
 
     make({ ref: "H-006",
       slug: "summit-trucker-hat",
+      flat: true,
       name: "The Summit Trucker Hat",
       category: "hats",
       type: "Trucker Hat",

@@ -126,11 +126,11 @@
 
   /* ---------------- shared fragments ---------------- */
 
-  function phHTML(tint, label, extraClass, img, cover) {
+  function phHTML(tint, label, extraClass, img, cover, flat) {
     if (img) {
       return (
-        '<div class="ph ' + (extraClass || "") + (cover ? " ph--cover" : " ph--photo") + '">' +
-        (cover ? "" : '  <div class="ph__art ' + tint + '"></div>') +
+        '<div class="ph ' + (extraClass || "") + (cover ? " ph--cover" : flat ? " ph--flat" : " ph--photo") + '">' +
+        (cover || flat ? "" : '  <div class="ph__art ' + tint + '"></div>') +
         '  <img class="ph__img" src="' + img + '" alt="' + esc(label) + '" loading="lazy" decoding="async" />' +
         "</div>"
       );
@@ -194,7 +194,7 @@
     return (
       '<article class="pcard" data-product="' + product.slug + '">' +
       '  <a class="pcard__media-link" href="' + U("#/products/" + product.category + "/" + product.slug) + '" aria-label="View details for ' + esc(product.name) + '">' +
-      phHTML(product.tint, product.imageLabel, "pcard__media", product.image) +
+      phHTML(product.tint, product.imageLabel, "pcard__media", product.image, false, product.flat) +
       "  </a>" +
       '  <div class="pcard__body">' +
       '    <span class="pcard__cat">' + esc(cat ? cat.name : product.category) + " \u2014 " + esc(product.type || "") + "</span>" +
@@ -478,7 +478,7 @@
       .map(function (p) {
         return (
           '<a class="rel-card" href="' + U("#/products/" + p.category + "/" + p.slug) + '">' +
-          phHTML(p.tint, p.imageLabel, "rel-card__media", p.image) +
+          phHTML(p.tint, p.imageLabel, "rel-card__media", p.image, false, p.flat) +
           '  <div class="rel-card__body"><h3>' + esc(p.name) + '</h3><span class="tlink">View Details</span></div>' +
           "</a>"
         );
@@ -511,8 +511,8 @@
 
     var gallery =
       (product.image
-        ? '<div class="pd__thumb ph ph--photo is-active">' +
-          '  <div class="ph__art ' + product.tint + '"></div>' +
+        ? '<div class="pd__thumb ph ' + (product.flat ? "ph--flat" : "ph--photo") + ' is-active">' +
+          (product.flat ? "" : '  <div class="ph__art ' + product.tint + '"></div>') +
           '  <img class="ph__img" src="' + product.image + '" alt="' + esc(product.name) + ' \u2014 catalog photo" loading="lazy" />' +
           "</div>"
         : "") +
@@ -542,7 +542,7 @@
       "</nav>" +
       '<div class="pd__grid">' +
       '  <div class="pd__media">' +
-      phHTML(product.tint, product.imageLabel, "pd__ph", product.image) +
+      phHTML(product.tint, product.imageLabel, "pd__ph", product.image, false, product.flat) +
       '    <div class="pd__thumbs" aria-label="Product image gallery placeholders">' + gallery + "</div>" +
       "  </div>" +
       '  <div class="pd__info">' +

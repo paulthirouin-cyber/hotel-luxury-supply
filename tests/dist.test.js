@@ -697,6 +697,15 @@ for (const url of ["/", "/products/", "/products/hats/", "/products/hats/riviera
   t.ok(preloads.length === 2 && preloads.every((l) => l.hasAttribute("crossorigin") && fs.existsSync(path.join(DIST, l.getAttribute("href")))), ctx + " two font preloads that exist");
   t.ok(/font-display:swap/.test(style.textContent), ctx + " font-display swap");
   t.ok(!/.pd__ph{position:static/.test(style.textContent), ctx + " product gallery frame never position:static (absolute photo would escape it on mobile)");
+  doc.querySelectorAll(".ph--flat").forEach((ph) => {
+    t.ok(!ph.querySelector(".ph__art"), ctx + " flat photo has no tint art");
+    const src = ph.querySelector("img") && ph.querySelector("img").getAttribute("src");
+    const buf = src && fs.existsSync(path.join(DIST, src)) ? fs.readFileSync(path.join(DIST, src)) : null;
+    // WebP VP8X chunk: bit 4 of the flags byte (offset 20) is the alpha flag; VP8L stores alpha in its own header
+    const vp8x = buf && buf.slice(12, 16).toString() === "VP8X";
+    const hasAlpha = !buf ? true : vp8x ? Boolean(buf[20] & 0x10) : buf.slice(12, 16).toString() === "VP8L" ? Boolean(buf[24] & 0x10) : false;
+    t.ok(buf && !hasAlpha, ctx + " flat photo " + src + " is opaque (no alpha channel for image search)");
+  });
   t.ok([...doc.querySelectorAll("script[src]")].every((s) => s.hasAttribute("defer")), ctx + " all scripts deferred");
   const imgs = [...doc.querySelectorAll("img[src^='/assets/']")];
   t.ok(imgs.every((i) => Number(i.getAttribute("width")) > 0 && Number(i.getAttribute("height")) > 0), ctx + " every image has width/height");
