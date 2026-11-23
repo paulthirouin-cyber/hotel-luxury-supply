@@ -50,11 +50,12 @@ window.HL_CATEGORIES = [
     keywords: ["custom resort hats","embroidered hotel caps","golf club hats with logo"],
     tagline: "Bespoke Embroidered Detail",
     image: A("assets/catalog/cat-hats.jpg"),
+    imageSquare: A("assets/catalog/cat-hats-square.jpg"), // near-square crop for the homepage feature/small cards
     catalogSubtitle: "Embroidered caps and sun-ready silhouettes for clubs, courses, cabanas, and guest retail.",
     catalogIntro: "Structured caps and relaxed sun shapes, embroidered in-house for clubs, courses, and pool decks.",
     name: "Hats",
     line: "Embroidered caps and sun-ready silhouettes for clubs, courses, and cabanas.",
-    imageLabel: "Embroidered cap on tennis bench or golf cart in soft sun.",
+    imageLabel: "Embroidered resort cap on a travertine pool edge, with the infinity pool and sea beyond.",
     tint: "tint-sand",
     accent: "terracotta",
     micro: "micro-brim",

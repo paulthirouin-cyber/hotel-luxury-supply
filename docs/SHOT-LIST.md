@@ -62,7 +62,7 @@ blurred beyond, wide cinematic composition with the left third kept calm.
 heavyweight canvas — ivory, navy, resort green — lined on a walnut shelf,
 one casting a long soft shadow, folded linen beside them.
 
-**cat-hats.jpg** — On a tennis-court bench, a structured cotton-twill cap
+**cat-hats.jpg** — _Delivered 2026-11-23 (poolside Regent cap, landscape + square crop)._ Original brief: On a tennis-court bench, a structured cotton-twill cap
 and a relaxed bucket hat resting brim-to-brim, clay court blurred behind,
 afternoon light.
 

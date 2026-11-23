@@ -91,7 +91,7 @@
       metaDescription: "Golf resort and private club merchandise: embroidered golf caps, umbrellas, leather luggage tags, and bottles in the club's colors. Quote-based, from 100 units.",
       keywords: ["golf resort merchandise", "golf club pro shop merchandise", "custom golf club gifts"],
       image: A("assets/catalog/cat-hats.jpg"),
-      imageLabel: "Embroidered caps and a leather luggage tag at the first tee.",
+      imageLabel: "Embroidered club cap resting on a travertine pool edge in soft resort light.",
       tint: "tint-green"
     },
     {

@@ -25,18 +25,20 @@
 
   var html = data
     .map(function (cat, i) {
+      // feature and small cards are near-square; use the square crop when the category has one
+      var img = cat.size !== "wide" && cat.imageSquare ? cat.imageSquare : cat.image;
       return (
         '<a class="at-card at-card--' + cat.size + " accent-" + cat.accent + " " + cat.micro + '"' +
         ' href="' + esc(window.HLRoutes ? window.HLRoutes.href("#/products/" + cat.slug) : "products.html#/products/" + cat.slug) + '"' +
         ' style="--stagger:' + i + '"' +
         ">" +
-        '  <div class="at-card__media ph' + (cat.image ? " ph--cover" : "") + '">' +
+        '  <div class="at-card__media ph' + (img ? " ph--cover" : "") + '">' +
         '    <div class="ph__art ' + cat.tint + '">' +
         '      <span class="ph__line"></span>' +
         '      <span class="at-card__micro" aria-hidden="true"></span>' +
         "    </div>" +
-        (cat.image
-          ? '    <img class="ph__img" src="' + cat.image + '" alt="' + esc(cat.imageLabel) + '" loading="lazy" />'
+        (img
+          ? '    <img class="ph__img" src="' + img + '" alt="' + esc(cat.imageLabel) + '" loading="lazy" />'
           : '    <span class="ph__cap">Image — ' + esc(cat.imageLabel) + "</span>") +
         "  </div>" +
         '  <div class="at-card__panel">' +
