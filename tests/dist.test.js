@@ -699,6 +699,7 @@ for (const url of ["/", "/products/", "/products/hats/", "/products/hats/riviera
   t.ok(preloads.length === 2 && preloads.every((l) => l.hasAttribute("crossorigin") && fs.existsSync(path.join(DIST, l.getAttribute("href")))), ctx + " two font preloads that exist");
   t.ok(/font-display:swap/.test(style.textContent), ctx + " font-display swap");
   t.ok(!/.pd__ph{position:static/.test(style.textContent), ctx + " product gallery frame never position:static (absolute photo would escape it on mobile)");
+  if (/^\/products\/[a-z-]+\/[a-z0-9-]+\/$/.test(url)) t.ok(!doc.querySelector(".pd__thumbs, .pd__thumb"), ctx + " no thumbnail strip under the product photo (parked until more views exist)");
   doc.querySelectorAll(".ph--flat").forEach((ph) => {
     t.ok(!ph.querySelector(".ph__art"), ctx + " flat photo has no tint art");
     const src = ph.querySelector("img") && ph.querySelector("img").getAttribute("src").split("?")[0];

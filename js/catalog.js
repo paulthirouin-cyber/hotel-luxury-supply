@@ -509,25 +509,8 @@
     var mount = document.getElementById("productDetail");
     if (!mount) return;
 
-    var gallery =
-      (product.image
-        ? '<div class="pd__thumb ph ' + (product.flat ? "ph--flat" : "ph--photo") + ' is-active">' +
-          (product.flat ? "" : '  <div class="ph__art ' + product.tint + '"></div>') +
-          '  <img class="ph__img" src="' + product.image + '" alt="' + esc(product.name) + ' \u2014 catalog photo" loading="lazy" />' +
-          "</div>"
-        : "") +
-      (product.gallery || [])
-        .slice(0, product.image ? 2 : 3)
-        .map(function (label) {
-          return (
-            '<div class="pd__thumb ph">' +
-            '  <div class="ph__art ' + product.tint + '"></div>' +
-            '  <span class="ph__cap">' + esc(label) + "</span>" +
-            "</div>"
-          );
-        })
-        .join("");
-
+    // Thumbnail strip (second photo + "more views" placeholders) is parked until additional
+    // product views are photographed; product.gallery keeps the labels for that day.
     var specs = (product.specifications || [])
       .map(function (s) {
         return "<div><dt>" + esc(s.label) + "</dt><dd>" + esc(s.value) + "</dd></div>";
@@ -543,7 +526,6 @@
       '<div class="pd__grid">' +
       '  <div class="pd__media">' +
       phHTML(product.tint, product.imageLabel, "pd__ph", product.image, false, product.flat) +
-      '    <div class="pd__thumbs" aria-label="Product image gallery placeholders">' + gallery + "</div>" +
       "  </div>" +
       '  <div class="pd__info">' +
       '    <span class="pcard__cat">' + esc(cat ? cat.name : "") + " \u2014 " + esc(product.type || "") + "</span>" +
