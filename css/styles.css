@@ -725,8 +725,8 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
 .ph--photo .ph__art { opacity: 0.38; }
 .ph--photo .ph__art::after { opacity: 0.5; }
 
-/* Flat product photos: opaque files with the brand beige already baked in (safe for Google Images) */
-.ph--flat { background: var(--canvas-deep); }
+/* Flat product photos: opaque files with sun white #FCF8EE already baked in (safe for Google Images) */
+.ph--flat { background: var(--ivory); }
 .ph--flat .ph__img { object-fit: cover; padding: 0; }
 
 /* homepage hero photo */

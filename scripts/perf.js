@@ -154,6 +154,27 @@ function responsiveImages(doc, distDir) {
   });
 }
 
+// Cache busting: /assets/* and /css,/js ship with a one-year immutable cache (see _headers), so a
+// replaced image with the same name would stay stale in browsers and at the edge. Every image URL
+// carries a short content hash as a query string; a new file is a new URL.
+const hashCache = new Map();
+function fileHash(file) {
+  if (!hashCache.has(file)) hashCache.set(file, fs.existsSync(file) ? require("crypto").createHash("sha1").update(fs.readFileSync(file)).digest("hex").slice(0, 8) : null);
+  return hashCache.get(file);
+}
+function versioned(url, distDir) {
+  const clean = url.split("?")[0];
+  const h = fileHash(path.join(distDir, clean));
+  return h ? clean + "?v=" + h : clean;
+}
+function versionImages(doc, distDir) {
+  doc.querySelectorAll("img[src^='/assets/']").forEach((img) => {
+    img.setAttribute("src", versioned(img.getAttribute("src"), distDir));
+    const ss = img.getAttribute("srcset");
+    if (ss) img.setAttribute("srcset", ss.split(",").map((c) => { const [u, w] = c.trim().split(/\s+/); return versioned(u, distDir) + (w ? " " + w : ""); }).join(", "));
+  });
+}
+
 function apply(doc, distDir) {
   eagerHero(doc);
   responsiveImages(doc, distDir);
@@ -161,6 +182,7 @@ function apply(doc, distDir) {
   preloadFonts(doc);
   deferScripts(doc);
   imageDims(doc, distDir);
+  versionImages(doc, distDir);
 }
 
-module.exports = { apply, minifyCss, absolutizeCssUrls, readDims, PRELOAD_FONTS };
+module.exports = { apply, minifyCss, absolutizeCssUrls, readDims, PRELOAD_FONTS, versioned };

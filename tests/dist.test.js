@@ -87,11 +87,13 @@ function auditPage(url) {
     if (hi > -1 && href.slice(0, hi) === "/") t.ok(homeIds.has(href.slice(hi + 1)), ctx + " home anchor exists: " + href);
   });
   doc.querySelectorAll("img").forEach((img) => {
-    const src = img.getAttribute("src");
+    const srcRaw = img.getAttribute("src");
+    const src = (srcRaw || "").split("?")[0];
     t.ok(src && src.startsWith("/assets/") && fs.existsSync(path.join(DIST, src)), ctx + " image absolute + exists: " + src);
+    t.ok(/\?v=[0-9a-f]{8}$/.test(srcRaw), ctx + " image URL is content-hashed (immutable cache safety): " + srcRaw);
     t.ok((img.getAttribute("alt") || "").length > 5, ctx + " image alt");
     const ss = img.getAttribute("srcset");
-    if (ss) ss.split(",").forEach((c) => { const u = c.trim().split(/\s+/)[0]; t.ok(fs.existsSync(path.join(DIST, u)) && img.getAttribute("sizes"), ctx + " srcset candidate exists + sizes: " + u); });
+    if (ss) ss.split(",").forEach((c) => { const u = c.trim().split(/\s+/)[0].split("?")[0]; t.ok(fs.existsSync(path.join(DIST, u)) && img.getAttribute("sizes"), ctx + " srcset candidate exists + sizes: " + u); });
     const variant = src.replace(/\.webp$/, "-480.webp");
     if (/\/assets\/catalog\//.test(src) && (fs.existsSync(path.join(DIST, variant)) || /-1600\.webp$/.test(src))) t.ok(ss, ctx + " catalog image has responsive srcset: " + src);
   });
@@ -699,7 +701,7 @@ for (const url of ["/", "/products/", "/products/hats/", "/products/hats/riviera
   t.ok(!/.pd__ph{position:static/.test(style.textContent), ctx + " product gallery frame never position:static (absolute photo would escape it on mobile)");
   doc.querySelectorAll(".ph--flat").forEach((ph) => {
     t.ok(!ph.querySelector(".ph__art"), ctx + " flat photo has no tint art");
-    const src = ph.querySelector("img") && ph.querySelector("img").getAttribute("src");
+    const src = ph.querySelector("img") && ph.querySelector("img").getAttribute("src").split("?")[0];
     const buf = src && fs.existsSync(path.join(DIST, src)) ? fs.readFileSync(path.join(DIST, src)) : null;
     // WebP VP8X chunk: bit 4 of the flags byte (offset 20) is the alpha flag; VP8L stores alpha in its own header
     const vp8x = buf && buf.slice(12, 16).toString() === "VP8X";
