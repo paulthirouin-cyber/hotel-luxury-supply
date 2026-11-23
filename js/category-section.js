@@ -52,7 +52,9 @@
     })
     .join("");
 
-  grid.innerHTML = html;
+  // The static build pre-renders this grid (with content-hashed image URLs). Only fill it when
+  // empty (SPA/preview); never replace pre-rendered markup from client-side data.
+  if (!grid.children.length) grid.innerHTML = html;
 
   // ---------- entrance reveal ----------
 

@@ -175,6 +175,10 @@ function versionImages(doc, distDir) {
   });
 }
 
+function versionScripts(doc, distDir) {
+  doc.querySelectorAll("script[src^='/js/']").forEach((s) => s.setAttribute("src", versioned(s.getAttribute("src"), distDir)));
+}
+
 function apply(doc, distDir) {
   eagerHero(doc);
   responsiveImages(doc, distDir);
@@ -183,6 +187,7 @@ function apply(doc, distDir) {
   deferScripts(doc);
   imageDims(doc, distDir);
   versionImages(doc, distDir);
+  versionScripts(doc, distDir);
 }
 
 module.exports = { apply, minifyCss, absolutizeCssUrls, readDims, PRELOAD_FONTS, versioned };

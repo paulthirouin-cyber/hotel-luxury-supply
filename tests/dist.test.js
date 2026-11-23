@@ -98,8 +98,10 @@ function auditPage(url) {
     if (/\/assets\/catalog\//.test(src) && (fs.existsSync(path.join(DIST, variant)) || /-1600\.webp$/.test(src))) t.ok(ss, ctx + " catalog image has responsive srcset: " + src);
   });
   doc.querySelectorAll('link[rel="stylesheet"][href^="/"], script[src]').forEach((el) => {
-    const src = el.getAttribute("href") || el.getAttribute("src");
+    const srcRaw = el.getAttribute("href") || el.getAttribute("src");
+    const src = srcRaw.split("?")[0];
     t.ok(src.startsWith("/") && fs.existsSync(path.join(DIST, src)), ctx + " asset exists: " + src);
+    if (el.tagName === "SCRIPT" && src.startsWith("/js/")) t.ok(/\?v=[0-9a-f]{8}$/.test(srcRaw), ctx + " script URL is content-hashed (immutable cache safety): " + srcRaw);
   });
   return doc;
 }
@@ -176,7 +178,7 @@ function liveDom(url, opts) {
   win.HL_NAVIGATE = (u, replace) => { win.__nav.push({ url: u, replace }); };
   if (opts.before) opts.before(win);
   [...win.document.querySelectorAll("script:not([type])")].forEach((s) => {
-    const src = s.getAttribute("src");
+    const src = (s.getAttribute("src") || "").split("?")[0];
     win.eval(src ? fs.readFileSync(path.join(DIST, src), "utf8") : s.textContent);
   });
   return dom;
