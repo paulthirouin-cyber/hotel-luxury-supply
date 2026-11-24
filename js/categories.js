@@ -107,6 +107,7 @@ window.HL_CATEGORIES = [
     keywords: ["custom hotel flip flops","branded resort flip flops","spa flip flops with logo"],
     tagline: "Premium High-Density Comfort",
     image: A("assets/catalog/cat-flip-flops.jpg"),
+    imageSquare: A("assets/catalog/cat-flip-flops-square.jpg"), // square crop centred on the product for the homepage card
     catalogSubtitle: "Poolside and beach-ready essentials customized for the property.",
     catalogIntro: "Guest-ready flip-flops in property colors, from spa amenities to beach club retail.",
     name: "Flip-flops",
@@ -134,6 +135,7 @@ window.HL_CATEGORIES = [
     keywords: ["custom hotel leather goods","debossed leather valet tray","hotel luggage tags with logo"],
     tagline: "Genuine Handcrafted Leather",
     image: A("assets/catalog/cat-leather-goods.jpg"),
+    imageSquare: A("assets/catalog/cat-leather-goods-square.jpg"), // square crop centred on the product for the homepage card
     catalogSubtitle: "Debossed trays, tags, and in-room details for a more finished suite.",
     catalogIntro: "Quiet leather details \u2014 debossed trays and tags that finish a suite and travel well.",
     name: "Leather Goods",
@@ -161,6 +163,7 @@ window.HL_CATEGORIES = [
     keywords: ["custom hotel slippers","embroidered spa slippers","luxury hotel slippers with logo"],
     tagline: "Plush Terry Cotton Fleece",
     image: A("assets/catalog/cat-slippers.jpg"),
+    imageSquare: A("assets/catalog/cat-slippers-square.jpg"), // square crop centred on the product for the homepage card
     catalogSubtitle: "Soft custom slippers for spa, suite, and wellness experiences.",
     catalogIntro: "Embroidered slippers for spa, suite, and wellness programs \u2014 the detail guests remember after checkout.",
     name: "Slippers",
@@ -188,6 +191,7 @@ window.HL_CATEGORIES = [
     keywords: ["custom hotel accessories","branded resort accessories","hotel guest amenities with logo"],
     tagline: "Bespoke Branded Essentials",
     image: A("assets/catalog/cat-accessories.jpg"),
+    imageSquare: A("assets/catalog/cat-accessories-square.jpg"), // square crop centred on the product for the homepage card
     catalogSubtitle: "Umbrellas, sunglasses, sleep masks, yoga mats, and guest extras.",
     catalogIntro: "The guest extras that complete a stay \u2014 umbrellas, sunglasses, sleep masks, and wellness pieces.",
     name: "Accessories",
