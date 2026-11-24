@@ -28,7 +28,7 @@
       metaDescription: "Custom pool deck amenities for hotels and resorts: striped totes, bucket hats, flip-flops, sunglasses, and insulated bottles in your colors. Quote-based, from 100 units.",
       keywords: ["hotel pool amenities", "pool deck amenities custom", "resort pool merchandise"],
       image: A("assets/catalog/cat-bags.jpg"),
-      imageLabel: "Loungers, striped shade, and a canvas tote along the pool deck.",
+      imageLabel: "Woven resort tote on a sage-green door, pool cabana beyond.",
       tint: "tint-pool"
     },
     {

@@ -58,7 +58,7 @@ blurred beyond, wide cinematic composition with the left third kept calm.
 
 ## C. Category cards — 4:3 landscape → assets/catalog/cat-<slug>.jpg
 
-**cat-bags.jpg** — In a boutique niche, three structured totes in
+**cat-bags.jpg** — DELIVERED 2026-11-24 (woven tote on a sage door, poolside; square crop `cat-bags-square.jpg`). Original brief: In a boutique niche, three structured totes in
 heavyweight canvas — ivory, navy, resort green — lined on a walnut shelf,
 one casting a long soft shadow, folded linen beside them.
 

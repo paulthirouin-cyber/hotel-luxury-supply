@@ -23,11 +23,12 @@ window.HL_CATEGORIES = [
     keywords: ["custom hotel tote bags","branded resort totes","custom beach bags for resorts"],
     tagline: "100% Pure Cotton Canvas",
     image: A("assets/catalog/cat-bags.jpg"),
+    imageSquare: A("assets/catalog/cat-bags-square.jpg"), // square crop centred on the tote for the homepage feature card
     catalogSubtitle: "Resort totes, beach bags, and carryalls made for arrival, poolside, retail, and guest gifting.",
     catalogIntro: "From arrival gifts to boutique retail, each bag is built on resort-grade canvas and finished with your property\u2019s mark.",
     name: "Bags",
     line: "Resort totes, beach bags, and carryalls made for arrival, poolside, and retail.",
-    imageLabel: "Canvas tote at a luxury pool lounger with cabana stripes.",
+    imageLabel: "Woven leather tote hanging on a sage-green door beside a stone wall, with a pool cabana beyond.",
     tint: "tint-poolside",
     accent: "pool",
     micro: "micro-stripe",
