@@ -358,20 +358,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
     );
 }
 
-/* soft pool shimmer */
-.hero__art::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 55%;
-  bottom: 0;
-  background: repeating-linear-gradient(
-    92deg,
-    rgba(255, 253, 248, 0.14) 0 3px,
-    transparent 3px 90px
-  );
-}
+/* (pool shimmer stripes removed 2026-11-24: they softened the real photograph) */
 
 .hero__inner {
   position: relative;

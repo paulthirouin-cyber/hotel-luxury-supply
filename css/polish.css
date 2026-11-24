@@ -144,12 +144,12 @@ h2 { letter-spacing: 0.012em; }
 .hero__content::before {
   content: "";
   position: absolute;
-  inset: -60px -80px -60px -60px;
+  inset: -40px -60px -40px -40px;
   z-index: -1;
   background: radial-gradient(
     75% 85% at 32% 50%,
-    rgba(252, 248, 238, 0.72) 0%,
-    rgba(252, 248, 238, 0.35) 55%,
+    rgba(252, 248, 238, 0.5) 0%,
+    rgba(252, 248, 238, 0.18) 55%,
     rgba(252, 248, 238, 0) 100%
   );
   pointer-events: none;

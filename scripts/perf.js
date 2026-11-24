@@ -123,20 +123,25 @@ function eagerHero(doc) {
 }
 
 // Responsive sources: use generated variants (scripts/images.js) when present.
-//   /assets/catalog/cat-x.jpg  → src cat-x-1600.webp, srcset 960w/1600w (hero, full-bleed)
+//   /assets/catalog/cat-x.jpg  → src = largest cat-x-<w>.webp present, srcset of every width present (hero, full-bleed)
 //   /assets/catalog/x.webp     → srcset x-480.webp 480w, x.webp <orig>w (cards, contained)
 function responsiveImages(doc, distDir) {
   doc.querySelectorAll("img[src^='/assets/catalog/']").forEach((img) => {
     const src = img.getAttribute("src");
     const m = src.match(/^\/assets\/catalog\/(cat-[a-z-]+)\.(jpg|jpeg|png)$/);
     if (m) {
-      const big = "/assets/catalog/" + m[1] + "-1600.webp", mid = "/assets/catalog/" + m[1] + "-960.webp";
-      if (fs.existsSync(path.join(distDir, big))) {
-        img.setAttribute("src", big);
-        const dm = fs.existsSync(path.join(distDir, mid)) ? readDims(path.join(distDir, mid)) : null, db = readDims(path.join(distDir, big));
-        img.setAttribute("srcset", (dm && db && dm.width < db.width) ? mid + " " + dm.width + "w, " + big + " " + db.width + "w" : big + " " + (db ? db.width : 1600) + "w");
+      const variants = [2600, 1600, 960]
+        .map((w) => ({ w, url: "/assets/catalog/" + m[1] + "-" + w + ".webp" }))
+        .filter((v) => fs.existsSync(path.join(distDir, v.url)))
+        .map((v) => ({ url: v.url, width: (readDims(path.join(distDir, v.url)) || { width: v.w }).width }))
+        .filter((v, i, arr) => arr.findIndex((o) => o.width === v.width) === i) // drop duplicates capped at the source size
+        .sort((x, y) => x.width - y.width);
+      if (variants.length) {
+        const big = variants[variants.length - 1];
+        img.setAttribute("src", big.url);
+        img.setAttribute("srcset", variants.map((v) => v.url + " " + v.width + "w").join(", "));
         img.setAttribute("sizes", img.classList.contains("hero__img") ? "100vw" : "(max-width: 900px) 100vw, 50vw");
-        const d = readDims(path.join(distDir, big));
+        const d = readDims(path.join(distDir, big.url));
         if (d) { img.setAttribute("width", String(d.width)); img.setAttribute("height", String(d.height)); }
       }
       return;
