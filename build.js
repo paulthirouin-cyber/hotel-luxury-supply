@@ -59,7 +59,7 @@ const HOME_META = {
   title: "Bespoke Branded Goods for Luxury Hospitality | HL Supply",
   description: "HL Supply is a bespoke product atelier creating custom branded guest goods for luxury hotels, resorts, private clubs, spas, and destination events.",
   path: "/",
-  image: "/assets/catalog/cat-bags.jpg"
+  image: "/assets/catalog/cat-home.jpg"
 };
 const LANDING_META = {
   title: "Custom Hospitality Products Catalog | HL Supply",
