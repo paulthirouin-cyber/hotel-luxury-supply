@@ -135,25 +135,8 @@ h2 { letter-spacing: 0.012em; }
    hero polish
    ============================================================ */
 
-/* soft warm scrim behind the copy for guaranteed readability
-   once real photography replaces the placeholder */
-.hero__content {
-  position: relative;
-}
-
-.hero__content::before {
-  content: "";
-  position: absolute;
-  inset: -40px -60px -40px -40px;
-  z-index: -1;
-  background: radial-gradient(
-    75% 85% at 32% 50%,
-    rgba(252, 248, 238, 0.5) 0%,
-    rgba(252, 248, 238, 0.18) 55%,
-    rgba(252, 248, 238, 0) 100%
-  );
-  pointer-events: none;
-}
+/* (headline scrim removed 2026-11-24: a clipped gradient box over real photography; copy sits directly on the photo) */
+.hero__content { position: relative; }
 
 /* label reads as stationery mark rather than a UI chip */
 .hero__label {
