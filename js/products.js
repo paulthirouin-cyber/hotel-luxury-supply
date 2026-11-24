@@ -70,6 +70,7 @@
   window.HL_PRODUCTS = [
     make({ ref: "B-001",
       slug: "signature-tote",
+      flat: true,
       name: "The Signature Solid Tote",
       category: "bags",
       type: "Solid Tote",
@@ -96,6 +97,7 @@
 
     make({ ref: "B-003",
       slug: "nautical-striped-tote",
+      flat: true,
       name: "The Nautical Striped Tote",
       category: "bags",
       type: "Striped Tote",
@@ -109,6 +111,7 @@
 
     make({ ref: "B-004",
       slug: "sovereign-leather-strap-tote",
+      flat: true,
       name: "The Sovereign Leather Strap Tote",
       category: "bags",
       type: "Leather Strap Tote",
@@ -122,6 +125,7 @@
 
     make({ ref: "B-005",
       slug: "pavilion-squared-tote",
+      flat: true,
       name: "The Pavilion Squared Tote",
       category: "bags",
       type: "Squared Tote",
@@ -135,6 +139,7 @@
 
     make({ ref: "B-006",
       slug: "envoy-accent-tote",
+      flat: true,
       name: "The Envoy Accent Tote",
       category: "bags",
       type: "Accent Tote",
@@ -148,6 +153,7 @@
 
     make({ ref: "B-007",
       slug: "petite-mini-tote",
+      flat: true,
       name: "The Petite Mini Tote",
       category: "bags",
       type: "Mini Tote",
@@ -161,6 +167,7 @@
 
     make({ ref: "B-008",
       slug: "nomad-drawstring-tote",
+      flat: true,
       name: "The Nomad Drawstring Tote",
       category: "bags",
       type: "Drawstring Tote",
