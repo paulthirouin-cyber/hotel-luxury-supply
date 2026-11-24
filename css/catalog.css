@@ -123,8 +123,17 @@
 
 .pcard__body { padding: 22px 22px 24px; display: flex; flex-direction: column; flex: 1; }
 
-/* Push MOQ / note / link to the card foot so rows align regardless of copy length. */
+/* Fallback (no subgrid): push MOQ / note / link to the card foot. */
 .pcard__body .pcard__meta { margin-top: auto; }
+
+/* Shared rows: every card in a row lines up its category, title, description, MOQ block, note and
+   link on the same baseline, whatever the copy length (media + 6 body rows = 7 tracks). */
+@supports (grid-template-rows: subgrid) {
+  .pcard { display: grid; grid-template-rows: subgrid; grid-row: span 7; row-gap: 0; }
+  .pcard__body { display: grid; grid-template-rows: subgrid; grid-row: span 6; row-gap: 0; align-content: start; }
+  .pcard__body .pcard__meta { margin-top: 0; align-self: end; }
+  .pcard__pricing-note, .pcard__ctas { align-self: end; }
+}
 
 .pcard__cat {
   font-family: var(--sans, "Hanken Grotesk", sans-serif);
