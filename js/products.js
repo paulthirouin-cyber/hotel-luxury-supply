@@ -266,6 +266,7 @@
 
     make({ ref: "W-001",
       slug: "marquis-bottle",
+      flat: true,
       name: "The Marquis Bottle",
       category: "bottles",
       type: "Bottle",
@@ -278,6 +279,7 @@
 
     make({ ref: "W-002",
       slug: "aura-bottle",
+      flat: true,
       name: "The Aura Bottle",
       category: "bottles",
       type: "Bottle",
@@ -290,6 +292,7 @@
 
     make({ ref: "W-003",
       slug: "vanguard-bottle",
+      flat: true,
       name: "The Vanguard Bottle",
       category: "bottles",
       type: "Bottle",
@@ -302,6 +305,7 @@
 
     make({ ref: "W-004",
       slug: "lumiere-bottle",
+      flat: true,
       name: "The Lumi\u00e8re Bottle",
       category: "bottles",
       type: "Bottle",
