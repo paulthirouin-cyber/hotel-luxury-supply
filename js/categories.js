@@ -79,11 +79,12 @@ window.HL_CATEGORIES = [
     keywords: ["custom hotel water bottles","branded insulated bottles for resorts","laser etched logo bottles"],
     tagline: "Triple-Wall Vacuum Insulation",
     image: A("assets/catalog/cat-bottles.jpg"),
+    imageSquare: A("assets/catalog/cat-bottles-square.jpg"), // square crop centred on the bottle for the homepage card
     catalogSubtitle: "Custom bottles for suites, spas, fitness programs, and outdoor guest moments.",
     catalogIntro: "Polished, durable bottles etched with your logo \u2014 made for suites, spa bars, and days on the property.",
     name: "Bottles",
     line: "Custom bottles for suites, spas, fitness, and outdoor guest moments.",
-    imageLabel: "Custom bottle on spa counter or poolside stone ledge.",
+    imageLabel: "Forest-green insulated bottle with a wrist strap on a travertine terrace table, whitewashed wall and sea beyond.",
     tint: "tint-pool",
     accent: "chrome",
     micro: "micro-sheen",

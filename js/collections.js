@@ -112,7 +112,7 @@
       metaDescription: "Hotel fitness and wellness amenities with your logo: sports caps, yoga mats, insulated bottles, and drawstring totes for golf, tennis, fitness, and spa programs.",
       keywords: ["hotel fitness amenities", "resort wellness products", "hotel tennis program merchandise", "padel club merchandise"],
       image: A("assets/catalog/cat-bottles.jpg"),
-      imageLabel: "Sports cap, yoga mat, and bottle on a terrace before a morning session.",
+      imageLabel: "Insulated bottle with a wrist strap on a seaside terrace table.",
       tint: "tint-chrome"
     }
   ];

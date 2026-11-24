@@ -66,7 +66,7 @@ one casting a long soft shadow, folded linen beside them.
 and a relaxed bucket hat resting brim-to-brim, clay court blurred behind,
 afternoon light.
 
-**cat-bottles.jpg** — On a marble spa counter, two matte brushed
+**cat-bottles.jpg** — DELIVERED 2026-11-24 (green bottle on a travertine terrace table by the sea; square crop `cat-bottles-square.jpg`). Original brief: On a marble spa counter, two matte brushed
 stainless-steel bottles with machined caps — one deep navy, one cream —
 beside a rolled towel, soft light from a high window.
 
