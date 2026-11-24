@@ -135,7 +135,27 @@ h2 { letter-spacing: 0.012em; }
    hero polish
    ============================================================ */
 
-/* (headline scrim removed 2026-11-24: a clipped gradient box over real photography; copy sits directly on the photo) */
+/* Readability wash: one full-bleed layer pinned to the whole hero (inset 0), so it always
+   covers the photograph edge to edge and moves with it. Strongest behind the copy on the
+   left, fading to clear over the terrace. Never a clipped box. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(252, 248, 238, 0.66) 0%,
+    rgba(252, 248, 238, 0.5) 34%,
+    rgba(252, 248, 238, 0.18) 56%,
+    rgba(252, 248, 238, 0) 72%
+  );
+}
+@media (max-width: 900px) {
+  /* copy spans the full width on phones: even wash */
+  .hero::before { background: rgba(252, 248, 238, 0.5); }
+}
 .hero__content { position: relative; }
 
 /* label reads as stationery mark rather than a UI chip */
