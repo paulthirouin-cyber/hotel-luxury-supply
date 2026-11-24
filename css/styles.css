@@ -727,7 +727,7 @@ h4, h5, h6, b, strong, th { font-weight: 500; }
 
 /* Flat product photos: opaque files with sun white #FCF8EE already baked in (safe for Google Images) */
 .ph--flat { background: var(--ivory); }
-.ph--flat .ph__img { object-fit: cover; padding: 0; }
+.ph--flat .ph__img { object-fit: contain; padding: 0; } /* file background = box background, so contain never crops handles */
 
 /* homepage hero photo */
 .hero__img {

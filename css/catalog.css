@@ -99,7 +99,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   gap: clamp(20px, 2.4vw, 32px);
-  align-items: start;
+  align-items: stretch; /* every card in a row shares the same height */
 }
 
 .pcard {
@@ -121,7 +121,10 @@
 
 .pcard__media-link:focus-visible { outline: 2px solid var(--pool-deep, #1D4E9E); outline-offset: -2px; }
 
-.pcard__body { padding: 22px 22px 24px; display: flex; flex-direction: column; }
+.pcard__body { padding: 22px 22px 24px; display: flex; flex-direction: column; flex: 1; }
+
+/* Push MOQ / note / link to the card foot so rows align regardless of copy length. */
+.pcard__body .pcard__meta { margin-top: auto; }
 
 .pcard__cat {
   font-family: var(--sans, "Hanken Grotesk", sans-serif);
