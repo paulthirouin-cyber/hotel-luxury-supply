@@ -84,6 +84,7 @@
 
     make({ ref: "B-002",
       slug: "atelier-woven-tote",
+      flat: true,
       name: "The Atelier Woven Leather Tote",
       category: "bags",
       type: "Woven Leather Tote",
